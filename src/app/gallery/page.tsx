@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowLeft, Filter, Grid, List } from "lucide-react"
@@ -9,18 +9,33 @@ import { GalleryCard } from "@/components/gallery-card"
 import { Pagination } from "@/components/pagination"
 import { allProducts, categories, sizes } from "@/data/products"
 import { Button } from "@/components/ui/button"
+import { useSearchParams } from "next/navigation"
 
 const ITEMS_PER_PAGE = 20
 
 export default function GalleryPage() {
-  const [selectedMainCategory, setSelectedMainCategory] = useState<"all" | "marvel" | "tiles">("all")
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null)
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const searchParams = useSearchParams()
+
+  const initialMainCategory = (searchParams.get("category") as "all" | "marvel" | "tiles") || "all"
+  const initialSubcategory = searchParams.get("subcategory") || null
+  const initialSize = searchParams.get("size") || null
+
+  const [selectedMainCategory, setSelectedMainCategory] = useState<"all" | "marvel" | "tiles">(initialMainCategory)
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(initialSubcategory)
+  const [selectedSize, setSelectedSize] = useState<string | null>(initialSize)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState<"name" | "rating">("name")
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Dynamically determine categories and sizes for FilterChips based on main category selection
+  // Effect to update state when URL params change
+  useEffect(() => {
+    setSelectedMainCategory((searchParams.get("category") as "all" | "marvel" | "tiles") || "all")
+    setSelectedSubcategory(searchParams.get("subcategory") || null)
+    setSelectedSize(searchParams.get("size") || null)
+    setCurrentPage(1)
+  }, [searchParams])
+
+  // Dynamically determine categories and sizes for FilterChips
   const filterChipCategories = useMemo(() => {
     let currentCategories: { id: string; name: string; sizes: string[] }[] = []
     let currentSizes: string[] = []
@@ -32,21 +47,18 @@ export default function GalleryPage() {
       currentCategories = categories.tiles.map((cat) => ({ ...cat, sizes: sizes.tiles }))
       currentSizes = sizes.tiles
     } else {
-      // "all" category: combine all subcategories and sizes
       const combinedSubcategories = [
         ...categories.marvel.map((cat) => ({ ...cat, sizes: sizes.marvel })),
         ...categories.tiles.map((cat) => ({ ...cat, sizes: sizes.tiles })),
       ]
-      // Remove duplicates if any subcategory names overlap
       const uniqueSubcategories = Array.from(new Set(combinedSubcategories.map((c) => c.id))).map(
         (id) => combinedSubcategories.find((c) => c.id === id)!,
       )
-
       currentCategories = uniqueSubcategories
       currentSizes = Array.from(new Set([...sizes.marvel, ...sizes.tiles]))
     }
     return { categories: currentCategories, sizes: currentSizes }
-  }, [selectedMainCategory]) // Removed unnecessary dependencies
+  }, [selectedMainCategory]) // CORRECTED: Removed 'categories' and 'sizes'
 
   const filteredProducts = useMemo(() => {
     let productsToFilter = allProducts
@@ -74,12 +86,11 @@ export default function GalleryPage() {
             return a.name.localeCompare(b.name)
         }
       })
-  }, [selectedMainCategory, selectedSubcategory, selectedSize, sortBy]) // Removed allProducts dependency
+  }, [selectedMainCategory, selectedSubcategory, selectedSize, sortBy]) // CORRECTED: Removed 'allProducts'
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
   const endIndex = startIndex + ITEMS_PER_PAGE
   const paginatedProducts = filteredProducts.slice(startIndex, endIndex)
-
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
 
   const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
@@ -155,7 +166,7 @@ export default function GalleryPage() {
               {/* Sort Dropdown */}
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as "name" | "rating")}
+                onChange={(e) => setSortBy(e.target.value as "name" | "rating")} // CORRECTED: Replaced 'any'
                 className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm"
               >
                 <option value="name">Sort by Name</option>

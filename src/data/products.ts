@@ -486,14 +486,14 @@ export const allProducts = [...marvelProducts, ...tilesProducts]
 
 export const categories = {
   marvel: [
-    { id: "natural-stone", name: "Natural Stone", count: 6 },
-    { id: "premium-stone", name: "Premium Stone", count: 3 },
+    { id: "natural-stone", name: "Natural Stone", count: 6, exampleImage: "/placeholder.svg?height=300&width=300" },
+    { id: "premium-stone", name: "Premium Stone", count: 3, exampleImage: "/placeholder.svg?height=300&width=300" },
   ],
   tiles: [
-    { id: "ceramic", name: "Ceramic", count: 4 },
-    { id: "porcelain", name: "Porcelain", count: 4 },
-    { id: "mosaic", name: "Mosaic", count: 2 },
-    { id: "glass", name: "Glass", count: 1 },
+    { id: "ceramic", name: "Ceramic", count: 4, exampleImage: "/placeholder.svg?height=300&width=300" },
+    { id: "porcelain", name: "Porcelain", count: 4, exampleImage: "/placeholder.svg?height=300&width=300" },
+    { id: "mosaic", name: "Mosaic", count: 2, exampleImage: "/placeholder.svg?height=300&width=300" },
+    { id: "glass", name: "Glass", count: 1, exampleImage: "/placeholder.svg?height=300&width=300" },
   ],
 }
 
