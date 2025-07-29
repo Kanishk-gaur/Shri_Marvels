@@ -110,14 +110,14 @@ export function GalleryCard({ product, index = 0 }: GalleryCardProps) {
           </p>
 
           {/* View Details Button */}
-          <Button asChild className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
+          {/* <Button asChild className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
             <Link href={`/${product.category}/${product.id}`}>
               <div className="flex items-center justify-center space-x-2">
                 <Eye className="w-4 h-4" />
                 <span>View Details</span>
               </div>
             </Link>
-          </Button>
+          </Button> */}
         </div>
 
         {/* 3D Hover Effect */}

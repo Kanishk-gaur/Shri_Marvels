@@ -5,22 +5,23 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { MarvelCarousel } from "@/components/marvel-carousel"
 import { SubcategoryCard } from "@/components/subcategory-card"
-// FIX: Changed import path to "@/data" to correctly get all exports
-import { categories, sizes } from "@/data"
+import { categories } from "@/data" // We don't need 'sizes' here anymore for this logic
 
-// FIX: Added a type for subcategory objects to resolve 'any' type errors
+// FIX: Update the type to include the 'sizes' array
 type SubCategoryInfo = {
   id: string
   name: string
   count: number
   exampleImage: string
+  sizes: string[] // This is the crucial addition
 }
 
 export default function MarvelPage() {
-  // FIX: Added 'SubCategoryInfo' type to 'cat' parameter
+  // The 'categories.marvel' data now contains the specific sizes for each entry
   const marvelSubcategories = categories.marvel.map((cat: SubCategoryInfo) => ({
     ...cat,
-    availableSizes: sizes.marvel, // All marvel subcategories share the same sizes for now
+    // The 'availableSizes' prop will now receive the correct, specific sizes
+    availableSizes: cat.sizes,
   }))
 
   return (
@@ -71,13 +72,12 @@ export default function MarvelPage() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* By typing 'cat' above, TS now correctly infers the type for 'subcategory' here */}
           {marvelSubcategories.map((subcategory) => (
             <SubcategoryCard
               key={subcategory.id}
               mainCategory="marvel"
               subcategory={subcategory}
-              availableSizes={subcategory.availableSizes}
+              availableSizes={subcategory.availableSizes} // This now correctly passes the specific sizes
             />
           ))}
         </div>
