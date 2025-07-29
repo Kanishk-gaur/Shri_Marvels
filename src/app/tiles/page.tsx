@@ -5,10 +5,20 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { TilesCarousel } from "@/components/tiles-carousel"
 import { SubcategoryCard } from "@/components/subcategory-card"
-import { categories, sizes } from "@/data/products"
+// FIX: Changed import path to "@/data" to correctly get all exports
+import { categories, sizes } from "@/data"
+
+// FIX: Added a type for subcategory objects to resolve 'any' type errors
+type SubCategoryInfo = {
+  id: string
+  name: string
+  count: number
+  exampleImage: string
+}
 
 export default function TilesPage() {
-  const tilesSubcategories = categories.tiles.map((cat) => ({
+  // FIX: Added 'SubCategoryInfo' type to 'cat' parameter
+  const tilesSubcategories = categories.tiles.map((cat: SubCategoryInfo) => ({
     ...cat,
     availableSizes: sizes.tiles, // All tiles subcategories share the same sizes for now
   }))
@@ -61,6 +71,7 @@ export default function TilesPage() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* By typing 'cat' above, TS now correctly infers the type for 'subcategory' here */}
           {tilesSubcategories.map((subcategory) => (
             <SubcategoryCard
               key={subcategory.id}

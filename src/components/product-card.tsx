@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star, Eye, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Product } from "@/data/products";
+// FIX: Corrected the import path
+import type { Product } from "@/data";
 
 interface ProductCardProps {
   product: Product;
@@ -68,8 +69,9 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2">
                 {product.name}
               </h3>
+              {/* FIX: Changed product.size to display the sizes array */}
               <p className="text-white/70 text-sm">
-                {product.subcategory} • {product.size}&quot;
+                {product.subcategory} • {product.sizes.join(" | ")}&quot;
               </p>
             </div>
           </div>

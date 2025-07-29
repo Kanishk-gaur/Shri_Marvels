@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star, Eye, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Product } from "@/data/products";
+import type { Product } from "@/data";
 
 interface GalleryCardProps {
   product: Product;
@@ -68,8 +68,9 @@ export function GalleryCard({ product, index = 0 }: GalleryCardProps) {
               <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2">
                 {product.name}
               </h3>
+              {/* FIX: Changed product.size to display the sizes array */}
               <p className="text-white/70 text-sm">
-                {product.subcategory} • {product.size}&quot;
+                {product.subcategory} • {product.sizes.join(" | ")}&quot;
               </p>
             </div>
           </div>
@@ -109,11 +110,13 @@ export function GalleryCard({ product, index = 0 }: GalleryCardProps) {
           </p>
 
           {/* View Details Button */}
-          <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
-            <div className="flex items-center justify-center space-x-2">
-              <Eye className="w-4 h-4" />
-              <span>View Details</span>
-            </div>
+          <Button asChild className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
+            <Link href={`/${product.category}/${product.id}`}>
+              <div className="flex items-center justify-center space-x-2">
+                <Eye className="w-4 h-4" />
+                <span>View Details</span>
+              </div>
+            </Link>
           </Button>
         </div>
 

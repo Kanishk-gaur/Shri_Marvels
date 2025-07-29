@@ -1,32 +1,17 @@
-export interface Product {
-  id: number
-  name: string
-  category: "marvel" | "tiles"
-  subcategory: string
-  size: string
-  material: string
-  finish: string
-  thickness: string
-  image: string
-  images: string[]
-  description: string
-  features: string[]
-  rating: number
-  reviews: number
-  dimensions: {
-    length: number
-    width: number
-    unit: string
-  }
-}
+import { Product } from "../types"
 
-export const marvelProducts: Product[] = [
+/**
+ * This is the single source of truth for all product data.
+ * To add, edit, or remove a product, you only need to modify this array.
+ */
+export const allProducts: Product[] = [
+  // === Marvel Products ===
   {
     id: 1,
     name: "Carrara White Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "24x24",
+    sizes: ["24x24", "12x24"], // Changed 'size' to 'sizes' array
     material: "Natural Marble",
     finish: "Polished",
     thickness: "10mm",
@@ -54,7 +39,7 @@ export const marvelProducts: Product[] = [
     name: "Emperador Dark Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "12x24",
+    sizes: ["12x24"],
     material: "Natural Marble",
     finish: "Honed",
     thickness: "12mm",
@@ -77,7 +62,7 @@ export const marvelProducts: Product[] = [
     name: "Calacatta Gold Marvel",
     category: "marvel",
     subcategory: "Premium Stone",
-    size: "36x36",
+    sizes: ["36x36"],
     material: "Natural Marble",
     finish: "Polished",
     thickness: "15mm",
@@ -104,7 +89,7 @@ export const marvelProducts: Product[] = [
     name: "Nero Marquina Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "18x18",
+    sizes: ["18x18"],
     material: "Natural Marble",
     finish: "Polished",
     thickness: "10mm",
@@ -127,7 +112,7 @@ export const marvelProducts: Product[] = [
     name: "Crema Marfil Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "24x24",
+    sizes: ["24x24"],
     material: "Natural Marble",
     finish: "Honed",
     thickness: "10mm",
@@ -150,7 +135,7 @@ export const marvelProducts: Product[] = [
     name: "Volakas White Marvel",
     category: "marvel",
     subcategory: "Premium Stone",
-    size: "18x36",
+    sizes: ["18x36"],
     material: "Natural Marble",
     finish: "Polished",
     thickness: "12mm",
@@ -173,7 +158,7 @@ export const marvelProducts: Product[] = [
     name: "Dark Emperador Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "16x16",
+    sizes: ["16x16"],
     material: "Natural Marble",
     finish: "Brushed",
     thickness: "10mm",
@@ -196,7 +181,7 @@ export const marvelProducts: Product[] = [
     name: "Thassos White Marvel",
     category: "marvel",
     subcategory: "Premium Stone",
-    size: "12x12",
+    sizes: ["12x12"],
     material: "Natural Marble",
     finish: "Polished",
     thickness: "8mm",
@@ -219,7 +204,7 @@ export const marvelProducts: Product[] = [
     name: "Verde Guatemala Marvel",
     category: "marvel",
     subcategory: "Natural Stone",
-    size: "24x48",
+    sizes: ["24x48"],
     material: "Natural Marble",
     finish: "Honed",
     thickness: "15mm",
@@ -237,15 +222,14 @@ export const marvelProducts: Product[] = [
     reviews: 60,
     dimensions: { length: 24, width: 48, unit: "inches" },
   },
-]
 
-export const tilesProducts: Product[] = [
+  // === Tiles Products ===
   {
     id: 101,
     name: "Metro White Subway Tiles",
     category: "tiles",
     subcategory: "Ceramic",
-    size: "3x6",
+    sizes: ["3x6"],
     material: "Ceramic",
     finish: "Glossy",
     thickness: "8mm",
@@ -269,7 +253,7 @@ export const tilesProducts: Product[] = [
     name: "Hexagon Mosaic Collection",
     category: "tiles",
     subcategory: "Mosaic",
-    size: "12x12",
+    sizes: ["12x12"],
     material: "Porcelain",
     finish: "Matte",
     thickness: "6mm",
@@ -297,7 +281,7 @@ export const tilesProducts: Product[] = [
     name: "Wood-Look Plank Tiles",
     category: "tiles",
     subcategory: "Porcelain",
-    size: "6x36",
+    sizes: ["6x36"],
     material: "Porcelain",
     finish: "Textured",
     thickness: "10mm",
@@ -321,7 +305,7 @@ export const tilesProducts: Product[] = [
     name: "Terrazzo Style Floor Tiles",
     category: "tiles",
     subcategory: "Porcelain",
-    size: "24x24",
+    sizes: ["24x24"],
     material: "Porcelain",
     finish: "Polished",
     thickness: "12mm",
@@ -345,7 +329,7 @@ export const tilesProducts: Product[] = [
     name: "Moroccan Pattern Tiles",
     category: "tiles",
     subcategory: "Ceramic",
-    size: "8x8",
+    sizes: ["8x8"],
     material: "Ceramic",
     finish: "Matte",
     thickness: "9mm",
@@ -369,7 +353,7 @@ export const tilesProducts: Product[] = [
     name: "Concrete Look Porcelain Tiles",
     category: "tiles",
     subcategory: "Porcelain",
-    size: "24x48",
+    sizes: ["24x48"],
     material: "Porcelain",
     finish: "Matte",
     thickness: "10mm",
@@ -392,7 +376,7 @@ export const tilesProducts: Product[] = [
     name: "Geometric Pattern Ceramic Tiles",
     category: "tiles",
     subcategory: "Ceramic",
-    size: "8x8",
+    sizes: ["8x8"],
     material: "Ceramic",
     finish: "Glossy",
     thickness: "8mm",
@@ -415,7 +399,7 @@ export const tilesProducts: Product[] = [
     name: "Large Format Porcelain Slabs",
     category: "tiles",
     subcategory: "Porcelain",
-    size: "48x96",
+    sizes: ["48x96"],
     material: "Porcelain",
     finish: "Polished",
     thickness: "6mm",
@@ -438,7 +422,7 @@ export const tilesProducts: Product[] = [
     name: "Terracotta Look Tiles",
     category: "tiles",
     subcategory: "Ceramic",
-    size: "12x12",
+    sizes: ["12x12"],
     material: "Ceramic",
     finish: "Matte",
     thickness: "9mm",
@@ -461,7 +445,7 @@ export const tilesProducts: Product[] = [
     name: "Glass Mosaic Tiles",
     category: "tiles",
     subcategory: "Mosaic",
-    size: "12x12",
+    sizes: ["12x12","10x10", "8x80"],
     material: "Glass",
     finish: "Glossy",
     thickness: "4mm",
@@ -481,23 +465,3 @@ export const tilesProducts: Product[] = [
     dimensions: { length: 12, width: 12, unit: "inches" },
   },
 ]
-
-export const allProducts = [...marvelProducts, ...tilesProducts]
-
-export const categories = {
-  marvel: [
-    { id: "natural-stone", name: "Natural Stone", count: 6, exampleImage: "/placeholder.svg?height=300&width=300" },
-    { id: "premium-stone", name: "Premium Stone", count: 3, exampleImage: "/placeholder.svg?height=300&width=300" },
-  ],
-  tiles: [
-    { id: "ceramic", name: "Ceramic", count: 4, exampleImage: "/placeholder.svg?height=300&width=300" },
-    { id: "porcelain", name: "Porcelain", count: 4, exampleImage: "/placeholder.svg?height=300&width=300" },
-    { id: "mosaic", name: "Mosaic", count: 2, exampleImage: "/placeholder.svg?height=300&width=300" },
-    { id: "glass", name: "Glass", count: 1, exampleImage: "/placeholder.svg?height=300&width=300" },
-  ],
-}
-
-export const sizes = {
-  marvel: ["12x12", "12x24", "16x16", "18x18", "18x36", "24x24", "24x48", "36x36"],
-  tiles: ["3x6", "6x36", "8x8", "12x12", "24x24", "24x48", "48x96"],
-}

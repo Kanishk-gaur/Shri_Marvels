@@ -7,11 +7,18 @@ import { ArrowLeft, Filter, Grid, List } from "lucide-react";
 import { FilterChips } from "@/components/filter-chips";
 import { GalleryCard } from "@/components/gallery-card";
 import { Pagination } from "@/components/pagination";
-import { allProducts, categories, sizes } from "@/data/products";
+import { allProducts, categories, sizes, Product } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 
-const ITEMS_PER_PAGE = 20;
+const ITEMS_PER_PAGE = 9;
+
+type SubCategoryInfo = {
+  id: string;
+  name: string;
+  count: number;
+  exampleImage: string;
+};
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
@@ -32,7 +39,6 @@ export default function GalleryPage() {
   const [sortBy, setSortBy] = useState<"name" | "rating">("name");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Effect to update state when URL params change
   useEffect(() => {
     setSelectedMainCategory(
       (searchParams.get("category") as "all" | "marvel" | "tiles") || "all"
@@ -42,27 +48,32 @@ export default function GalleryPage() {
     setCurrentPage(1);
   }, [searchParams]);
 
-  // Dynamically determine categories and sizes for FilterChips
   const filterChipCategories = useMemo(() => {
-    let currentCategories: { id: string; name: string; sizes: string[] }[] = [];
+    let currentCategories: (SubCategoryInfo & { sizes: string[] })[] = [];
     let currentSizes: string[] = [];
 
     if (selectedMainCategory === "marvel") {
-      currentCategories = categories.marvel.map((cat) => ({
+      currentCategories = categories.marvel.map((cat: SubCategoryInfo) => ({
         ...cat,
         sizes: sizes.marvel,
       }));
       currentSizes = sizes.marvel;
     } else if (selectedMainCategory === "tiles") {
-      currentCategories = categories.tiles.map((cat) => ({
+      currentCategories = categories.tiles.map((cat: SubCategoryInfo) => ({
         ...cat,
         sizes: sizes.tiles,
       }));
       currentSizes = sizes.tiles;
     } else {
       const combinedSubcategories = [
-        ...categories.marvel.map((cat) => ({ ...cat, sizes: sizes.marvel })),
-        ...categories.tiles.map((cat) => ({ ...cat, sizes: sizes.tiles })),
+        ...categories.marvel.map((cat: SubCategoryInfo) => ({
+          ...cat,
+          sizes: sizes.marvel,
+        })),
+        ...categories.tiles.map((cat: SubCategoryInfo) => ({
+          ...cat,
+          sizes: sizes.tiles,
+        })),
       ];
       const uniqueSubcategories = Array.from(
         new Set(combinedSubcategories.map((c) => c.id))
@@ -71,7 +82,7 @@ export default function GalleryPage() {
       currentSizes = Array.from(new Set([...sizes.marvel, ...sizes.tiles]));
     }
     return { categories: currentCategories, sizes: currentSizes };
-  }, [selectedMainCategory]); // CORRECTED: Removed 'categories' and 'sizes'
+  }, [selectedMainCategory]);
 
   const filteredProducts = useMemo(() => {
     let productsToFilter = allProducts;
@@ -83,16 +94,16 @@ export default function GalleryPage() {
     }
 
     return productsToFilter
-      .filter((product) => {
+      .filter((product: Product) => {
         if (!selectedSubcategory) return true;
         return (
-          product.subcategory.toLowerCase().replace(" ", "-") ===
+          product.subcategory.toLowerCase().replace(/ /g, "-") ===
           selectedSubcategory
         );
       })
-      .filter((product) => {
+      .filter((product: Product) => {
         if (!selectedSize) return true;
-        return product.size === selectedSize;
+        return product.sizes.includes(selectedSize);
       })
       .sort((a, b) => {
         switch (sortBy) {
@@ -102,7 +113,7 @@ export default function GalleryPage() {
             return a.name.localeCompare(b.name);
         }
       });
-  }, [selectedMainCategory, selectedSubcategory, selectedSize, sortBy]); // CORRECTED: Removed 'allProducts'
+  }, [selectedMainCategory, selectedSubcategory, selectedSize, sortBy]);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -118,7 +129,6 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pt-16">
-      {/* Header */}
       <motion.div
         className="p-6 flex items-center justify-between"
         initial={{ y: -50, opacity: 0 }}
@@ -136,12 +146,11 @@ export default function GalleryPage() {
         </Link>
         <div className="text-center">
           <h1 className="text-3xl font-bold text-white">Our Full Gallery</h1>
-          <p className="text-white/70">Explore all marvels and tiles</p>
+          <p className="text-white/70">Explore all our products</p>
         </div>
-        <div className="w-24"></div>
+        <div className="w-32"></div>
       </motion.div>
 
-      {/* Filter Section */}
       <motion.div
         className="px-6 py-8"
         initial={{ y: 50, opacity: 0 }}
@@ -159,13 +168,12 @@ export default function GalleryPage() {
                 ({filteredProducts.length} items)
               </span>
             </div>
-
             <div className="flex items-center space-x-4">
-              {/* Main Category Filter */}
               <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
                 <Button
                   onClick={() => handleMainCategorySelect("all")}
-                  className={`px-4 py-2 rounded-md text-sm ${
+                  variant="ghost"
+                  className={`px-3 py-1.5 rounded-md text-sm ${
                     selectedMainCategory === "all"
                       ? "bg-white/20 text-white"
                       : "text-white/70 hover:bg-white/15"
@@ -175,7 +183,8 @@ export default function GalleryPage() {
                 </Button>
                 <Button
                   onClick={() => handleMainCategorySelect("marvel")}
-                  className={`px-4 py-2 rounded-md text-sm ${
+                  variant="ghost"
+                  className={`px-3 py-1.5 rounded-md text-sm ${
                     selectedMainCategory === "marvel"
                       ? "bg-white/20 text-white"
                       : "text-white/70 hover:bg-white/15"
@@ -185,7 +194,8 @@ export default function GalleryPage() {
                 </Button>
                 <Button
                   onClick={() => handleMainCategorySelect("tiles")}
-                  className={`px-4 py-2 rounded-md text-sm ${
+                  variant="ghost"
+                  className={`px-3 py-1.5 rounded-md text-sm ${
                     selectedMainCategory === "tiles"
                       ? "bg-white/20 text-white"
                       : "text-white/70 hover:bg-white/15"
@@ -194,19 +204,15 @@ export default function GalleryPage() {
                   Tiles
                 </Button>
               </div>
-
-              {/* Sort Dropdown */}
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as "name" | "rating")} // CORRECTED: Replaced 'any'
-                className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm"
+                onChange={(e) => setSortBy(e.target.value as "name" | "rating")}
+                className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:ring-cyan-500"
               >
                 <option value="name">Sort by Name</option>
                 <option value="rating">Highest Rated</option>
               </select>
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
+              <div className="flex items-center space-x-1 bg-white/10 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-2 rounded ${
@@ -226,7 +232,6 @@ export default function GalleryPage() {
               </div>
             </div>
           </div>
-
           <FilterChips
             categories={filterChipCategories.categories}
             selectedCategory={selectedSubcategory}
@@ -237,7 +242,6 @@ export default function GalleryPage() {
         </div>
       </motion.div>
 
-      {/* Products Grid */}
       <motion.div
         className="px-6 pb-12"
         initial={{ opacity: 0 }}
@@ -245,7 +249,7 @@ export default function GalleryPage() {
         transition={{ delay: 0.4, duration: 0.8 }}
       >
         <div className="max-w-7xl mx-auto">
-          {filteredProducts.length > 0 ? (
+          {paginatedProducts.length > 0 ? (
             <>
               <div className="mb-4 text-white/70">
                 Displaying items {startIndex + 1} -{" "}
@@ -255,8 +259,8 @@ export default function GalleryPage() {
               <div
                 className={`grid gap-6 ${
                   viewMode === "grid"
-                    ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                    : "grid-cols-1 lg:grid-cols-2"
+                    ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                    : "grid-cols-1"
                 }`}
               >
                 {paginatedProducts.map((product, index) => (
@@ -284,18 +288,18 @@ export default function GalleryPage() {
                 No items found
               </h3>
               <p className="text-white/70 mb-6">
-                Try adjusting your filters to see more results
+                Try adjusting your filters to see more results.
               </p>
-              <button
+              <Button
                 onClick={() => {
                   setSelectedMainCategory("all");
                   setSelectedSubcategory(null);
                   setSelectedSize(null);
                 }}
-                className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-lg hover:from-cyan-600 hover:to-purple-600 transition-all duration-300"
+                className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-lg"
               >
                 Clear All Filters
-              </button>
+              </Button>
             </div>
           )}
         </div>
