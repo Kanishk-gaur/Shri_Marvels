@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Eye, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import type { Product } from "@/data";
 
 interface GalleryCardProps {
