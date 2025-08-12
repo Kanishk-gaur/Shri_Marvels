@@ -81,6 +81,16 @@ export function FilterChips({
               whileTap={{ scale: 0.95 }}
               layout
             >
+              <div>
+                <span className="inline-block w-3 h-3 rounded-full bg-white/50 mr-2"></span>
+                <span className="inline-block w-3 h-3 rounded-full bg-white/50"></span>
+                 
+                <div>
+                  <span className="inline-block w-3 h-3 rounded-full bg-white/50"></span>
+                  <span className="inline-block w-3 h-3 rounded-full bg-white/50"></span>
+                  <span className="inline-block w-3 h-3 rounded-full bg-white/50"></span>
+                </div>
+              </div>
               <span>{category.name}</span>
               {selectedCategory === category.id && (
                 <motion.div
