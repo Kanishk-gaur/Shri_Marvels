@@ -5,7 +5,7 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { TilesCarousel } from "@/components/tiles-carousel"
 import { SubcategoryCard } from "@/components/subcategory-card"
-import { categories } from "@/data" // We no longer need the generic 'sizes' import for this part
+import { categories } from "@/data"
 
 // FIX: Updated the type definition to include the 'sizes' array
 type SubCategoryInfo = {
@@ -25,7 +25,7 @@ export default function TilesPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-900 via-indigo-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#EFE2C8] to-[#E7DFC9] antialiased">
       {/* Header */}
       <motion.div
         className="p-6 flex items-center justify-between"
@@ -35,7 +35,7 @@ export default function TilesPage() {
       >
         <Link href="/">
           <motion.button
-            className="flex items-center space-x-2 text-white hover:text-sky-400 transition-colors"
+            className="flex items-center space-x-2 text-[#5C4421] hover:text-[#84632e] transition-colors"
             whileHover={{ x: -5 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -43,8 +43,8 @@ export default function TilesPage() {
           </motion.button>
         </Link>
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white">Designer Tile Collection</h1>
-          <p className="text-white/70">Contemporary ceramic and porcelain tiles</p>
+          <h1 className="text-3xl font-bold text-[#5C4421]">Designer Tile Collection</h1>
+          <p className="text-[#84632e]">Contemporary ceramic and porcelain tiles</p>
         </div>
         <div className="w-24"></div>
       </motion.div>
@@ -66,13 +66,13 @@ export default function TilesPage() {
         transition={{ delay: 0.4, duration: 0.8 }}
       >
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">Explore Tile Types</h2>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-[#5C4421] mb-4">Explore Tile Types</h2>
+          <p className="text-[#84632e] max-w-2xl mx-auto">
             Select a tile type to view available sizes and browse our curated gallery.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Now, each subcategory card gets the correct sizes */}
+        {/* Updated grid to have 4 columns on large screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {tilesSubcategories.map((subcategory) => (
             <SubcategoryCard
               key={subcategory.id}

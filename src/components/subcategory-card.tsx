@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { useState } from "react"
 import { SizeSelectionDialog } from "./size-selection-dialog"
+import { ArrowRight } from "lucide-react"
 
 interface SubcategoryCardProps {
   mainCategory: "marvel" | "tiles"
@@ -22,23 +23,37 @@ export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: S
   return (
     <>
       <motion.div
-        className="group cursor-pointer relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-300"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        className="group cursor-pointer relative overflow-hidden rounded-2xl shadow-md transition-shadow duration-300 hover:shadow-xl h-full"
+        whileHover={{ y: -5 }}
+        transition={{ type: "spring", stiffness: 300 }}
         onClick={() => setIsDialogOpen(true)}
       >
-        <div className="aspect-square relative overflow-hidden">
+        {/* Image Container */}
+        <div className="relative aspect-square w-full h-full">
           <Image
             src={subcategory.exampleImage || "/placeholder.svg"}
             alt={subcategory.name}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-            <h3 className="text-white font-semibold text-xl relative z-10">{subcategory.name}</h3>
+          {/* Gradient Overlay for Text */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+        </div>
+
+        {/* Content Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+          <h3 className="text-lg font-semibold truncate" title={subcategory.name}>
+            {subcategory.name}
+          </h3>
+          <p className="text-sm text-white/80 mt-1">{subcategory.count} items available</p>
+          <div className="mt-4">
+            <div className="inline-flex items-center font-semibold text-white group-hover:text-emerald-300 transition-colors text-sm">
+              Select Size
+              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </div>
           </div>
         </div>
-        <div className="p-4 text-white/70 text-sm">{subcategory.count} items available</div>
       </motion.div>
 
       <SizeSelectionDialog

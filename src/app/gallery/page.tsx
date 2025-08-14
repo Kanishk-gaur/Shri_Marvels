@@ -1,23 +1,21 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Filter, Grid, List } from "lucide-react";
-import { FilterChips } from "@/components/filter-chips";
+import { ArrowLeft, Filter, Loader } from "lucide-react";
 import { GalleryCard } from "@/components/gallery-card";
-import { Pagination } from "@/components/pagination";
-import { allProducts, categories, sizes, Product } from "@/data";
+import { allProducts, categories, Product, sizes as allSizes } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
+import { FilterChips } from "@/components/filter-chips";
+import { SizeFilter } from "@/components/size-filter";
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 12;
 
 type SubCategoryInfo = {
   id: string;
   name: string;
-  count: number;
-  exampleImage: string;
 };
 
 export default function GalleryPage() {
@@ -26,7 +24,6 @@ export default function GalleryPage() {
   const initialMainCategory =
     (searchParams.get("category") as "all" | "marvel" | "tiles") || "all";
   const initialSubcategory = searchParams.get("subcategory") || null;
-  const initialSize = searchParams.get("size") || null;
 
   const [selectedMainCategory, setSelectedMainCategory] = useState<
     "all" | "marvel" | "tiles"
@@ -34,57 +31,23 @@ export default function GalleryPage() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
     initialSubcategory
   );
-  const [selectedSize, setSelectedSize] = useState<string | null>(initialSize);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+
   const [sortBy, setSortBy] = useState<"name" | "rating">("name");
-  const [currentPage, setCurrentPage] = useState(1);
+  
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    setSelectedMainCategory(
-      (searchParams.get("category") as "all" | "marvel" | "tiles") || "all"
-    );
-    setSelectedSubcategory(searchParams.get("subcategory") || null);
-    setSelectedSize(searchParams.get("size") || null);
-    setCurrentPage(1);
-  }, [searchParams]);
-
-  const filterChipCategories = useMemo(() => {
-    let currentCategories: (SubCategoryInfo & { sizes: string[] })[] = [];
-    let currentSizes: string[] = [];
-
-    if (selectedMainCategory === "marvel") {
-      currentCategories = categories.marvel.map((cat: SubCategoryInfo) => ({
-        ...cat,
-        sizes: sizes.marvel,
-      }));
-      currentSizes = sizes.marvel;
-    } else if (selectedMainCategory === "tiles") {
-      currentCategories = categories.tiles.map((cat: SubCategoryInfo) => ({
-        ...cat,
-        sizes: sizes.tiles,
-      }));
-      currentSizes = sizes.tiles;
-    } else {
-      const combinedSubcategories = [
-        ...categories.marvel.map((cat: SubCategoryInfo) => ({
-          ...cat,
-          sizes: sizes.marvel,
-        })),
-        ...categories.tiles.map((cat: SubCategoryInfo) => ({
-          ...cat,
-          sizes: sizes.tiles,
-        })),
-      ];
-      const uniqueSubcategories = Array.from(
-        new Set(combinedSubcategories.map((c) => c.id))
-      ).map((id) => combinedSubcategories.find((c) => c.id === id)!);
-      currentCategories = uniqueSubcategories;
-      currentSizes = Array.from(new Set([...sizes.marvel, ...sizes.tiles]));
-    }
-    return { categories: currentCategories, sizes: currentSizes };
+  const availableSizes = useMemo(() => {
+    if (selectedMainCategory === "marvel") return allSizes.marvel;
+    if (selectedMainCategory === "tiles") return allSizes.tiles;
+    const combined = [...allSizes.marvel, ...allSizes.tiles];
+    return [...new Set(combined)].sort((a, b) => parseInt(a) - parseInt(b));
   }, [selectedMainCategory]);
-
-  const filteredProducts = useMemo(() => {
+  
+  const filteredAndSortedProducts = useMemo(() => {
     let productsToFilter = allProducts;
 
     if (selectedMainCategory === "marvel") {
@@ -93,7 +56,7 @@ export default function GalleryPage() {
       productsToFilter = allProducts.filter((p) => p.category === "tiles");
     }
 
-    return productsToFilter
+    const filtered = productsToFilter
       .filter((product: Product) => {
         if (!selectedSubcategory) return true;
         return (
@@ -102,33 +65,94 @@ export default function GalleryPage() {
         );
       })
       .filter((product: Product) => {
-        if (!selectedSize) return true;
-        return product.sizes.includes(selectedSize);
-      })
-      .sort((a, b) => {
-        switch (sortBy) {
-          case "rating":
-            return b.rating - a.rating;
-          default:
-            return a.name.localeCompare(b.name);
-        }
+        if (selectedSizes.length === 0) return true;
+        return product.sizes.some(size => selectedSizes.includes(size));
       });
-  }, [selectedMainCategory, selectedSubcategory, selectedSize, sortBy]);
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "rating":
+          return b.rating - a.rating;
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+  }, [selectedMainCategory, selectedSubcategory, sortBy, selectedSizes]);
+
+  useEffect(() => {
+    setPage(1);
+    const newProducts = filteredAndSortedProducts.slice(0, ITEMS_PER_PAGE);
+    setDisplayedProducts(newProducts);
+    setHasMore(filteredAndSortedProducts.length > ITEMS_PER_PAGE);
+  }, [filteredAndSortedProducts]);
+
+  const loadMoreProducts = useCallback(() => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      const nextPage = page + 1;
+      const newProducts = filteredAndSortedProducts.slice(
+        0,
+        nextPage * ITEMS_PER_PAGE
+      );
+
+      setDisplayedProducts(newProducts);
+      setPage(nextPage);
+      setHasMore(newProducts.length < filteredAndSortedProducts.length);
+      setIsLoading(false);
+    }, 500);
+  }, [page, hasMore, isLoading, filteredAndSortedProducts]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 200
+      ) {
+        loadMoreProducts();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadMoreProducts]);
 
   const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
     setSelectedMainCategory(category);
     setSelectedSubcategory(null);
-    setSelectedSize(null);
-    setCurrentPage(1);
   };
 
+  const handleSizeChange = (size: string) => {
+    setSelectedSizes(prev => 
+      prev.includes(size) 
+        ? prev.filter(s => s !== size) 
+        : [...prev, size]
+    );
+  };
+  
+  const filterChipCategories = useMemo(() => {
+    let currentCategories: SubCategoryInfo[] = [];
+
+    if (selectedMainCategory === "marvel") {
+      currentCategories = categories.marvel;
+    } else if (selectedMainCategory === "tiles") {
+      currentCategories = categories.tiles;
+    } else {
+      const combinedSubcategories = [
+        ...categories.marvel,
+        ...categories.tiles,
+      ];
+      const uniqueSubcategories = Array.from(
+        new Set(combinedSubcategories.map((c) => c.id))
+      ).map((id) => combinedSubcategories.find((c) => c.id === id)!);
+      currentCategories = uniqueSubcategories;
+    }
+    return currentCategories;
+  }, [selectedMainCategory]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pt-16">
+    <div className="min-h-screen bg-gradient-to-br from-[#EFE2C8] to-[#E7DFC9] pt-16">
       <motion.div
         className="p-6 flex items-center justify-between"
         initial={{ y: -50, opacity: 0 }}
@@ -137,7 +161,7 @@ export default function GalleryPage() {
       >
         <Link href="/">
           <motion.button
-            className="flex items-center space-x-2 text-white hover:text-cyan-400 transition-colors"
+            className="flex items-center space-x-2 text-[#5C4421] hover:text-[#84632e] transition-colors"
             whileHover={{ x: -5 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -145,165 +169,100 @@ export default function GalleryPage() {
           </motion.button>
         </Link>
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white">Our Full Gallery</h1>
-          <p className="text-white/70">Explore all our products</p>
+          <h1 className="text-3xl font-bold text-[#5C4421]">Our Full Gallery</h1>
+          <p className="text-[#84632e]">Explore all our products</p>
         </div>
         <div className="w-32"></div>
       </motion.div>
 
-      <motion.div
-        className="px-6 py-8"
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.8 }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6 space-y-4 lg:space-y-0">
-            <div className="flex items-center space-x-2">
-              <Filter className="w-5 h-5 text-white" />
-              <h2 className="text-xl font-semibold text-white">
-                Filter Gallery
-              </h2>
-              <span className="text-white/60">
-                ({filteredProducts.length} items)
-              </span>
+      <div className="max-w-screen-2xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left Sidebar for Filters */}
+          <aside className="lg:col-span-1">
+            <div className="sticky top-24">
+              <SizeFilter 
+                sizes={availableSizes} 
+                selectedSizes={selectedSizes}
+                onSizeChange={handleSizeChange}
+                onClear={() => setSelectedSizes([])}
+              />
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-white/10 rounded-lg p-1">
-                <Button
-                  onClick={() => handleMainCategorySelect("all")}
-                  variant="ghost"
-                  className={`px-3 py-1.5 rounded-md text-sm ${
-                    selectedMainCategory === "all"
-                      ? "bg-white/20 text-white"
-                      : "text-white/70 hover:bg-white/15"
-                  }`}
-                >
-                  All
-                </Button>
-                <Button
-                  onClick={() => handleMainCategorySelect("marvel")}
-                  variant="ghost"
-                  className={`px-3 py-1.5 rounded-md text-sm ${
-                    selectedMainCategory === "marvel"
-                      ? "bg-white/20 text-white"
-                      : "text-white/70 hover:bg-white/15"
-                  }`}
-                >
-                  Marvel
-                </Button>
-                <Button
-                  onClick={() => handleMainCategorySelect("tiles")}
-                  variant="ghost"
-                  className={`px-3 py-1.5 rounded-md text-sm ${
-                    selectedMainCategory === "tiles"
-                      ? "bg-white/20 text-white"
-                      : "text-white/70 hover:bg-white/15"
-                  }`}
-                >
-                  Tiles
-                </Button>
-              </div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as "name" | "rating")}
-                className="bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:ring-cyan-500"
-              >
-                <option value="name">Sort by Name</option>
-                <option value="rating">Highest Rated</option>
-              </select>
-              <div className="flex items-center space-x-1 bg-white/10 rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded ${
-                    viewMode === "grid" ? "bg-white/20" : ""
-                  }`}
-                >
-                  <Grid className="w-4 h-4 text-white" />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded ${
-                    viewMode === "list" ? "bg-white/20" : ""
-                  }`}
-                >
-                  <List className="w-4 h-4 text-white" />
-                </button>
-              </div>
-            </div>
-          </div>
-          <FilterChips
-            categories={filterChipCategories.categories}
-            selectedCategory={selectedSubcategory}
-            selectedSize={selectedSize}
-            onCategorySelect={setSelectedSubcategory}
-            onSizeSelect={setSelectedSize}
-          />
-        </div>
-      </motion.div>
+          </aside>
 
-      <motion.div
-        className="px-6 pb-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-      >
-        <div className="max-w-7xl mx-auto">
-          {paginatedProducts.length > 0 ? (
-            <>
-              <div className="mb-4 text-white/70">
-                Displaying items {startIndex + 1} -{" "}
-                {Math.min(endIndex, filteredProducts.length)} of{" "}
-                {filteredProducts.length}
+          {/* Main Content */}
+          <main className="lg:col-span-3">
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 space-y-4 md:space-y-0">
+                <div className="flex items-center space-x-2">
+                  <h2 className="text-xl font-semibold text-[#5C4421]">
+                    Products
+                  </h2>
+                  <span className="text-[#84632e]">
+                    ({filteredAndSortedProducts.length} items)
+                  </span>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2 bg-white/60 rounded-lg p-1">
+                    <Button onClick={() => handleMainCategorySelect("all")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "all" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>All</Button>
+                    <Button onClick={() => handleMainCategorySelect("marvel")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "marvel" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>Marvel</Button>
+                    <Button onClick={() => handleMainCategorySelect("tiles")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "tiles" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>Tiles</Button>
+                  </div>
+                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value as "name" | "rating")} className="bg-white/60 border border-slate-300 text-[#5C4421] rounded-lg px-3 py-2 text-sm focus:ring-emerald-500">
+                    <option value="name">Sort by Name</option>
+                    <option value="rating">Highest Rated</option>
+                  </select>
+                </div>
               </div>
-              <div
-                className={`grid gap-6 ${
-                  viewMode === "grid"
-                    ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                    : "grid-cols-1"
-                }`}
-              >
-                {paginatedProducts.map((product, index) => (
-                  <GalleryCard
-                    key={product.id}
-                    product={product}
-                    index={index}
-                  />
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+              <FilterChips
+                categories={filterChipCategories}
+                selectedCategory={selectedSubcategory}
+                onCategorySelect={setSelectedSubcategory}
+              />
+            </motion.div>
+
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              {displayedProducts.length > 0 ? (
+                <>
+                  <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                    {displayedProducts.map((product, index) => (
+                      <GalleryCard
+                        key={`${product.id}-${index}`}
+                        product={product}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                  {isLoading && (
+                    <div className="flex justify-center items-center py-8">
+                      <Loader className="w-8 h-8 text-[#84632e] animate-spin" />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-20">
+                  <div className="w-24 h-24 mx-auto mb-6 bg-white/60 rounded-full flex items-center justify-center">
+                    <Filter className="w-12 h-12 text-[#84632e]/50" />
+                  </div>
+                  <h3 className="text-2xl font-semibold text-[#5C4421] mb-2">No items found</h3>
+                  <p className="text-[#84632e] mb-6">Try adjusting your filters to see more results.</p>
+                  <Button onClick={() => { setSelectedMainCategory("all"); setSelectedSubcategory(null); setSelectedSizes([]); }} className="bg-gradient-to-r from-[#B79962] to-[#F3C77B] text-white font-semibold py-2 px-6 rounded-lg">
+                    Clear All Filters
+                  </Button>
+                </div>
               )}
-            </>
-          ) : (
-            <div className="text-center py-20">
-              <div className="w-24 h-24 mx-auto mb-6 bg-white/10 rounded-full flex items-center justify-center">
-                <Filter className="w-12 h-12 text-white/50" />
-              </div>
-              <h3 className="text-2xl font-semibold text-white mb-2">
-                No items found
-              </h3>
-              <p className="text-white/70 mb-6">
-                Try adjusting your filters to see more results.
-              </p>
-              <Button
-                onClick={() => {
-                  setSelectedMainCategory("all");
-                  setSelectedSubcategory(null);
-                  setSelectedSize(null);
-                }}
-                className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-lg"
-              >
-                Clear All Filters
-              </Button>
-            </div>
-          )}
+            </motion.div>
+          </main>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

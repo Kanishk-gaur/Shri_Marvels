@@ -52,7 +52,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="bg-white/10 border-white/20 text-white hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-white/60 border-slate-300 text-[#5C4421] hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <ChevronLeft className="w-4 h-4" />
       </Button>
@@ -67,7 +67,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
             transition={{ delay: index * 0.05, duration: 0.3 }}
           >
             {page === "..." ? (
-              <span className="px-3 py-2 text-white/50">...</span>
+              <span className="px-3 py-2 text-[#84632e]">...</span>
             ) : (
               <Button
                 variant={currentPage === page ? "default" : "outline"}
@@ -75,8 +75,8 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
                 onClick={() => onPageChange(page as number)}
                 className={
                   currentPage === page
-                    ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white"
-                    : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    ? "bg-gradient-to-r from-[#B79962] to-[#F3C77B] text-white"
+                    : "bg-white/60 border-slate-300 text-[#5C4421] hover:bg-white/80"
                 }
               >
                 {page}
@@ -92,7 +92,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="bg-white/10 border-white/20 text-white hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-white/60 border-slate-300 text-[#5C4421] hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <ChevronRight className="w-4 h-4" />
       </Button>
