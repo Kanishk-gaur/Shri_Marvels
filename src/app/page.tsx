@@ -183,7 +183,7 @@ export default function HomePage() {
                 fusion of cutting-edge technology and aesthetic excellence.
               </p>
               <Link
-                href="/gallery?category=tiles"
+                href="/tiles"
                 className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 Explore Tile Collections →
@@ -275,7 +275,7 @@ export default function HomePage() {
                 value to your property.
               </p>
               <Link
-                href="/gallery?category=marvel"
+                href="/marble"
                 className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
                 Discover Premium Marbles →

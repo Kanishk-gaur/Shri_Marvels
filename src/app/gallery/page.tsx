@@ -1,21 +1,33 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Filter, Loader } from "lucide-react";
+import { ArrowLeft, Filter } from "lucide-react";
 import { GalleryCard } from "@/components/gallery-card";
 import { allProducts, categories, Product, sizes as allSizes } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
-import { FilterChips } from "@/components/filter-chips";
+import { FilterChips } from "@/components/filter-chips"; 
 import { SizeFilter } from "@/components/size-filter";
-
-const ITEMS_PER_PAGE = 12;
 
 type SubCategoryInfo = {
   id: string;
   name: string;
+};
+
+// Helper function to group products by size
+const groupProductsBySize = (products: Product[]) => {
+  const grouped: { [size: string]: Product[] } = {};
+  products.forEach((product) => {
+    product.sizes.forEach((size) => {
+      if (!grouped[size]) {
+        grouped[size] = [];
+      }
+      grouped[size].push(product);
+    });
+  });
+  return grouped;
 };
 
 export default function GalleryPage() {
@@ -33,12 +45,7 @@ export default function GalleryPage() {
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
 
-  const [sortBy, setSortBy] = useState<"name" | "rating">("name");
-  
-  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [sortBy] = useState<"name" | "rating">("name");
 
   const availableSizes = useMemo(() => {
     if (selectedMainCategory === "marvel") return allSizes.marvel;
@@ -79,44 +86,10 @@ export default function GalleryPage() {
     });
   }, [selectedMainCategory, selectedSubcategory, sortBy, selectedSizes]);
 
-  useEffect(() => {
-    setPage(1);
-    const newProducts = filteredAndSortedProducts.slice(0, ITEMS_PER_PAGE);
-    setDisplayedProducts(newProducts);
-    setHasMore(filteredAndSortedProducts.length > ITEMS_PER_PAGE);
-  }, [filteredAndSortedProducts]);
-
-  const loadMoreProducts = useCallback(() => {
-    if (isLoading || !hasMore) return;
-
-    setIsLoading(true);
-    setTimeout(() => {
-      const nextPage = page + 1;
-      const newProducts = filteredAndSortedProducts.slice(
-        0,
-        nextPage * ITEMS_PER_PAGE
-      );
-
-      setDisplayedProducts(newProducts);
-      setPage(nextPage);
-      setHasMore(newProducts.length < filteredAndSortedProducts.length);
-      setIsLoading(false);
-    }, 500);
-  }, [page, hasMore, isLoading, filteredAndSortedProducts]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 200
-      ) {
-        loadMoreProducts();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadMoreProducts]);
+    const groupedBySize = useMemo(
+    () => groupProductsBySize(filteredAndSortedProducts),
+    [filteredAndSortedProducts]
+  );
 
   const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
     setSelectedMainCategory(category);
@@ -152,7 +125,7 @@ export default function GalleryPage() {
   }, [selectedMainCategory]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EFE2C8] to-[#E7DFC9] pt-16">
+    <div className="min-h-screen bg-orange-50 pt-16">
       <motion.div
         className="p-6 flex items-center justify-between"
         initial={{ y: -50, opacity: 0 }}
@@ -161,7 +134,7 @@ export default function GalleryPage() {
       >
         <Link href="/">
           <motion.button
-            className="flex items-center space-x-2 text-[#5C4421] hover:text-[#84632e] transition-colors"
+            className="flex items-center space-x-2 text-zinc-600 hover:text-zinc-900 transition-colors"
             whileHover={{ x: -5 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -169,99 +142,80 @@ export default function GalleryPage() {
           </motion.button>
         </Link>
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-[#5C4421]">Our Full Gallery</h1>
-          <p className="text-[#84632e]">Explore all our products</p>
+          <h1 className="text-3xl font-bold text-zinc-800">Our Full Gallery</h1>
+          <p className="text-zinc-500">Explore all our products</p>
         </div>
         <div className="w-32"></div>
       </motion.div>
 
       <div className="max-w-screen-2xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left Sidebar for Filters */}
-          <aside className="lg:col-span-1">
-            <div className="sticky top-24">
-              <SizeFilter 
-                sizes={availableSizes} 
+        {/* Filter Bar */}
+        <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-zinc-200/80 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
+            <div className="flex items-center space-x-4 mb-4 md:mb-0">
+              <div className="flex items-center space-x-2 bg-zinc-200/60 rounded-lg p-1">
+                <Button onClick={() => handleMainCategorySelect("all")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "all" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>All</Button>
+                <Button onClick={() => handleMainCategorySelect("marvel")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "marvel" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Marvel</Button>
+                <Button onClick={() => handleMainCategorySelect("tiles")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "tiles" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Tiles</Button>
+              </div>
+              <SizeFilter
+                sizes={availableSizes}
                 selectedSizes={selectedSizes}
                 onSizeChange={handleSizeChange}
                 onClear={() => setSelectedSizes([])}
               />
             </div>
-          </aside>
-
-          {/* Main Content */}
-          <main className="lg:col-span-3">
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-            >
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 space-y-4 md:space-y-0">
-                <div className="flex items-center space-x-2">
-                  <h2 className="text-xl font-semibold text-[#5C4421]">
-                    Products
-                  </h2>
-                  <span className="text-[#84632e]">
-                    ({filteredAndSortedProducts.length} items)
-                  </span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2 bg-white/60 rounded-lg p-1">
-                    <Button onClick={() => handleMainCategorySelect("all")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "all" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>All</Button>
-                    <Button onClick={() => handleMainCategorySelect("marvel")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "marvel" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>Marvel</Button>
-                    <Button onClick={() => handleMainCategorySelect("tiles")} variant="ghost" className={`px-3 py-1.5 rounded-md text-sm ${selectedMainCategory === "tiles" ? "bg-white shadow text-[#5C4421]" : "text-[#84632e] hover:bg-white/70"}`}>Tiles</Button>
-                  </div>
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value as "name" | "rating")} className="bg-white/60 border border-slate-300 text-[#5C4421] rounded-lg px-3 py-2 text-sm focus:ring-emerald-500">
-                    <option value="name">Sort by Name</option>
-                    <option value="rating">Highest Rated</option>
-                  </select>
-                </div>
-              </div>
+            <div className="flex-grow overflow-x-auto">
               <FilterChips
                 categories={filterChipCategories}
                 selectedCategory={selectedSubcategory}
                 onCategorySelect={setSelectedSubcategory}
               />
-            </motion.div>
-
-            <motion.div
-              className="mt-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              {displayedProducts.length > 0 ? (
-                <>
-                  <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-                    {displayedProducts.map((product, index) => (
-                      <GalleryCard
-                        key={`${product.id}-${index}`}
-                        product={product}
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                  {isLoading && (
-                    <div className="flex justify-center items-center py-8">
-                      <Loader className="w-8 h-8 text-[#84632e] animate-spin" />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center py-20">
-                  <div className="w-24 h-24 mx-auto mb-6 bg-white/60 rounded-full flex items-center justify-center">
-                    <Filter className="w-12 h-12 text-[#84632e]/50" />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-[#5C4421] mb-2">No items found</h3>
-                  <p className="text-[#84632e] mb-6">Try adjusting your filters to see more results.</p>
-                  <Button onClick={() => { setSelectedMainCategory("all"); setSelectedSubcategory(null); setSelectedSizes([]); }} className="bg-gradient-to-r from-[#B79962] to-[#F3C77B] text-white font-semibold py-2 px-6 rounded-lg">
-                    Clear All Filters
-                  </Button>
-                </div>
-              )}
-            </motion.div>
-          </main>
+            </div>
+          </div>
         </div>
+
+        {/* Main Content */}
+        <main>
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {Object.keys(groupedBySize).length > 0 ? (
+              Object.keys(groupedBySize)
+                .sort((a, b) => parseInt(a) - parseInt(b))
+                .map((size) => (
+                  <div key={size} className="mb-12">
+                    <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
+                      Size: {size}&quot;
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                      {groupedBySize[size].map((product, index) => (
+                          <GalleryCard
+                            key={`${product.id}-${index}`}
+                            product={product}
+                            index={index}
+                          />
+                      ))}
+                    </div>
+                  </div>
+                ))
+            ) : (
+              <div className="text-center py-20">
+                <div className="w-24 h-24 mx-auto mb-6 bg-zinc-200 rounded-full flex items-center justify-center">
+                  <Filter className="w-12 h-12 text-zinc-400" />
+                </div>
+                <h3 className="text-2xl font-semibold text-zinc-700 mb-2">No items found</h3>
+                <p className="text-zinc-500 mb-6">Try adjusting your filters to see more results.</p>
+                <Button onClick={() => { setSelectedMainCategory("all"); setSelectedSubcategory(null); setSelectedSizes([]); }} className="bg-zinc-800 text-white font-semibold py-2 px-6 rounded-lg hover:bg-zinc-700">
+                  Clear All Filters
+                </Button>
+              </div>
+            )}
+          </motion.div>
+        </main>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ export default function MarvelPage() {
   }))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#EFE2C8] to-[#E7DFC9] antialiased">
       {/* Header */}
       <motion.div
         className="p-6 flex items-center justify-between"
@@ -35,7 +35,7 @@ export default function MarvelPage() {
       >
         <Link href="/">
           <motion.button
-            className="flex items-center space-x-2 text-white hover:text-red-400 transition-colors"
+            className="flex items-center space-x-2 text-[#5C4421] hover:text-[#84632e] transition-colors"
             whileHover={{ x: -5 }}
           >
             <ArrowLeft className="w-5 h-5" />
@@ -43,8 +43,8 @@ export default function MarvelPage() {
           </motion.button>
         </Link>
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white">Premium Marble Collection</h1>
-          <p className="text-white/70">Natural stone from the world&apos;s finest quarries</p>
+          <h1 className="text-3xl font-bold text-[#5C4421]">Premium Marble Collection</h1>
+          <p className="text-[#84632e]">Natural stone from the world&apos;s finest quarries</p>
         </div>
         <div className="w-24"></div>
       </motion.div>
@@ -66,12 +66,12 @@ export default function MarvelPage() {
         transition={{ delay: 0.4, duration: 0.8 }}
       >
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">Explore Marble Types</h2>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-[#5C4421] mb-4">Explore Marble Types</h2>
+          <p className="text-[#84632e] max-w-2xl mx-auto">
             Select a marble type to view available sizes and browse our curated gallery.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {marvelSubcategories.map((subcategory) => (
             <SubcategoryCard
               key={subcategory.id}
