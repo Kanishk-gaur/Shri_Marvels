@@ -16,16 +16,14 @@ type SubCategoryInfo = {
   name: string;
 };
 
-// Helper function to group products by size
-const groupProductsBySize = (products: Product[]) => {
-  const grouped: { [size: string]: Product[] } = {};
+// Helper function to group products by subcategory
+const groupProductsBySubcategory = (products: Product[]) => {
+  const grouped: { [subcategory: string]: Product[] } = {};
   products.forEach((product) => {
-    product.sizes.forEach((size) => {
-      if (!grouped[size]) {
-        grouped[size] = [];
-      }
-      grouped[size].push(product);
-    });
+    if (!grouped[product.subcategory]) {
+      grouped[product.subcategory] = [];
+    }
+    grouped[product.subcategory].push(product);
   });
   return grouped;
 };
@@ -86,8 +84,8 @@ export default function GalleryPage() {
     });
   }, [selectedMainCategory, selectedSubcategory, sortBy, selectedSizes]);
 
-    const groupedBySize = useMemo(
-    () => groupProductsBySize(filteredAndSortedProducts),
+  const groupedBySubcategory = useMemo(
+    () => groupProductsBySubcategory(filteredAndSortedProducts),
     [filteredAndSortedProducts]
   );
 
@@ -127,43 +125,50 @@ export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-orange-50 pt-16">
       <motion.div
-        className="p-6 flex items-center justify-between"
+        className="relative flex items-center justify-center p-4 sm:p-6"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <Link href="/">
-          <motion.button
-            className="flex items-center space-x-2 text-zinc-600 hover:text-zinc-900 transition-colors"
-            whileHover={{ x: -5 }}
-          >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Home</span>
-          </motion.button>
-        </Link>
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-zinc-800">Our Full Gallery</h1>
-          <p className="text-zinc-500">Explore all our products</p>
+        <div className="absolute left-4 sm:left-6">
+          <Link href="/">
+            <motion.button
+              className="flex items-center space-x-2 text-zinc-600 hover:text-zinc-900 transition-colors"
+              whileHover={{ x: -5 }}
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="hidden sm:inline">Back to Home</span>
+            </motion.button>
+          </Link>
         </div>
-        <div className="w-32"></div>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-zinc-800 sm:text-3xl">
+            Our Full Gallery
+          </h1>
+          <p className="text-sm text-zinc-500 sm:text-base">
+            Explore all our products
+          </p>
+        </div>
       </motion.div>
 
       <div className="max-w-screen-2xl mx-auto px-6 py-8">
         {/* Filter Bar */}
-        <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-zinc-200/80 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
-            <div className="flex items-center space-x-4 mb-4 md:mb-0">
+        <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-zinc-200/80 mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6">
+            <div className="flex items-center flex-wrap gap-4 mb-4 lg:mb-0 lg:flex-nowrap">
               <div className="flex items-center space-x-2 bg-zinc-200/60 rounded-lg p-1">
-                <Button onClick={() => handleMainCategorySelect("all")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "all" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>All</Button>
-                <Button onClick={() => handleMainCategorySelect("marvel")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "marvel" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Marvel</Button>
-                <Button onClick={() => handleMainCategorySelect("tiles")} variant="ghost" className={`flex-1 px-4 py-2 rounded-md text-sm ${selectedMainCategory === "tiles" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Tiles</Button>
+                <Button onClick={() => handleMainCategorySelect("all")} variant="ghost" className={`flex-1 px-3 sm:px-4 py-2 rounded-md text-sm ${selectedMainCategory === "all" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>All</Button>
+                <Button onClick={() => handleMainCategorySelect("marvel")} variant="ghost" className={`flex-1 px-3 sm:px-4 py-2 rounded-md text-sm ${selectedMainCategory === "marvel" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Marvel</Button>
+                <Button onClick={() => handleMainCategorySelect("tiles")} variant="ghost" className={`flex-1 px-3 sm:px-4 py-2 rounded-md text-sm ${selectedMainCategory === "tiles" ? "bg-white shadow text-zinc-800" : "text-zinc-600 hover:bg-white/70"}`}>Tiles</Button>
               </div>
-              <SizeFilter
-                sizes={availableSizes}
-                selectedSizes={selectedSizes}
-                onSizeChange={handleSizeChange}
-                onClear={() => setSelectedSizes([])}
-              />
+              <div className="flex-shrink-0">
+                <SizeFilter
+                  sizes={availableSizes}
+                  selectedSizes={selectedSizes}
+                  onSizeChange={handleSizeChange}
+                  onClear={() => setSelectedSizes([])}
+                />
+              </div>
             </div>
             <div className="flex-grow overflow-x-auto">
               <FilterChips
@@ -183,16 +188,16 @@ export default function GalleryPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            {Object.keys(groupedBySize).length > 0 ? (
-              Object.keys(groupedBySize)
-                .sort((a, b) => parseInt(a) - parseInt(b))
-                .map((size) => (
-                  <div key={size} className="mb-12">
+            {Object.keys(groupedBySubcategory).length > 0 ? (
+              Object.keys(groupedBySubcategory)
+                .sort()
+                .map((subcategory) => (
+                  <div key={subcategory} className="mb-12">
                     <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
-                      Size: {size}&quot;
+                      {subcategory}
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                      {groupedBySize[size].map((product, index) => (
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
+                      {groupedBySubcategory[subcategory].map((product, index) => (
                           <GalleryCard
                             key={`${product.id}-${index}`}
                             product={product}

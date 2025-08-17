@@ -32,7 +32,7 @@ export function SizeFilter({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between bg-white"
+          className="w-[140px] lg:w-[200px] justify-between bg-white"
         >
           {selectedSizes.length > 0
             ? `${selectedSizes.length} selected`
@@ -40,7 +40,7 @@ export function SizeFilter({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 bg-white">
+      <PopoverContent className="w-[150px] lg:w-[200px] p-0 bg-white">
         <div className="p-2 max-h-80 overflow-y-auto">
           {sizes.map((size) => (
             <motion.div

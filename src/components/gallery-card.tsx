@@ -31,9 +31,6 @@ export function GalleryCard({ product, index = 0 }: GalleryCardProps) {
           <h3 className="text-gray-800 font-semibold text-xs truncate" title={product.name}>
             {product.name}
           </h3>
-          <p className="text-gray-500 text-xs mt-1">
-            {product.subcategory}
-          </p>
           <p className="text-emerald-600 text-xs font-medium mt-2">
             Sizes: {product.sizes.map(s => `${s}"`).join(', ')}
           </p>
