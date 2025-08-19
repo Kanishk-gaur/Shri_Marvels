@@ -8,14 +8,9 @@ export interface Product {
   subcategory: string
    sizes: string[]
   material: string
-  finish: string
-  thickness: string
   image: string
   images: string[]
-  description: string
-  features: string[]
   rating: number
-  reviews: number
   dimensions: {
     length: number
     width: number
