@@ -90,20 +90,10 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 />
               ))}
             </div>
-            <span className="text-white/70 text-sm">({product.reviews})</span>
           </div>
 
           {/* Material & Finish */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex space-x-2">
-              <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full">
-                {product.material}
-              </span>
-              <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full">
-                {product.finish}
-              </span>
-            </div>
-          </div>
+          
 
           <Link href={`/${product.category}/${product.id}`}>
             <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
