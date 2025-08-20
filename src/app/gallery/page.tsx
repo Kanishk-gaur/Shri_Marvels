@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Filter } from "lucide-react";
-import { GalleryCard } from "@/components/gallery-card";
+import GalleryCard from "@/components/gallery-card";
 import { allProducts, categories, Product, sizes as allSizes } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
@@ -28,6 +28,8 @@ const groupProductsBySubcategory = (products: Product[]) => {
   return grouped;
 };
 
+const ITEMS_PER_PAGE = 50;
+
 export default function GalleryPage() {
   const searchParams = useSearchParams();
 
@@ -42,6 +44,9 @@ export default function GalleryPage() {
     initialSubcategory
   );
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const [sortBy] = useState<"name" | "rating">("name");
 
@@ -84,10 +89,55 @@ export default function GalleryPage() {
     });
   }, [selectedMainCategory, selectedSubcategory, sortBy, selectedSizes]);
 
-  const groupedBySubcategory = useMemo(
-    () => groupProductsBySubcategory(filteredAndSortedProducts),
-    [filteredAndSortedProducts]
-  );
+  const loadMoreProducts = useCallback(() => {
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const newProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
+    
+    if (newProducts.length > 0) {
+      setVisibleProducts(prev => [...prev, ...newProducts]);
+      setPage(prev => prev + 1);
+    }
+    
+    if (endIndex >= filteredAndSortedProducts.length) {
+      setHasMore(false);
+    }
+  }, [page, filteredAndSortedProducts]);
+
+  useEffect(() => {
+    setVisibleProducts([]);
+    setPage(1);
+    setHasMore(true);
+  }, [selectedMainCategory, selectedSubcategory, selectedSizes]);
+
+  useEffect(() => {
+    if (page === 1 && hasMore) {
+      loadMoreProducts();
+    }
+  }, [page, hasMore, loadMoreProducts]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 500 || !hasMore) {
+        return;
+      }
+      loadMoreProducts();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadMoreProducts, hasMore]);
+
+  const groupedBySubcategory = useMemo(() => {
+    const grouped: { [subcategory: string]: Product[] } = {};
+    visibleProducts.forEach((product) => {
+      if (!grouped[product.subcategory]) {
+        grouped[product.subcategory] = [];
+      }
+      grouped[product.subcategory].push(product);
+    });
+    return grouped;
+  }, [visibleProducts]);
 
   const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
     setSelectedMainCategory(category);
@@ -101,6 +151,10 @@ export default function GalleryPage() {
         : [...prev, size]
     );
   };
+
+  const handleSubcategorySelect = (category: string | null) => {
+    setSelectedSubcategory(category);
+  }
   
   const filterChipCategories = useMemo(() => {
     let currentCategories: SubCategoryInfo[] = [];
@@ -174,7 +228,7 @@ export default function GalleryPage() {
               <FilterChips
                 categories={filterChipCategories}
                 selectedCategory={selectedSubcategory}
-                onCategorySelect={setSelectedSubcategory}
+                onCategorySelect={handleSubcategorySelect}
               />
             </div>
           </div>
@@ -191,13 +245,17 @@ export default function GalleryPage() {
             {Object.keys(groupedBySubcategory).length > 0 ? (
               Object.keys(groupedBySubcategory)
                 .sort()
-                .map((subcategory) => (
+                .map((subcategory) => {
+                  const productsInSubcategory = groupedBySubcategory[subcategory];
+                  const subcategorySizes = Array.from(new Set(productsInSubcategory.flatMap(p => p.sizes))).sort((a,b) => parseInt(a) - parseInt(b));
+
+                  return (
                   <div key={subcategory} className="mb-12">
                     <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
-                      {subcategory}
+                      {subcategory} <span className="text-lg font-medium text-emerald-600">({subcategorySizes.map(s => `${s}"`).join(', ')})</span>
                     </h2>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
-                      {groupedBySubcategory[subcategory].map((product, index) => (
+                    <div className="grid grid-cols-24 gap-4 grid-flow-dense">
+                      {productsInSubcategory.map((product, index) => (
                           <GalleryCard
                             key={`${product.id}-${index}`}
                             product={product}
@@ -206,7 +264,7 @@ export default function GalleryPage() {
                       ))}
                     </div>
                   </div>
-                ))
+                )})
             ) : (
               <div className="text-center py-20">
                 <div className="w-24 h-24 mx-auto mb-6 bg-zinc-200 rounded-full flex items-center justify-center">
@@ -220,6 +278,11 @@ export default function GalleryPage() {
               </div>
             )}
           </motion.div>
+          {hasMore && (
+            <div className="text-center py-10">
+              <p className="text-zinc-500">Loading more products...</p>
+            </div>
+          )}
         </main>
       </div>
     </div>
