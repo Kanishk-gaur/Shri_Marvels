@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/data";
+import { useState } from "react";
 
 interface GalleryCardProps {
   product: Product;
@@ -12,6 +13,7 @@ interface GalleryCardProps {
 }
 
 export default function GalleryCard({ product, index = 0, priority = false }: GalleryCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
   
   let gridClass = 'col-span-2 row-span-4'; // Default to 10 items per row and a balanced height
@@ -53,22 +55,27 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
     <motion.div
       className={`group ${gridClass}`}
       initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.6 }}
+      layout
     >
       <Link href={`/${product.category}/${product.id}`} className="block relative bg-white rounded-lg overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg h-full">
         <div className="relative w-full h-full overflow-hidden">
-          <Image
-            src={product.image || "/placeholder.svg"}
-            alt={product.name}
-            fill
-            priority={priority}
-            placeholder="blur"
-            blurDataURL={`data:image/svg+xml;base64,${Buffer.from(
-              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><rect width="1" height="1" fill="#e2e8f0"/></svg>`
-            ).toString("base64")}`}
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          {!isLoaded && product.image && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+          )}
+          {product.image ? (
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              priority={priority}
+              onLoad={() => setIsLoaded(true)}
+              className={`object-cover transition-all duration-300 group-hover:scale-105 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gray-300"></div> // Placeholder for missing image
+          )}
         </div>
         <div className="p-3 absolute bottom-0 bg-gradient-to-t from-black/80 to-transparent w-full">
           <h3 className="text-white font-semibold text-xs truncate" title={product.name}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Filter } from "lucide-react";
@@ -8,7 +8,7 @@ import GalleryCard from "@/components/gallery-card";
 import { allProducts, categories, Product, sizes as allSizes } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
-import { FilterChips } from "@/components/filter-chips"; 
+import { FilterChips } from "@/components/filter-chips";
 import { SizeFilter } from "@/components/size-filter";
 
 type SubCategoryInfo = {
@@ -16,22 +16,37 @@ type SubCategoryInfo = {
   name: string;
 };
 
-// Helper function to group products by subcategory
-const groupProductsBySubcategory = (products: Product[]) => {
-  const grouped: { [subcategory: string]: Product[] } = {};
-  products.forEach((product) => {
-    if (!grouped[product.subcategory]) {
-      grouped[product.subcategory] = [];
-    }
-    grouped[product.subcategory].push(product);
-  });
-  return grouped;
+// Helper function to get grid class based on size
+const getGridClass = (size: string) => {
+  switch (size) {
+    case '6x6':
+      return 'col-span-3 row-span-12';
+    case '8x6':
+      return 'col-span-3 row-span-3';
+    case '8x12':
+      return 'col-span-3 row-span-12';
+    case '12x18':
+      return 'col-span-3 row-span-14';
+    case '2x2':
+      return 'col-span-3 row-span-14';
+    case '2x3':
+      return 'col-span-3 row-span-16';
+    case '6x3':
+      return 'col-span-3 row-span-12';
+    case '2x4':
+      return 'col-span-2 row-span-18';
+    case '8x4':
+      return 'col-span-2 row-span-12';
+    default:
+      return 'col-span-2 row-span-14';
+  }
 };
 
 const ITEMS_PER_PAGE = 20;
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
+  const observer = useRef<IntersectionObserver | null>(null);
 
   const initialMainCategory =
     (searchParams.get("category") as "all" | "marvel" | "tiles") || "all";
@@ -47,8 +62,9 @@ export default function GalleryPage() {
   const [visibleProducts, setVisibleProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const [sortBy] = useState<"name" | "rating">("name");
+  const [sortBy] = useState<'name' | 'rating'>('name');
 
   const availableSizes = useMemo(() => {
     if (selectedMainCategory === "marvel") return allSizes.marvel;
@@ -79,18 +95,46 @@ export default function GalleryPage() {
         return product.sizes.some(size => selectedSizes.includes(size));
       });
 
+    const naturalSort = (a: { name: string }, b: { name: string }) => {
+      const re = /(\d+)/g;
+      const aParts = a.name.split(re);
+      const bParts = b.name.split(re);
+
+      for (let i = 0; i < Math.min(aParts.length, bParts.length); i++) {
+        const aPart = aParts[i];
+        const bPart = bParts[i];
+
+        if (i % 2 === 1) { // It's a number part
+          const aNum = parseInt(aPart, 10);
+          const bNum = parseInt(bPart, 10);
+          if (aNum !== bNum) {
+            return aNum - bNum;
+          }
+        } else { // It's a string part
+          if (aPart !== bPart) {
+            return aPart.localeCompare(bPart);
+          }
+        }
+      }
+      return a.name.length - b.name.length;
+    };
+
+
     return filtered.sort((a, b) => {
       switch (sortBy) {
         case "rating":
           return b.rating - a.rating;
         default:
-          return a.name.localeCompare(b.name);
+          return naturalSort(a, b);
       }
     });
   }, [selectedMainCategory, selectedSubcategory, sortBy, selectedSizes]);
 
   const loadMoreProducts = useCallback(() => {
-    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    if (loading) return;
+    setLoading(true);
+
+    const startIndex = page * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const newProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
     
@@ -102,39 +146,41 @@ export default function GalleryPage() {
     if (endIndex >= filteredAndSortedProducts.length) {
       setHasMore(false);
     }
-  }, [page, filteredAndSortedProducts]);
+    setLoading(false);
+  }, [page, filteredAndSortedProducts, loading]);
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMoreProducts();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore, loadMoreProducts]
+  );
 
   useEffect(() => {
-    setVisibleProducts([]);
+    const initialProducts = filteredAndSortedProducts.slice(0, ITEMS_PER_PAGE);
+    setVisibleProducts(initialProducts);
     setPage(1);
-    setHasMore(true);
-  }, [selectedMainCategory, selectedSubcategory, selectedSizes]);
+    setHasMore(filteredAndSortedProducts.length > ITEMS_PER_PAGE);
+  }, [filteredAndSortedProducts]);
 
-  useEffect(() => {
-    if (page === 1 && hasMore) {
-      loadMoreProducts();
-    }
-  }, [page, hasMore, loadMoreProducts]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 500 || !hasMore) {
-        return;
-      }
-      loadMoreProducts();
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadMoreProducts, hasMore]);
-
-  const groupedBySubcategory = useMemo(() => {
-    const grouped: { [subcategory: string]: Product[] } = {};
+  const groupedBySubcategoryAndSize: { [subcategory: string]: { [gridClass: string]: Product[] } } = useMemo(() => {
+    const grouped: { [subcategory: string]: { [gridClass: string]: Product[] } } = {};
     visibleProducts.forEach((product) => {
       if (!grouped[product.subcategory]) {
-        grouped[product.subcategory] = [];
+        grouped[product.subcategory] = {};
       }
-      grouped[product.subcategory].push(product);
+      const gridClass = getGridClass(product.sizes[0] || 'default');
+      if (!grouped[product.subcategory][gridClass]) {
+        grouped[product.subcategory][gridClass] = [];
+      }
+      grouped[product.subcategory][gridClass].push(product);
     });
     return grouped;
   }, [visibleProducts]);
@@ -242,30 +288,34 @@ export default function GalleryPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            {Object.keys(groupedBySubcategory).length > 0 ? (
-              Object.keys(groupedBySubcategory)
+            {Object.keys(groupedBySubcategoryAndSize).length > 0 ? (
+              Object.keys(groupedBySubcategoryAndSize)
                 .sort()
-                .map((subcategory) => {
-                  const productsInSubcategory = groupedBySubcategory[subcategory];
-                  const subcategorySizes = Array.from(new Set(productsInSubcategory.flatMap(p => p.sizes))).sort((a,b) => parseInt(a) - parseInt(b));
-
-                  return (
+                .map((subcategory) => (
                   <div key={subcategory} className="mb-12">
-                    <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
-                      {subcategory} <span className="text-lg font-medium text-emerald-600">({subcategorySizes.map(s => `${s}"`).join(', ')})</span>
-                    </h2>
-                    <div className="grid grid-cols-24 gap-4 grid-flow-dense">
-                      {productsInSubcategory.map((product, index) => (
-                          <GalleryCard
-                            key={`${product.id}-${index}`}
-                            product={product}
-                            index={index}
-                            priority={index < 10}
-                          />
-                      ))}
-                    </div>
+                    {Object.keys(groupedBySubcategoryAndSize[subcategory]).map((gridClass) => {
+                      const products = groupedBySubcategoryAndSize[subcategory][gridClass];
+                      const sizes = [...new Set(products.flatMap(p => p.sizes))].sort((a,b) => parseInt(a) - parseInt(b));
+                      return (
+                        <div key={gridClass} className="mb-8">
+                          <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
+                            {subcategory} <span className="text-lg font-medium text-emerald-600">({sizes.map(s => `${s}"`).join(', ')})</span>
+                          </h2>
+                          <div className="grid grid-cols-24 gap-4 grid-flow-dense">
+                            {products.map((product, index) => (
+                                <GalleryCard
+                                  key={`${product.id}-${index}`}
+                                  product={product}
+                                  index={index}
+                                  priority={index < 10}
+                                />
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                )})
+                ))
             ) : (
               <div className="text-center py-20">
                 <div className="w-24 h-24 mx-auto mb-6 bg-zinc-200 rounded-full flex items-center justify-center">
@@ -279,9 +329,11 @@ export default function GalleryPage() {
               </div>
             )}
           </motion.div>
-          {hasMore && (
+          <div ref={lastElementRef}></div>
+          {loading && (
             <div className="text-center py-10">
-              <p className="text-zinc-500">Loading more products...</p>
+              <div className="w-8 h-8 border-4 border-zinc-200 border-t-zinc-500 rounded-full animate-spin mx-auto"></div>
+              <p className="text-zinc-500 mt-2">Loading...</p>
             </div>
           )}
         </main>
