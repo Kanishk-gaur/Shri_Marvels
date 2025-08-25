@@ -28,7 +28,7 @@ const groupProductsBySubcategory = (products: Product[]) => {
   return grouped;
 };
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 20;
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
@@ -260,6 +260,7 @@ export default function GalleryPage() {
                             key={`${product.id}-${index}`}
                             product={product}
                             index={index}
+                            priority={index < 10}
                           />
                       ))}
                     </div>

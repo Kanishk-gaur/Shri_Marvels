@@ -8,9 +8,10 @@ import type { Product } from "@/data";
 interface GalleryCardProps {
   product: Product;
   index?: number;
+  priority?: boolean;
 }
 
-export default function GalleryCard({ product, index = 0 }: GalleryCardProps) {
+export default function GalleryCard({ product, index = 0, priority = false }: GalleryCardProps) {
   const sizeString = product.sizes[0] || "1x1";
   
   let gridClass = 'col-span-2 row-span-4'; // Default to 10 items per row and a balanced height
@@ -61,6 +62,11 @@ export default function GalleryCard({ product, index = 0 }: GalleryCardProps) {
             src={product.image || "/placeholder.svg"}
             alt={product.name}
             fill
+            priority={priority}
+            placeholder="blur"
+            blurDataURL={`data:image/svg+xml;base64,${Buffer.from(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><rect width="1" height="1" fill="#e2e8f0"/></svg>`
+            ).toString("base64")}`}
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
