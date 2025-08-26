@@ -62,7 +62,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       <Link href={`/${product.category}/${product.id}`} className="block relative bg-white rounded-lg overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg h-full">
         <div className="relative w-full h-full overflow-hidden">
           {!isLoaded && product.image && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
+            <div className="absolute inset-0 bg-zinc-200 animate-pulse"></div>
           )}
           {product.image ? (
             <Image
