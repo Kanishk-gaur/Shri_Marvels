@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Mail, Phone, Send, Clock, MessageCircle, Camera, Palette, MapPin } from "lucide-react"
+import { Mail, Phone,  MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -77,7 +77,7 @@ export default function ContactPage() {
           Contact Us
         </h1>
         <p className="text-lg text-[#84632e] max-w-3xl mx-auto">
-          We're here to help you with your inquiries. Reach out to us through any of the channels below.
+          We are here to help you with your inquiries. Reach out to us through any of the channels below.
         </p>
       </motion.div>
 
