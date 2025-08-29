@@ -24,7 +24,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       gridClass = 'col-span-3 row-span-12'; // Aspect ratio 1:1
       break;
     case '8x6':
-      gridClass = 'col-span-3 row-span-3'; // Aspect ratio 4:3
+      gridClass = 'col-span-3 row-span-4'; // Aspect ratio 4:3
       break;
     case '8x12':
       gridClass = 'col-span-3 row-span-12'; // Aspect ratio 2:3
