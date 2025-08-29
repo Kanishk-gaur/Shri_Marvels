@@ -4,27 +4,22 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, Home, Info, Mail, LayoutGrid } from "lucide-react";
-import { ProductFilter } from "./product-filter";
+import { usePathname } from "next/navigation";
+import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3 } from "lucide-react";
 
-// Updated nav items, removing Privacy and FAQ
+// Updated nav items to include Marvels and Tiles directly
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/about", label: "About", icon: Info },
-  { href: "/contact", label: "Contact", icon: Mail },
+  { href: "/marbel", label: "Marvels", icon: Gem },
+  { href: "/tiles", label: "Tiles", icon: Layers3 },
   { href: "/gallery", label: "Gallery", icon: LayoutGrid },
+  { href: "/contact", label: "Contact", icon: Mail },
 ];
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleNavFilterSelect = (mainCategory: 'marvel' | 'tiles', subcategory: string, size: string) => {
-    router.push(`/gallery?category=${mainCategory}&subcategory=${subcategory}&size=${size}`);
-    setIsOpen(false); // Close mobile menu on selection
-  };
 
   return (
     <>
@@ -49,8 +44,7 @@ export function Navigation() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-4">
-              {/* Render Home, About, Contact */}
-              {navItems.slice(0, 3).map((item) => {
+              {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
@@ -68,37 +62,6 @@ export function Navigation() {
                   </Link>
                 );
               })}
-
-              {/* Product Filter in Navbar */}
-              <div className="pl-4">
-                <ProductFilter
-                  mainCategory="all"
-                  selectedFilter={null}
-                  onFilterSelect={handleNavFilterSelect}
-                  buttonText="Products"
-                />
-              </div>
-
-              {/* Render Gallery Link */}
-              {(() => {
-                  const galleryItem = navItems[3];
-                  const Icon = galleryItem.icon;
-                  const isActive = pathname === galleryItem.href;
-                  return (
-                      <Link key={galleryItem.href} href={galleryItem.href}>
-                          <motion.div
-                              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                                  isActive ? "bg-white/20 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
-                              }`}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                          >
-                              <Icon className="w-4 h-4" />
-                              <span>{galleryItem.label}</span>
-                          </motion.div>
-                      </Link>
-                  );
-              })()}
             </div>
 
             {/* Mobile Menu Button */}
@@ -126,7 +89,7 @@ export function Navigation() {
               exit={{ y: -100 }}
             >
               <div className="px-4 py-6 space-y-4">
-                {navItems.slice(0, 3).map((item) => {
+                {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
                   return (
@@ -143,34 +106,6 @@ export function Navigation() {
                     </Link>
                   );
                 })}
-                
-                <div className="px-4 pt-4 border-t border-white/10">
-                    <ProductFilter
-                        mainCategory="all"
-                        selectedFilter={null}
-                        onFilterSelect={handleNavFilterSelect}
-                        buttonText="Filter Products"
-                    />
-                </div>
-
-                {(() => {
-                  const galleryItem = navItems[3];
-                  const Icon = galleryItem.icon;
-                  const isActive = pathname === galleryItem.href;
-                  return (
-                    <Link key={galleryItem.href} href={galleryItem.href} onClick={() => setIsOpen(false)}>
-                      <motion.div
-                        className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                          isActive ? "bg-white/20 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
-                        }`}
-                        whileHover={{ x: 5 }}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span>{galleryItem.label}</span>
-                      </motion.div>
-                    </Link>
-                  );
-                })()}
               </div>
             </motion.div>
           </motion.div>
