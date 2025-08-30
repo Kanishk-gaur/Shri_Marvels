@@ -33,9 +33,9 @@ export default function GalleryPage() {
     const [selectedMainCategory, setSelectedMainCategory] = useState<"all" | "marvel" | "tiles">("all");
     const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
     const [activeProductFilter, setActiveProductFilter] = useState<{ category: 'marvel' | 'tiles'; subcategory: string; size: string; } | null>(null);
-  
+
     const [visibleGroups, setVisibleGroups] = useState<string[]>([]);
-    
+
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ export default function GalleryPage() {
         const size = searchParams.get("size");
 
         setSelectedMainCategory(category);
-    
+
         if (category !== 'all' && subcategory && size) {
             setActiveProductFilter({ category, subcategory, size });
             setSelectedSubcategory(null);
@@ -78,14 +78,17 @@ export default function GalleryPage() {
 
         const grouped: { [key: string]: Product[] } = {};
         products.forEach(product => {
-            if (!grouped[product.subcategory]) {
-                grouped[product.subcategory] = [];
-            }
-            grouped[product.subcategory].push(product);
+            product.sizes.forEach(size => {
+                const groupKey = `${product.subcategory} (${size}")`;
+                if (!grouped[groupKey]) {
+                    grouped[groupKey] = [];
+                }
+                grouped[groupKey].push(product);
+            });
         });
 
-        for (const subcategory in grouped) {
-            grouped[subcategory].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+        for (const groupKey in grouped) {
+            grouped[groupKey].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
         }
 
         return grouped;
@@ -105,15 +108,15 @@ export default function GalleryPage() {
 
     const handleSubcategorySelect = (subcategory: string | null) => {
         setSelectedSubcategory(subcategory);
-        setActiveProductFilter(null); 
+        setActiveProductFilter(null);
     };
 
     const handleProductFilterSelect = (category: 'marvel' | 'tiles', subcategory: string, size: string) => {
         setActiveProductFilter({ category, subcategory, size });
         setSelectedMainCategory(category);
-        setSelectedSubcategory(null); 
+        setSelectedSubcategory(null);
     };
-    
+
     const loadMoreProducts = useCallback(() => {
         if (loading) return;
         setLoading(true);
@@ -155,7 +158,7 @@ export default function GalleryPage() {
     }, [selectedMainCategory]);
 
     const isFilterActive = selectedMainCategory !== 'all' || selectedSubcategory !== null || activeProductFilter !== null;
-    
+
     const hasProducts = Object.keys(groupedProducts).length > 0;
 
     return (
@@ -225,13 +228,13 @@ export default function GalleryPage() {
                         transition={{ delay: 0.4, duration: 0.8 }}
                     >
                         {hasProducts ? (
-                            visibleGroups.map((subcategory, groupIndex) => (
-                                <div key={subcategory} className="mb-12">
+                            visibleGroups.map((groupKey, groupIndex) => (
+                                <div key={groupKey} className="mb-12">
                                     <h2 className="text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
-                                        {subcategory}
+                                        {groupKey}
                                     </h2>
                                     <div className="grid grid-cols-24 gap-4 grid-flow-dense">
-                                        {groupedProducts[subcategory].map((product, index) => (
+                                        {Array.isArray(groupedProducts[groupKey]) && groupedProducts[groupKey].map((product, index) => (
                                             <GalleryCard
                                                 key={`${product.id}-${index}`}
                                                 product={product}
