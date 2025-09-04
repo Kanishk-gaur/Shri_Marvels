@@ -20,39 +20,38 @@ export default function GalleryCard({
   const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
 
-  let gridClass = "col-span-2 row-span-4"; // Default to 10 items per row and a balanced height
+  let gridClass = "col-span-1 md:col-span-2 row-span-2 md:row-span-4"; // Default for mobile and desktop
 
-  // Based on a 20-column grid to accommodate a 10-item row layout
   switch (sizeString) {
     case "6x6":
-      gridClass = "col-span-3 row-span-12"; // Aspect ratio 1:1
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "8x6":
-      gridClass = "col-span-3 row-span-4"; // Aspect ratio 4:3
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-2 md:row-span-4";
       break;
     case "8x12":
-      gridClass = "col-span-3 row-span-12"; // Aspect ratio 2:3
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "12x18":
-      gridClass = "col-span-3 row-span-14"; // Aspect ratio 2:3
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-14";
       break;
     case "2x2":
-      gridClass = "col-span-3 row-span-14"; // Aspect ratio 1:1
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-14";
       break;
     case "2x3":
-      gridClass = "col-span-3 row-span-16"; // Aspect ratio 2:3
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
       break;
     case "6x3":
-      gridClass = "col-span-3 row-span-12"; // Aspect ratio 2:1
+      gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "2x4":
-      gridClass = "col-span-2 row-span-18"; // Aspect ratio 1:2
+      gridClass = "col-span-2 row-span-8 md:col-span-2 row-span-5 md:row-span-18";
       break;
     case "8x4":
-      gridClass = "col-span-2 row-span-12"; // Aspect ratio 2:1
+      gridClass = "col-span-2 row-span-8 md:col-span-2 row-span-3 md:row-span-12";
       break;
     default:
-      gridClass = "col-span-2 row-span-14";
+      gridClass = "col-span-2 row-span-8 md:col-span-2 row-span-4 md:row-span-14";
   }
 
   return (
