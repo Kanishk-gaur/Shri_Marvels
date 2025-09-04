@@ -54,7 +54,6 @@ export default function GalleryPage() {
 
   const [visibleGroups, setVisibleGroups] = useState<string[]>([]);
 
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
