@@ -20,7 +20,7 @@ export default function GalleryCard({
   const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
 
-  let gridClass = "col-span-1 md:col-span-2 row-span-2 md:row-span-4"; // Default for mobile and desktop
+  let gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16"; // Default for mobile and desktop
 
   switch (sizeString) {
     case "6x6":
@@ -29,11 +29,11 @@ export default function GalleryCard({
       break;
     case "8x12":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
+        "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16";
       break;
     case "12x18":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-14";
+        "col-span-4 row-span-8 md:col-span-6 row-span-4 md:row-span-16";
       break;
     case "2x2":
       gridClass =
@@ -71,7 +71,7 @@ export default function GalleryCard({
       transition={{ delay: index * 0.05, duration: 0.6 }}
       layout
     >
-      <div className="block relative bg-white rounded-lg overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg h-full">
+      <div className="block relative bg-white overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg h-full">
         <div className="relative w-full h-full overflow-hidden">
           {!isLoaded && product.image && (
             <div className="absolute inset-0 bg-zinc-200 animate-pulse"></div>
