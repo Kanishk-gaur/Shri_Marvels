@@ -25,42 +25,42 @@ export default function GalleryCard({
   switch (sizeString) {
     case "6x6":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
+        "col-span-3 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "8x12":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16";
+        "col-span-6 row-span-14 md:col-span-4 row-span-3 md:row-span-16";
       break;
     case "12x18":
       gridClass =
-        "col-span-4 row-span-8 md:col-span-6 row-span-4 md:row-span-16";
+        "col-span-6 row-span-8 md:col-span-6 row-span-4 md:row-span-16";
       break;
     case "2x2":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-14";
+        "col-span-4 row-span-8 md:col-span-3 row-span-4 md:row-span-14";
       break;
     case "2x3":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
+        "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
       break;
     case "6x3":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
+        "col-span-3 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "2x4":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-2 row-span-5 md:row-span-18";
+        "col-span-3 row-span-8 md:col-span-2 row-span-5 md:row-span-18";
       break;
     case "8x4":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-2 row-span-3 md:row-span-12";
+        "col-span-3 row-span-8 md:col-span-2 row-span-3 md:row-span-12";
       break;
     case "6x8":
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
+        "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
     default:
       gridClass =
-        "col-span-2 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
+        "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
   }
 
   return (
