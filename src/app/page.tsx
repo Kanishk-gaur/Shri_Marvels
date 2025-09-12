@@ -68,26 +68,26 @@ const marbleAttributes = [
 
 const inspirationLooks = [
   {
-    title: "Marble Statement Kitchen",
-    imageSrc: "/images/home/home_1.png",
+    title: "Elegant Roof Tile Design",
+    imageSrc: "/images/home/roof2.jpeg",
     href: "/gallery?category=marvel",
     colSpan: "col-span-1 md:col-span-2",
   },
   {
-    title: "Modern Tile Bathroom",
-    imageSrc: "/images/home/bathroom.png",
+    title: "Modern Roofing Solutions",
+    imageSrc: "/images/home/roof1.jpg",
     href: "/gallery?category=tiles",
     colSpan: "col-span-1",
   },
   {
-    title: "Tile Living Area",
-    imageSrc: "/images/home/living.jpg",
+    title: "Durable Roof Tiles",
+    imageSrc: "/images/home/roof3.jpg",
     href: "/gallery?category=tiles",
     colSpan: "col-span-1",
   },
   {
-    title: "Luxury Marble Foyer",
-    imageSrc: "/images/home/luxury.jpg",
+    title: "Luxury Roof Tile Collection",
+    imageSrc: "/images/home/roof4.png",
     href: "/gallery?category=marvel",
     colSpan: "col-span-1 md:col-span-2",
   },
@@ -130,7 +130,7 @@ export default function HomePage() {
         />
       </section>
 
-      {/* === PILLAR 1: THE WORLD OF TILES === */}
+      {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
       <section className="bg-slate-50 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
@@ -142,11 +142,12 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-              The Art of Versatility
+              The Canvas of Creativity
             </h2>
             <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-              Precision-engineered for modern life, our tile collections offer a
-              canvas for limitless creativity and lasting performance.
+              Our decorative tiles are crafted to be the centerpiece of your
+              design, offering a stunning blend of artistry, and lasting
+              performance.
             </p>
           </motion.div>
 
@@ -160,8 +161,8 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <Image
-                src="/images/home/tile_1.jpg"
-                alt="Modern interior with stylish tiles"
+                src="/images/home/home_tile1.jpg"
+                alt="Modern interior with stylish decorative tiles"
                 fill
                 className="object-cover"
               />
@@ -173,20 +174,20 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <h3 className="text-2xl font-semibold text-slate-800 mb-4">
-                Design Without Limits
+                Artistry in Every Piece
               </h3>
               <p className="text-slate-600 leading-relaxed mb-6">
-                Tiles are the cornerstone of contemporary design. From
-                minimalist large-formats that expand a space, to intricate
-                mosaics that create stunning focal points, our collection is
-                curated to bring any vision to life. Experience the perfect
-                fusion of cutting-edge technology and aesthetic excellence.
+                Decorative tiles are the soul of bespoke interiors. From bold,
+                graphic patterns that make a statement to subtle, intricate
+                designs that add a touch of elegance, our collection is curated
+                to bring every unique vision to life. Discover the perfect
+                harmony of imaginative design and exceptional craftsmanship.
               </p>
               <Link
                 href="/tiles"
                 className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                Explore Tile Collections →
+                Explore Decorative Tiles →
               </Link>
             </motion.div>
           </div>
@@ -218,7 +219,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* === PILLAR 2: THE WORLD OF MARBLE === */}
+      {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
       <section className="bg-white py-24 relative overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
@@ -233,12 +234,12 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-              The Legacy of Stone
+              The Beauty of Decorative Marvels
             </h2>
             <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-              Each piece of marble tells a story millions of years in the
-              making, bringing unparalleled elegance and a connection to the
-              earth into your space.
+              Each piece of our decorative marvels is a story told by the earth,
+              bringing unparalleled elegance and a sense of natural wonder into
+              your home.
             </p>
           </motion.div>
 
@@ -252,8 +253,8 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <Image
-                src="/images/home/marbel_1.jpg"
-                alt="Luxurious marble bathroom"
+                src="/images/home/home_marble.jpg"
+                alt="Luxurious decorative marvel bathroom"
                 fill
                 className="object-cover"
               />
@@ -265,20 +266,21 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <h3 className="text-2xl font-semibold text-slate-800 mb-4">
-                An Investment in Beauty
+                An Ode to Timeless Beauty
               </h3>
               <p className="text-slate-600 leading-relaxed mb-6">
-                To choose marble is to choose enduring art. Its unique, organic
-                patterns ensure no two installations are alike, creating a truly
-                bespoke environment. As a hallmark of luxury, it not only
-                enriches your daily life but also adds significant, lasting
-                value to your property.
+                To choose a decorative marvel is to choose a piece of history.
+                Its unique, organic patterns ensure that no two installations
+                are ever the same, creating a truly one-of-a-kind environment.
+                As a symbol of luxury and sophistication, it not only enhances
+                your daily life but also adds significant, lasting value to your
+                property.
               </p>
               <Link
                 href="/marble"
                 className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                Discover Premium Marbles →
+                Discover Decorative Marvels →
               </Link>
             </motion.div>
           </div>
@@ -318,8 +320,8 @@ export default function HomePage() {
               Your Vision, Realized
             </h2>
             <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-              See how our tiles and marbles have been used to create
-              breathtaking spaces, and get inspired for your next project.
+              See how our elegant roof tiles have been used to create
+              breathtaking rooftops, and get inspired for your next project.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -370,8 +372,9 @@ export default function HomePage() {
             </h2>
             <p className="text-lg text-emerald-100 max-w-2xl mx-auto mb-10">
               Your design journey starts here. Whether you&apos;re drawn to the
-              modern versatility of tiles or the timeless elegance of marble,
-              our collections are ready to bring your vision to life.
+              artistic flair of decorative tiles or the timeless elegance of our
+              decorative marvels, our collections are ready to bring your vision
+              to life.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
