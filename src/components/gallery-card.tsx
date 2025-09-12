@@ -20,7 +20,8 @@ export default function GalleryCard({
   const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
 
-  let gridClass = "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16"; // Default for mobile and desktop
+  let gridClass =
+    "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16"; // Default for mobile and desktop
 
   switch (sizeString) {
     case "6x6":
@@ -30,6 +31,10 @@ export default function GalleryCard({
     case "8x12":
       gridClass =
         "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-16";
+      break;
+    case "18x12":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
       break;
     case "12x18":
       gridClass =
