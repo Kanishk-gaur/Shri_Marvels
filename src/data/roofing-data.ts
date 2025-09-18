@@ -13,9 +13,9 @@ export const roofingSections: RoofingSection[] = [
     },
     lifestyle: "/modern-interior-with-brick-wall.jpg",
   },
-  // Top tile showcase row
   {
-    type: "tiles-only",
+    type: "tile-showcase",
+    house: "/placeholder.svg?height=300&width=500", // Placeholder added
     tiles: [
       {
         image: "/orange-clay-roof-tile.jpg",
@@ -51,9 +51,8 @@ export const roofingSections: RoofingSection[] = [
       },
     ],
   },
-  // House sections with tiles
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/modern-single-story-house-with-orange-clay-tile-ro.jpg",
     tiles: [
       {
@@ -83,7 +82,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/contemporary-white-house-with-red-tile-roof.jpg",
     tiles: [
       {
@@ -113,7 +112,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/traditional-house-with-brown-roof-tiles.jpg",
     tiles: [
       {
@@ -143,7 +142,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Orange" },
@@ -152,7 +151,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Premium Red" },
@@ -161,7 +160,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Bright Orange" },
@@ -169,9 +168,9 @@ export const roofingSections: RoofingSection[] = [
       { image: "/placeholder.svg?height=80&width=80", label: "Deep Orange" },
     ],
   },
-  // Three tiles section
   {
-    type: "tiles-only",
+    type: "tile-showcase",
+    house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=120&width=160", label: "Premium Clay" },
       { image: "/placeholder.svg?height=120&width=160", label: "Rustic Terra" },
@@ -179,7 +178,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Villa Terra" },
@@ -189,7 +188,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Family Red" },
@@ -198,9 +197,9 @@ export const roofingSections: RoofingSection[] = [
       { image: "/placeholder.svg?height=80&width=80", label: "Heritage" },
     ],
   },
-  // Colorful tiles section
   {
-    type: "tiles-only",
+    type: "tile-showcase",
+    house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=120&width=160", label: "Green" },
       { image: "/placeholder.svg?height=120&width=160", label: "Blue" },
@@ -209,7 +208,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Natural Wood" },
@@ -217,7 +216,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Cottage Red" },
@@ -225,7 +224,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Dark Slate" },
@@ -233,7 +232,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Luxury Red" },
@@ -241,9 +240,9 @@ export const roofingSections: RoofingSection[] = [
       { image: "/placeholder.svg?height=80&width=80", label: "Elite Terra" },
     ],
   },
-  // Final tiles section
   {
-    type: "tiles-only",
+    type: "tile-showcase",
+    house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=120&width=160", label: "Premium Red" },
       { image: "/placeholder.svg?height=120&width=160", label: "Luxury Orange" },
@@ -251,7 +250,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Designer Red" },
@@ -260,7 +259,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Modern Red" },
@@ -268,7 +267,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
-    type: "house-with-tiles",
+    type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=80&width=80", label: "Classic Orange" },
@@ -276,9 +275,9 @@ export const roofingSections: RoofingSection[] = [
       { image: "/placeholder.svg?height=80&width=80", label: "Heritage" },
     ],
   },
-  // More sections continue...
   {
-    type: "tiles-only",
+    type: "tile-showcase",
+    house: "/placeholder.svg?height=300&width=500",
     tiles: [
       { image: "/placeholder.svg?height=120&width=160", label: "Artisan Red" },
       { image: "/placeholder.svg?height=120&width=160", label: "Handcrafted" },

@@ -1,4 +1,13 @@
-export interface Product {
+export interface Tile {
+  image?: string;
+  label: string;
+  size?: string;
+  weight?: string;
+  color?: string;
+  coverage?: string;
+}
+
+export interface Brick {
   name: string;
   image: string;
   size: string;
@@ -7,30 +16,16 @@ export interface Product {
   colour: string;
 }
 
-export interface Tile {
-  image: string;
-  label: string;
-  size?: string;
-  weight?: string;
-  color?: string;
-  coverage?: string;
-}
-
 export interface BrickShowcaseSection {
   type: "brick-showcase";
-  product: Product;
+  product: Brick;
   lifestyle: string;
 }
 
-export interface TilesOnlySection {
-  type: "tiles-only";
+export interface TileShowcaseSection {
+  type: "tile-showcase";
+  house: string; // House image is now required
   tiles: Tile[];
 }
 
-export interface HouseWithTilesSection {
-  type: "house-with-tiles";
-  house: string;
-  tiles: Tile[];
-}
-
-export type RoofingSection = BrickShowcaseSection | TilesOnlySection | HouseWithTilesSection;
+export type RoofingSection = BrickShowcaseSection | TileShowcaseSection;
