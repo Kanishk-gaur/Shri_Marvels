@@ -19,7 +19,6 @@ export default function RoofingShowcase() {
           </div>
         ))}
       </main>
-      <Footer />
     </div>
   );
 }

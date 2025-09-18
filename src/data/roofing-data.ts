@@ -5,7 +5,7 @@ export const roofingSections: RoofingSection[] = [
     type: "brick-showcase",
     product: {
       name: "Bumper",
-      image: "/terracotta-brick-sample.jpg",
+       image: "images/roof.png",
       size: "5 x 2.5 inch",
       weight: "200 Gms.",
       require: "800 Pcs to Cover 100 Sq. Ft.",
@@ -18,7 +18,7 @@ export const roofingSections: RoofingSection[] = [
     house: "/placeholder.svg?height=300&width=500", // Placeholder added
     tiles: [
       {
-        image: "/orange-clay-roof-tile.jpg",
+        image: "images/roof.png",
         label: "Clay Tile",
         size: "420 x 330mm",
         weight: "2.8kg",
@@ -26,7 +26,7 @@ export const roofingSections: RoofingSection[] = [
         coverage: "10.5 tiles/m²",
       },
       {
-        image: "/red-terracotta-roof-tile.jpg",
+      image: "images/roof.png",
         label: "Terracotta",
         size: "400 x 240mm",
         weight: "2.2kg",
@@ -56,7 +56,7 @@ export const roofingSections: RoofingSection[] = [
     house: "/modern-single-story-house-with-orange-clay-tile-ro.jpg",
     tiles: [
       {
-        image: "/orange-clay-roof-tile-sample.jpg",
+        image: "images/roof.png",
         label: "Orange Clay",
         size: "420 x 330mm",
         weight: "2.8kg",
@@ -64,7 +64,7 @@ export const roofingSections: RoofingSection[] = [
         coverage: "10.5 tiles/m²",
       },
       {
-        image: "/red-clay-roof-tile-sample.jpg",
+       image: "images/roof.png",
         label: "Red Clay",
         size: "420 x 330mm",
         weight: "2.9kg",
