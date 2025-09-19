@@ -2,10 +2,11 @@ import { RoofingSection } from "@/components/roofing-showcase/types";
 
 export const roofingSections: RoofingSection[] = [
   {
+    id: "bumper-brick",
     type: "brick-showcase",
     product: {
       name: "Bumper",
-       image: "images/roof.png",
+       image: "/images/roof.png",
       size: "5 x 2.5 inch",
       weight: "200 Gms.",
       require: "800 Pcs to Cover 100 Sq. Ft.",
@@ -14,11 +15,12 @@ export const roofingSections: RoofingSection[] = [
     lifestyle: "/modern-interior-with-brick-wall.jpg",
   },
   {
+    id: "mixed-tiles-1",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500", // Placeholder added
     tiles: [
       {
-        image: "images/roof.png",
+        image: "/images/roof.png",
         label: "Clay Tile",
         size: "420 x 330mm",
         weight: "2.8kg",
@@ -26,7 +28,7 @@ export const roofingSections: RoofingSection[] = [
         coverage: "10.5 tiles/m²",
       },
       {
-      image: "images/roof.png",
+      image: "/images/roof.png",
         label: "Terracotta",
         size: "400 x 240mm",
         weight: "2.2kg",
@@ -52,11 +54,12 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "orange-clay-tiles",
     type: "tile-showcase",
     house: "/modern-single-story-house-with-orange-clay-tile-ro.jpg",
     tiles: [
       {
-        image: "images/roof.png",
+        image: "/images/roof.png",
         label: "Orange Clay",
         size: "420 x 330mm",
         weight: "2.8kg",
@@ -64,7 +67,7 @@ export const roofingSections: RoofingSection[] = [
         coverage: "10.5 tiles/m²",
       },
       {
-       image: "images/roof.png",
+       image: "/images/roof.png",
         label: "Red Clay",
         size: "420 x 330mm",
         weight: "2.9kg",
@@ -82,6 +85,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "red-roof-tiles",
     type: "tile-showcase",
     house: "/contemporary-white-house-with-red-tile-roof.jpg",
     tiles: [
@@ -112,6 +116,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "brown-roof-tiles",
     type: "tile-showcase",
     house: "/traditional-house-with-brown-roof-tiles.jpg",
     tiles: [
@@ -142,6 +147,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-orange-1",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -151,6 +157,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-red-1",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -160,6 +167,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-orange-2",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -169,6 +177,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-premium-clay",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -178,6 +187,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-spanish-tiles",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -188,6 +198,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-family-red",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -198,6 +209,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-colors",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -208,6 +220,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-wood",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -216,6 +229,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-cottage",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -224,6 +238,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-slate",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -232,6 +247,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-luxury-1",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -241,6 +257,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-luxury-2",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -250,6 +267,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-designer",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -259,6 +277,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-modern",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -267,6 +286,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-classic-orange",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -276,6 +296,7 @@ export const roofingSections: RoofingSection[] = [
     ],
   },
   {
+    id: "placeholder-artisan",
     type: "tile-showcase",
     house: "/placeholder.svg?height=300&width=500",
     tiles: [
@@ -285,4 +306,4 @@ export const roofingSections: RoofingSection[] = [
       { image: "/placeholder.svg?height=120&width=160", label: "Bespoke" },
     ],
   },
-]
+];

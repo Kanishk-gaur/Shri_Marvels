@@ -1,78 +1,88 @@
 "use client";
-
-import { TileShowcaseSection } from "./types";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import { TileShowcaseSection } from "./types";
 
-interface TileShowcaseProps {
+// Animation variants for Framer Motion
+const animationVariants = {
+  fromLeft: {
+    initial: { opacity: 0, x: -100 },
+    inView: { opacity: 1, x: 0 },
+  },
+  fromRight: {
+    initial: { opacity: 0, x: 100 },
+    inView: { opacity: 1, x: 0 },
+  },
+};
+
+interface HouseWithTilesShowcaseProps {
   section: TileShowcaseSection;
   sectionIndex: number;
 }
 
-export default function TileShowcase({ section, sectionIndex }: TileShowcaseProps) {
-  const { house, tiles } = section;
+const HouseWithTilesShowcase: React.FC<HouseWithTilesShowcaseProps> = ({
+  section,
+  sectionIndex,
+}) => {
+  const isReversed = sectionIndex % 2 !== 0;
+
+  // Determine animation direction based on whether the layout is reversed
+  const imageAnimation = isReversed ? animationVariants.fromRight : animationVariants.fromLeft;
+  const tilesAnimation = isReversed ? animationVariants.fromLeft : animationVariants.fromRight;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center gap-10">
-        <div className="flex-shrink-0">
-          <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-md">
-            <img
-              src={house}
-              alt={`House example ${sectionIndex}`}
-              className="w-[500px] h-[320px] object-cover"
-            />
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
-              <span className="text-sm font-semibold text-gray-800">Style #{sectionIndex + 1}</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-4 flex-1">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Available Tile Options</h3>
-          {tiles.map((tile, tileIndex) => (
-            <div
-              key={tileIndex}
-              className="flex items-center gap-5 p-4 border border-gray-100 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 hover:border-orange-200 transition-all duration-300 group"
-            >
-              <motion.div
-                className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-orange-300 transition-colors"
-                whileHover={{ scale: 1.05, rotateY: 15 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src={tile.image || "/placeholder.svg"}
+    <div
+      className={`flex flex-col overflow-hidden rounded-lg bg-white shadow-lg lg:flex-row ${
+        isReversed ? "lg:flex-row-reverse" : ""
+      }`}
+    >
+      {/* Animated House Image */}
+      <motion.div
+        className="w-full lg:w-3/5"
+        initial="initial"
+        whileInView="inView"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={imageAnimation}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <Image
+          src={section.house}
+          alt="House with tiles"
+          width={800}
+          height={600}
+          className="h-full w-full object-cover"
+        />
+      </motion.div>
+
+      {/* Animated Tile Details */}
+      <motion.div
+        className="w-full p-6 lg:w-2/5"
+        initial="initial"
+        whileInView="inView"
+        viewport={{ once: true, amount: 0.25 }}
+        variants={tilesAnimation}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <h3 className="mb-4 text-xl font-semibold text-gray-800">Available Tiles</h3>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+          {section.tiles.map((tile, index) => (
+            <div key={index} className="text-center">
+              <div className="mb-2 overflow-hidden rounded-md border">
+                <Image
+                  src={tile.image}
                   alt={tile.label}
-                  className="w-34 h-24 object-cover"
+                  width={120}
+                  height={120}
+                  className="h-auto w-full object-contain"
                 />
-              </motion.div>
-              <div className="flex-1">
-                <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-orange-700 transition-colors">
-                  {tile.label}
-                </h4>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-700">Size:</span>
-                    <span className="text-sm text-gray-600 font-mono">{tile.size || "420 x 330mm"}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-700">Weight:</span>
-                    <span className="text-sm text-gray-600 font-mono">{tile.weight || "2.8kg"}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-700">Color:</span>
-                    <span className="text-sm text-gray-600">{tile.color || "Natural"}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-700">Coverage:</span>
-                    <span className="text-sm text-gray-600 font-mono">
-                      {tile.coverage || "10.5 tiles/m²"}
-                    </span>
-                  </div>
-                </div>
               </div>
+              <p className="text-sm font-medium text-gray-700">{tile.label}</p>
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default HouseWithTilesShowcase;

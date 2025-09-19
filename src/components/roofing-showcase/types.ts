@@ -1,5 +1,5 @@
 export interface Tile {
-  image?: string;
+  image: string;
   label: string;
   size?: string;
   weight?: string;
@@ -7,7 +7,7 @@ export interface Tile {
   coverage?: string;
 }
 
-export interface Brick {
+export interface Product {
   name: string;
   image: string;
   size: string;
@@ -17,14 +17,16 @@ export interface Brick {
 }
 
 export interface BrickShowcaseSection {
+  id: string;
   type: "brick-showcase";
-  product: Brick;
+  product: Product;
   lifestyle: string;
 }
 
 export interface TileShowcaseSection {
+  id: string;
   type: "tile-showcase";
-  house: string; // House image is now required
+  house: string;
   tiles: Tile[];
 }
 
