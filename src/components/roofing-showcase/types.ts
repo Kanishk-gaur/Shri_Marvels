@@ -30,4 +30,10 @@ export interface TileShowcaseSection {
   tiles: Tile[];
 }
 
-export type RoofingSection = BrickShowcaseSection | TileShowcaseSection;
+export interface TilesOnlySection {
+  id: string;
+  type: "tiles-only-showcase";
+  tiles: Tile[];
+}
+
+export type RoofingSection = BrickShowcaseSection | TileShowcaseSection | TilesOnlySection;
