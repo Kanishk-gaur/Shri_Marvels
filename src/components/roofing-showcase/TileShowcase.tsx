@@ -41,7 +41,7 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
                 <img
                   src={tile.image || "/placeholder.svg"}
                   alt={tile.label}
-                  className="w-34 h-24 object-cover"
+                  className="w-36 h-26 object-cover"
                 />
               </motion.div>
               <div className="flex-1">

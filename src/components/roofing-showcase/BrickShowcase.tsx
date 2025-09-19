@@ -19,7 +19,7 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
                 <img
                   src={section.product.image || "/placeholder.svg"}
                   alt={section.product.name}
-                  className="w-48 h-32 object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
