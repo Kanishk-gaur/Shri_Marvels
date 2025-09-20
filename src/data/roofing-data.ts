@@ -238,7 +238,7 @@ export const roofingSections: RoofingSection[] = [
   {
     id: "mixed-tiles-1",
     type: "tile-showcase",
-    house: "/images/roof_tiles/bumber.png",
+    house: "/images/roof_tiles/house1.png",
     tiles: [
       {
         image: "/images/roof_tiles/mini_taylor1.png",
