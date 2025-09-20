@@ -6,7 +6,7 @@ import { RoofingSection } from "@/components/roofing-showcase/types";
 
 // Define the desired order of your sections by their unique ID.
 // You can reorder, repeat, or remove IDs from this list to change the page layout.
-export const orderedSectionIds = [
+const orderedSectionIds = [
   "mixed-tiles-1",
   "mixed-tiles-2",
   "bumper-brick-1",

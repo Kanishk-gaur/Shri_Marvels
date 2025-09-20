@@ -5,7 +5,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3 } from "lucide-react";
+import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3} from "lucide-react";
 
 // Updated nav items to include Marvels and Tiles directly
 const navItems = [
@@ -15,6 +15,7 @@ const navItems = [
   { href: "/tiles", label: "Tiles", icon: Layers3 },
   { href: "/gallery", label: "Gallery", icon: LayoutGrid },
   { href: "/contact", label: "Contact", icon: Mail },
+  { href: "/roof_tiles", label: "Roofing", icon: Home },
 ];
 
 export function Navigation() {
