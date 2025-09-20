@@ -40,11 +40,12 @@ const getSectionById = (id: string): RoofingSection | undefined => {
   return roofingSections.find((section) => section.id === id);
 };
 
-export default function RoofingShowcase() {
+export default function PageLayout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pt-16">
       <Hero />
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      {/* Adjusted padding for smaller screens */}
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 md:py-8">
         {orderedSectionIds.map((id, index) => {
           const section = getSectionById(id);
 

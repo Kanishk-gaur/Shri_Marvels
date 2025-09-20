@@ -6,16 +6,20 @@ interface BrickShowcaseProps {
 
 export default function BrickShowcase({ section }: BrickShowcaseProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center gap-8">
-        {/* Product specifications card */}
-        <div className="flex-shrink-0 w-80">
+    // Adjusted padding for different screen sizes
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 md:p-6 lg:p-8 hover:shadow-xl transition-shadow duration-300">
+      {/* CHANGE 1: Removed `items-center`. 
+        This allows the child elements to stretch to the same height on large screens (the default behavior for flexbox).
+      */}
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+        {/* Product specifications card - full width on small, fixed width on large */}
+        <div className="w-full lg:w-80 lg:flex-shrink-0">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">{section.product.name}</h3>
 
             {/* Product image */}
             <div className="mb-6 flex justify-center">
-              <div className="relative overflow-hidden rounded-lg border-2 border-gray-200 shadow-md">
+              <div className="relative overflow-hidden rounded-lg border-2 border-gray-200 shadow-md w-48 h-48">
                 <img
                   src={section.product.image || "/placeholder.svg"}
                   alt={section.product.name}
@@ -49,13 +53,17 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
           </div>
         </div>
 
-        {/* Lifestyle image */}
-        <div className="flex-1">
-          <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-lg">
+        {/* Lifestyle image - takes remaining space on large screens */}
+        <div className="flex-1 w-full">
+          {/* CHANGE 2: Added `h-full` to the image's direct wrapper.
+            This makes the wrapper expand to fill the vertical space provided by the parent flex container.
+          */}
+          <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-lg h-full">
             <img
               src={section.lifestyle || "/placeholder.svg"}
               alt={`${section.product.name} lifestyle application`}
-              className="w-full h-96 object-cover"
+              // Adjusted height for different screen sizes - lg:h-full now works correctly
+              className="w-full h-[250px] sm:h-[400px] lg:h-full object-cover"
             />
             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
               <span className="text-sm font-semibold text-gray-800">Interior Application</span>
