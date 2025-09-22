@@ -44,12 +44,13 @@ export default function PageLayout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pt-16">
       <Hero />
-      {/* Adjusted padding for smaller screens */}
-      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 md:py-8">
+      {/* Add mt-48 here to create space for the Hero component's overlapping card.
+        This pushes the main content down by 12rem (192px).
+      */}
+      <main className="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 md:py-8 mt-48">
         {orderedSectionIds.map((id, index) => {
           const section = getSectionById(id);
 
-          // If a section with the given ID isn't found, we'll render nothing.
           if (!section) {
             console.warn(`Section with ID "${id}" not found.`);
             return null;
@@ -66,7 +67,6 @@ export default function PageLayout() {
           );
         })}
       </main>
-      {/* Note: The Footer component was missing from the original page code. You might want to add it back. */}
       {/* <Footer /> */}
     </div>
   );
