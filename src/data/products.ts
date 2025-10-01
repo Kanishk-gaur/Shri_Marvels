@@ -4540,18 +4540,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 12, width: 8, unit: "inches" },
     rating: 4.5,
   },
-  {
-    id: 692,
-    name: "P2-36",
-    category: "tiles",
-    subcategory: "Digital Decorative Tiles",
-    sizes: ["8x12"],
-    material: "Ceramic",
-    image: "/images/morbi_cera/A36.png",
-    images: ["/images/morbi_cera/A36.png"],
-    dimensions: { length: 12, width: 8, unit: "inches" },
-    rating: 4.5,
-  },
+ 
   {
     id: 693,
     name: "P2-37",
@@ -4876,18 +4865,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 12, width: 8, unit: "inches" },
     rating: 4.5,
   },
-  {
-    id: 720,
-    name: "P3-64",
-    category: "tiles",
-    subcategory: "Digital Decorative Tiles",
-    sizes: ["8x12"],
-    material: "Ceramic",
-    image: "/images/morbi_cera/A64.png",
-    images: ["/images/morbi_cera/A64.png"],
-    dimensions: { length: 12, width: 8, unit: "inches" },
-    rating: 4.5,
-  },
+  
   {
     id: 721,
     name: "P3-65",
