@@ -24,6 +24,14 @@ export default function GalleryCard({
     "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16"; // Default for mobile and desktop
 
   switch (sizeString) {
+     case "20x600":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-8 row-span-8 md:row-span-4";
+      break;
+     case "10x600":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-8 row-span-8 md:row-span-3";
+      break;
     case "900x300 mm":
       gridClass =
         "col-span-6 row-span-12 md:col-span-4 row-span-8 md:row-span-10";
@@ -55,7 +63,7 @@ export default function GalleryCard({
       break;
     case "2x4":
       gridClass =
-        "col-span-6 row-span-12 md:col-span-6 row-span-3 md:row-span-12";
+        "col-span-6 row-span-12 md:col-span-6 row-span-3 md:row-span-16";
       break;
     case "4x6":
       gridClass =
