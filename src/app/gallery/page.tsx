@@ -18,7 +18,7 @@ const getGridClass = (size: string) => {
     case "8x6":
       return "col-span-3 row-span-3";
     case "8x12":
-      return "col-span-3 row-span-12";
+      return "col-span-3 row-span-14";
     case "12x18":
       return "col-span-3 row-span-10";
     case "2x2":

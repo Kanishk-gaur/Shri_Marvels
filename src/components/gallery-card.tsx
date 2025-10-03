@@ -24,21 +24,101 @@ export default function GalleryCard({
     "col-span-2 row-span-8 md:col-span-3 row-span-3 md:row-span-16"; // Default for mobile and desktop
 
   switch (sizeString) {
+    case "900x300 mm":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-4 row-span-8 md:row-span-10";
+      break;
+    case "1200x300 mm":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-6 row-span-8 md:row-span-10";
+      break;
+    case "1000x300 mm":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-6 row-span-8 md:row-span-8";
+      break;
+
+    case "12x18":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-3 row-span-8 md:row-span-16";
+      break;
+    case "6x48":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-8 row-span-8 md:row-span-6";
+      break;
+    case "4x48":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-12 row-span-8 md:row-span-6";
+      break;
+    case "4x2":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-3 row-span-3 md:row-span-20";
+      break;
+    case "2x4":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-6 row-span-3 md:row-span-12";
+      break;
+    case "4x6":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-12";
+      break;
+    case "4x4":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-16";
+      break;
+    case "2x2":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-3 row-span-3 md:row-span-12";
+      break;
+    case "12x24":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-12";
+      break;
+    case "24x4":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-7";
+    case "24x2.5":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-7";
+      break;
+    case "24x2":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-6";
+      break;
+    case "12x2.5":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-6";
+      break;
+    case "24x1":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-5";
+      break;
+    case "2x4":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-4 row-span-3 md:row-span-20";
+      break;
+    case "4x2":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-14";
+      break;
     case "6x6":
       gridClass =
         "col-span-3 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
     case "8x12":
       gridClass =
-        "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-16";
+        "col-span-6 row-span-12 md:col-span-3 row-span-3 md:row-span-18";
+      break;
+    case "12x8":
+      gridClass =
+        "col-span-6 row-span-12 md:col-span-6 row-span-4 md:row-span-16";
       break;
     case "18x12":
       gridClass =
-        "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
+        "col-span-6 row-span-12 md:col-span-6 row-span-3 md:row-span-16";
       break;
     case "12x18":
       gridClass =
-        "col-span-6 row-span-8 md:col-span-6 row-span-4 md:row-span-16";
+        "col-span-6 row-span-12 md:col-span-4 row-span-3 md:row-span-12";
       break;
     case "2x2":
       gridClass =
@@ -52,17 +132,26 @@ export default function GalleryCard({
       gridClass =
         "col-span-3 row-span-8 md:col-span-3 row-span-3 md:row-span-12";
       break;
-    case "2x4":
-      gridClass =
-        "col-span-3 row-span-8 md:col-span-2 row-span-5 md:row-span-18";
-      break;
     case "8x4":
       gridClass =
         "col-span-3 row-span-8 md:col-span-2 row-span-3 md:row-span-12";
       break;
+    case "3x2":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-6 row-span-3 md:row-span-16";
+      break;
     case "6x8":
       gridClass =
         "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
+
+    case "24x3":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-4 row-span-3 md:row-span-8";
+      break;
+    case "24x4":
+      gridClass =
+        "col-span-3 row-span-8 md:col-span-4 row-span-3 md:row-span-8";
+      break;
     default:
       gridClass =
         "col-span-3 row-span-8 md:col-span-3 row-span-4 md:row-span-16";
