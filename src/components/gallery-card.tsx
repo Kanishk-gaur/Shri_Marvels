@@ -113,7 +113,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-16";
       break;
     case "24x3":
-      gridClass = "col-span-6 row-span-12 md:col-span-4 md:row-span-8";
+      gridClass = "col-span-6 row-span-4 md:col-span-4 md:row-span-8";
       break;
     default:
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-16";
