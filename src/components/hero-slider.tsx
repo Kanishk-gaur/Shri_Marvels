@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 
 const slides = [
   {
-    imageSrc: "/images/home/home_3.jpg",
+    imageSrc: "/images/home/Golden.png",
     title: "DIVINE COLLECTION TILES",
     subtitle: "BRING HOME THE DIVINITY",
     href: "/gallery?subcategory=plain-god-picture",
   },
   {
-    imageSrc: "/images/home/home_2.png",
+    imageSrc: "/images/home/golden2.png",
     title: "DIGITAL GATE TILES",
     subtitle: "AUSPICIOUS ENTRANCES",
     href: "/gallery?subcategory=digital-gate-god-picture",

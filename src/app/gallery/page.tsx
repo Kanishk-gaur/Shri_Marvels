@@ -13,6 +13,7 @@ import { ProductFilter } from "@/components/product-filter";
 
 const getGridClass = (size: string) => {
   switch (size) {
+
     case "6x6":
       return "col-span-3 row-span-12";
     case "8x6":
