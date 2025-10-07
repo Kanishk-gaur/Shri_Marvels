@@ -22,7 +22,7 @@ export default function GalleryCard({
 
   // Set mobile grid classes by default
   // Override desktop grid classes with 'md:' prefix to keep desktop unchanged
-  let gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-16"; // Clear and ample mobile sizes
+  let gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-18"; // Clear and ample mobile sizes
 
   switch (sizeString) {
     case "12x18 inches":
@@ -62,7 +62,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-3 md:col-span-12 md:row-span-4";
       break;
     case "4x2":
-      gridClass = "col-span-4 row-span-12 md:col-span-3 md:row-span-20";
+      gridClass = "col-span-4 row-span-12 md:col-span-6 md:row-span-12";
       break;
     case "2x4":
       gridClass = "col-span-6 row-span-16  md:col-span-3 md:row-span-16";
@@ -108,7 +108,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-14";
       break;
     case "2x3":
-      gridClass = "col-span-4 row-span-12 md:col-span-3 md:row-span-16";
+      gridClass = "col-span-4 row-span-12 md:col-span-3 md:row-span-17";
       break;
     case "6x3":
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-12";
