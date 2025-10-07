@@ -75,7 +75,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-12 md:col-span-4 md:row-span-16";
       break;
     case "12x24":
-      gridClass = "col-span-6 row-span-7 md:col-span-4 md:row-span-8";
+      gridClass = "col-span-6 row-span-7 md:col-span-2 md:row-span-8";
       break;
     case "24x4":
       gridClass = "col-span-6 row-span-3 md:col-span-6 md:row-span-4";
@@ -99,7 +99,7 @@ export default function GalleryCard({
       gridClass = "col-span-4 row-span-8 md:col-span-3 md:row-span-12";
       break;
     case "8x12":
-      gridClass = "col-span-4 row-span-10 md:col-span-3 md:row-span-16";
+      gridClass = "col-span-3 row-span-7 md:col-span-3 md:row-span-16";
       break;
     case "12x8":
       gridClass = "col-span-6 row-span-8 md:col-span-6 md:row-span-16";
