@@ -25,8 +25,17 @@ export default function GalleryCard({
   let gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-16"; // Clear and ample mobile sizes
 
   switch (sizeString) {
+    case "12x18 inches":
+      gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-17";
+      break;
+    case "12x18 in":
+      gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-17";
+      break;
+    case "8x12 in":
+      gridClass = "col-span-4 row-span-10 md:col-span-3 md:row-span-17";
+      break;
     case "12x18":
-      gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-16";
+      gridClass = "col-span-3 row-span-8 md:col-span-3 md:row-span-12";
       break;
     case "8x6":
       gridClass = "col-span-4 row-span-11 md:col-span-3 md:row-span-18";
@@ -45,9 +54,6 @@ export default function GalleryCard({
       break;
     case "1000x300 mm":
       gridClass = "col-span-6 row-span-5 md:col-span-6 md:row-span-8";
-      break;
-    case "12x18":
-      gridClass = "col-span-4 row-span-10 md:col-span-3 md:row-span-10";
       break;
     case "6x48":
       gridClass = "col-span-6 row-span-4 md:col-span-8 md:row-span-4";
@@ -90,7 +96,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-12";
       break;
     case "8x12":
-      gridClass = "col-span-4 row-span-10 md:col-span-3 md:row-span-18";
+      gridClass = "col-span-4 row-span-10 md:col-span-3 md:row-span-12";
       break;
     case "12x8":
       gridClass = "col-span-6 row-span-8 md:col-span-6 md:row-span-16";
@@ -111,7 +117,7 @@ export default function GalleryCard({
       gridClass = "col-span-6 row-span-12 md:col-span-2 md:row-span-12";
       break;
     case "3x2":
-      gridClass = "col-span-6 row-span-8 md:col-span-6 md:row-span-16";
+      gridClass = "col-span-6 row-span-8 md:col-span-4 md:row-span-10";
       break;
     case "6x8":
       gridClass = "col-span-6 row-span-12 md:col-span-3 md:row-span-16";
