@@ -207,7 +207,7 @@ export default function GalleryCard({
       className={`group ${gridClass}`}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.6 }}
+      transition={{ delay: index * 0.05, duration: 0.6 } }
       layout
     >
       <div className="flex flex-col h-full bg-white overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg">
