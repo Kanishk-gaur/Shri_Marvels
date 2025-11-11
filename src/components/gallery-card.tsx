@@ -17,7 +17,7 @@ export default function GalleryCard({
   index = 0,
   priority = false,
 }: GalleryCardProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false); 
   const sizeString = product.sizes[0] || "1x1";
 
   // Grid classes structure: mobile (default) -> tablet (md:) -> desktop (lg:)
@@ -25,11 +25,35 @@ export default function GalleryCard({
     "col-span-6 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
 
   switch (sizeString) {
-     case "1200x1800 mm (48x72 inch)":
+    case "600x900 mm (24x36 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-22";
+      break;
+    case "1200x600 mm (48x24 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-16";
+      break;
+    case "20x1200 mm (0.79x47.2 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-7";
+      break;
+    case "12x600 mm (0.47x23.6 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-6";
+      break;
+    case "12x1200 mm (0.47x47.2 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-6";
+      break;
+    case "10x450 mm (0.39x17.7 inch)":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-5";
+      break;
+    case "1200x1800 mm (48x72 inch)":
       gridClass =
         "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-12 lg:row-span-34";
       break;
-     case "600x600 mm (24x24 inch)":
+    case "600x600 mm (24x24 inch)":
       gridClass =
         "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-18";
       break;
