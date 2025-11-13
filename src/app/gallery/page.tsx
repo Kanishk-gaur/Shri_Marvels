@@ -13,7 +13,6 @@ import { ProductFilter } from "@/components/product-filter";
 
 const getGridClass = (size: string) => {
   switch (size) {
-
     case "6x6":
       return "col-span-3 row-span-12";
     case "8x6":
@@ -310,7 +309,7 @@ export default function GalleryPage() {
                   <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
                     {groupKey}
                   </h2>
-                  <div className="grid grid-cols-12 sm:grid-cols-24 gap-4 grid-flow-dense">
+                  <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense">
                     {Array.isArray(groupedProducts[groupKey]) &&
                       groupedProducts[groupKey].map((product, index) => (
                         <GalleryCard

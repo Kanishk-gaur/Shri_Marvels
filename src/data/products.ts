@@ -33000,18 +33000,7 @@ export const allProducts: Product[] = [
     rating: 4.5,
   },
   
-  {
-    id: 3795,
-    name: "G-605",
-    category: "tiles",
-    subcategory: "Border Tiles",
-    sizes: ["6x600 mm (0.24x23.6 inch)"],
-    material: "Glass",
-    image: "/images/border-tiles/G-605.png",
-    images: ["/images/border-tiles/G-605.png"],
-    dimensions: { length: 600, width: 6, unit: "mm" },
-    rating: 4.5,
-  },
+  
   {
     id: 3796,
     name: "G-101",
