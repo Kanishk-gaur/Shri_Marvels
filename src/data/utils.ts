@@ -1,6 +1,5 @@
 import { Product } from "../types"
 
-// FIX: Define a specific interface for the data instead of using 'any'.
 interface SubCategoryData {
   id: string
   name: string
@@ -9,9 +8,6 @@ interface SubCategoryData {
   sizes: string[] 
 }
 
-// --- 1. DEFINE YOUR CUSTOM IMAGES HERE ---
-// Map each subcategory name to the specific image path you want to show.
-// If you leave a string empty "", it will fall back to the first product's image.
 const customCategoryImages: Record<string, string> = {
   // Tiles / Border Categories
   "Border Tiles": "/images/your-uploaded-border-tile.jpg",
@@ -85,10 +81,6 @@ const priorityOrder: Record<string, number> = {
   "Welcome": 28,
 };
 
-/**
- * Generates a categorized list of subcategories with product counts, an example image,
- * and a specific list of available sizes for each subcategory.
- */
 export const generateCategories = (products: Product[]) => {
   const categoryMap: {
     marvel: Record<string, SubCategoryData>
@@ -98,11 +90,8 @@ export const generateCategories = (products: Product[]) => {
     tiles: {},
   }
 
-  // Group products by subcategory and collect their sizes
   products.forEach((product) => {
     const { category, subcategory, image, sizes } = product
-    
-    // If this is the first time seeing this subcategory, initialize it
     if (!categoryMap[category][subcategory]) {
       
       // CHECK: Do we have a custom image for this subcategory?
