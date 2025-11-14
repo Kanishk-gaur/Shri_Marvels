@@ -70,25 +70,25 @@ const inspirationLooks = [
   {
     title: "Elegant Roof Tile Design",
     imageSrc: "/images/home/roof2.jpeg",
-    href: "/gallery?category=marvel",
+    href: "/roof_tiles",
     colSpan: "col-span-1 md:col-span-2",
   },
   {
     title: "Modern Roofing Solutions",
     imageSrc: "/images/home/roof1.jpg",
-    href: "/gallery?category=tiles",
+    href: "/roof_tiles",
     colSpan: "col-span-1",
   },
   {
     title: "Durable Roof Tiles",
     imageSrc: "/images/home/roof3.jpg",
-    href: "/gallery?category=tiles",
+    href: "/roof_tiles",
     colSpan: "col-span-1",
   },
   {
     title: "Luxury Roof Tile Collection",
     imageSrc: "/images/home/roof4.png",
-    href: "/gallery?category=marvel",
+    href: "/roof_tiles",
     colSpan: "col-span-1 md:col-span-2",
   },
 ];

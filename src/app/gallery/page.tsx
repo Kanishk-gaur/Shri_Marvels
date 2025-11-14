@@ -11,6 +11,58 @@ import { useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
 
+// --- CUSTOM SORTING LOGIC ---
+// 1. Define the priority order
+const priorityOrder: Record<string, number> = {
+  "Border Tiles": 5,
+  "Daimond Collection Posters": 2,
+  "Digital Border Tiles": 3,
+  "Digital Gate Punch Picture Tiles": 4,
+  "Digital God Posters": 1,
+  "Digital Plain God Picture Tiles": 6,
+  "Digital Plain Poster Tiles": 7,
+  "Glitter Emboss": 8,
+  "God GVT": 9,
+  "GOD picture": 10,
+  "Golden & Silver Border Tiles": 11,
+  "Golden Rangoli Decorative Tiles": 12,
+  "GOLDEN SILVER HIGHLIGHTER": 13,
+  "Golden Silver Highlighter Tiles": 14,
+  "GVT rangoli": 15,
+  "GVT Wall & Floor Border Tiles": 16,
+  "High Gloss 3D Emboss Poster Tiles": 17,
+  "High Gloss Plain & Glitter Poster": 18,
+  "High Gloss Posters": 19,
+  "High Gloss Posters 2x4": 20,
+  "High Gloss Posters 4x2": 21,
+  "Imported Pencil Border Tiles": 22,
+  "Kitchen Colorfull Poster": 23,
+  "Rangoli": 24,
+  "Steel Welcome": 25,
+  "Step & Riser Tiles": 26,
+  "VITROSA GOD picture": 27,
+  "Welcome": 28,
+};
+
+// 2. Helper function to parse the group key (e.g., "Subcategory (8x6")")
+const getPartsFromGroupKey = (groupKey: string) => {
+  const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
+  if (match) {
+    return { subcat: match[1], size: match[2] };
+  }
+  return { subcat: groupKey, size: "" }; // Fallback
+};
+
+// 3. Helper function to sort sizes numerically
+const sortSizes = (a: string, b: string) => {
+  const numA = parseInt(a, 10);
+  const numB = parseInt(b, 10);
+  if (isNaN(numA)) return 1;
+  if (isNaN(numB)) return -1;
+  return numA - numB;
+};
+// --- END OF CUSTOM SORTING LOGIC ---
+
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
@@ -94,6 +146,24 @@ export default function GalleryPage() {
     return grouped;
   }, [selectedMainCategory, selectedSubcategory, activeProductFilter]);
 
+  // Use the custom sorting logic to create the master list of group keys
+  const allSortedGroupKeys = useMemo(() => {
+    return Object.keys(groupedProducts).sort((a, b) => {
+      const partsA = getPartsFromGroupKey(a);
+      const partsB = getPartsFromGroupKey(b);
+
+      const priorityA = priorityOrder[partsA.subcat] || 999;
+      const priorityB = priorityOrder[partsB.subcat] || 999;
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB; // Sort by subcategory priority
+      }
+
+      // If same subcategory, sort by size
+      return sortSizes(partsA.size, partsB.size);
+    });
+  }, [groupedProducts]);
+
   const handleClearAllFilters = () => {
     setSelectedMainCategory("all");
     setSelectedSubcategory(null);
@@ -125,8 +195,8 @@ export default function GalleryPage() {
     if (loading) return;
     setLoading(true);
 
-    const allGroupKeys = Object.keys(groupedProducts).sort();
-    const nextGroupKeys = allGroupKeys.slice(
+    // Use the pre-sorted list of keys
+    const nextGroupKeys = allSortedGroupKeys.slice(
       visibleGroups.length,
       visibleGroups.length + 1
     );
@@ -138,7 +208,7 @@ export default function GalleryPage() {
     }
 
     setLoading(false);
-  }, [loading, groupedProducts, visibleGroups]);
+  }, [loading, allSortedGroupKeys, visibleGroups]);
 
   const lastElementRef = useCallback(
     (node: HTMLDivElement) => {
@@ -155,18 +225,26 @@ export default function GalleryPage() {
   );
 
   useEffect(() => {
-    const allGroupKeys = Object.keys(groupedProducts).sort();
-    setVisibleGroups(allGroupKeys.slice(0, 1)); // Start with the first group
-    setHasMore(allGroupKeys.length > 1);
-  }, [groupedProducts]);
+    // Use the pre-sorted list of keys
+    setVisibleGroups(allSortedGroupKeys.slice(0, 1)); // Start with the first group
+    setHasMore(allSortedGroupKeys.length > 1);
+  }, [allSortedGroupKeys]);
 
   const filterChipCategories = useMemo(() => {
     if (selectedMainCategory === "marvel") return categories.marvel;
     if (selectedMainCategory === "tiles") return categories.tiles;
     const combined = [...categories.marvel, ...categories.tiles];
-    return Array.from(new Set(combined.map((c) => c.id))).map(
-      (id) => combined.find((c) => c.id === id)!
-    );
+    
+    // Use the priority list to sort the combined filter chips
+    return combined.sort((a, b) => {
+      const priorityA = priorityOrder[a.name] || 999;
+      const priorityB = priorityOrder[b.name] || 999;
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+      return a.name.localeCompare(b.name);
+    });
   }, [selectedMainCategory]);
 
   const isFilterActive =

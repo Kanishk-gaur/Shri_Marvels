@@ -136,6 +136,9 @@ export default function Home() {
             color="#888888"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={false}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={200}
+            tileHeight={80}
           />
 
           {/* HL-CREAM */}
@@ -146,6 +149,9 @@ export default function Home() {
             color="#e8dcc8"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={true}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={200}
+            tileHeight={80}
           />
 
           {/* HL-CHOCO */}
@@ -156,6 +162,9 @@ export default function Home() {
             color="#6b4423"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={false}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={200}
+            tileHeight={80}
           />
 
           {/* HL-BROWN */}
@@ -166,6 +175,9 @@ export default function Home() {
             color="#8b6f47"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={true}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={240}
+            tileHeight={80}
           />
 
           {/* HL-NATURAL */}
@@ -176,6 +188,9 @@ export default function Home() {
             color="#c9b8a3"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={false}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={200}
+            tileHeight={80}
           />
 
           {/* HL-BEIGE */}
@@ -186,6 +201,9 @@ export default function Home() {
             color="#d4c4b0"
             image="/ceramic-stairs-gray-tiles-modern-interior.jpg"
             isReversed={true}
+            tileImageUrl="/ceramic-stairs-gray-tiles-modern-interior.jpg"
+            tileWidth={200}
+            tileHeight={80}
           />
         </div>
       </section>
@@ -306,6 +324,9 @@ function ProductShowcase({
   color,
   image,
   isReversed,
+  tileImageUrl,
+  tileWidth = 200,
+  tileHeight = 80,
 }: {
   title: string
   sizes: string
@@ -313,6 +334,9 @@ function ProductShowcase({
   color: string
   image: string
   isReversed: boolean
+  tileImageUrl?: string
+  tileWidth?: number
+  tileHeight?: number
 }) {
   const contentOrder = isReversed ? "order-2 md:order-2" : "order-2 md:order-1"
   const imageOrder = isReversed ? "order-1 md:order-1" : "order-1 md:order-2"
@@ -420,11 +444,15 @@ function ProductShowcase({
                   <div
                     style={{
                       width: `${scaledWidth}px`,
-                      height: "60px",
+                      height: `${tileHeight}px`,
                       background: color,
                       borderRadius: "6px",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.1), inset 0 0 15px rgba(0,0,0,0.05)",
                       transition: "transform 0.2s ease",
+                      overflow: "hidden",
+                      backgroundImage: tileImageUrl ? `url(${tileImageUrl})` : undefined,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                     }}
                   />
                   <div>

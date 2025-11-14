@@ -11,8 +11,6 @@ import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3} from "lucide-react
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/about", label: "About", icon: Info },
-  { href: "/marbel", label: "Marvels", icon: Gem },
-  { href: "/tiles", label: "Tiles", icon: Layers3 },
   { href: "/gallery", label: "Gallery", icon: LayoutGrid },
   { href: "/contact", label: "Contact", icon: Mail },
   { href: "/roof_tiles", label: "Roofing", icon: Home },

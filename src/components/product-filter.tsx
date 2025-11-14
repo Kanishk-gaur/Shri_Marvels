@@ -1,4 +1,3 @@
-// src/components/product-filter.tsx
 "use client";
 
 import * as React from "react";
@@ -39,6 +38,38 @@ const MAX_ITEMS_VISIBLE = 8;
 const HEADER_HEIGHT = 50;
 const PADDING_HEIGHT = 10;
 
+// Define the priority order for sorting
+const priorityOrder: Record<string, number> = {
+  "Border Tiles": 5,
+  "Daimond Collection Posters": 2,
+  "Digital Border Tiles": 3,
+  "Digital Gate Punch Picture Tiles": 4,
+  "Digital God Posters": 1,
+  "Digital Plain God Picture Tiles": 6,
+  "Digital Plain Poster Tiles": 7,
+  "Glitter Emboss": 8,
+  "God GVT": 9,
+  "GOD picture": 10,
+  "Golden & Silver Border Tiles": 11,
+  "Golden Rangoli Decorative Tiles": 12,
+  "GOLDEN SILVER HIGHLIGHTER": 13,
+  "Golden Silver Highlighter Tiles": 14,
+  "GVT rangoli": 15,
+  "GVT Wall & Floor Border Tiles": 16,
+  "High Gloss 3D Emboss Poster Tiles": 17,
+  "High Gloss Plain & Glitter Poster": 18,
+  "High Gloss Posters": 19,
+  "High Gloss Posters 2x4": 20,
+  "High Gloss Posters 4x2": 21,
+  "Imported Pencil Border Tiles": 22,
+  "Kitchen Colorfull Poster": 23,
+  "Rangoli": 24,
+  "Steel Welcome": 25,
+  "Step & Riser Tiles": 26,
+  "VITROSA GOD picture": 27,
+  "Welcome": 28,
+};
+
 export function ProductFilter({
   onFilterSelect,
   selectedFilter,
@@ -60,11 +91,22 @@ export function ProductFilter({
         mainCategory: "tiles" as const,
       })),
     ];
+
     const filtered =
       mainCategory === "all"
         ? combined
         : combined.filter((sub) => sub.mainCategory === mainCategory);
-    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Apply the custom priority sort instead of alphabetical
+    return filtered.sort((a, b) => {
+      const priorityA = priorityOrder[a.name] || 999;
+      const priorityB = priorityOrder[b.name] || 999;
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+      return a.name.localeCompare(b.name);
+    });
   }, [mainCategory]);
 
   const handleSizeSelect = (size: string) => {
