@@ -11,30 +11,6 @@ import { useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
 
-const getGridClass = (size: string) => {
-  switch (size) {
-    case "6x6":
-      return "col-span-3 row-span-12";
-    case "8x6":
-      return "col-span-3 row-span-3";
-    case "8x12":
-      return "col-span-3 row-span-14";
-    case "12x18":
-      return "col-span-3 row-span-10";
-    case "2x2":
-      return "col-span-3 row-span-14";
-    case "2x3":
-      return "col-span-3 row-span-16";
-    case "6x3":
-      return "col-span-3 row-span-12";
-    case "2x4":
-      return "col-span-2 row-span-18";
-    case "8x4":
-      return "col-span-2 row-span-12";
-    default:
-      return "col-span-2 row-span-14";
-  }
-};
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
