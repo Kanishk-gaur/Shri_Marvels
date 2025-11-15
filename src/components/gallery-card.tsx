@@ -26,6 +26,14 @@ export default function GalleryCard({
     "col-span-12 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
 
   switch (sizeString) {
+     case "300x63 mm (12x2.5 inch)":
+      gridClass =
+        "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-8";
+      break;
+     case "Polishing Series 300x600 mm (12x24 inch)":
+      gridClass =
+        "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+      break;
     case "600x1200 mm (24x48 inch)":
       gridClass =
         "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-33";
@@ -36,7 +44,7 @@ export default function GalleryCard({
       break;
     case "300x450 mm (11.8x17.7 inch)":
       gridClass =
-        "col-span-12 row-span-11 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-19";
+        "col-span-12 row-span-11 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-17";
       break;
     case "48x600 mm (1.89x23.6 inch)":
       gridClass =
@@ -272,7 +280,7 @@ export default function GalleryCard({
     case "8x12":
       // Was 3 -> 6
       gridClass =
-        "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-18";
+        "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-20";
       break;
     case "12x8":
       // Was 6 -> 12

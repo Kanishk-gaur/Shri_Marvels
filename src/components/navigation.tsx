@@ -5,15 +5,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3} from "lucide-react";
+import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3 } from "lucide-react";
 
-// Updated nav items to include Marvels and Tiles directly
+// Updated nav items including Step/Riser
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/about", label: "About", icon: Info },
   { href: "/gallery", label: "Gallery", icon: LayoutGrid },
   { href: "/contact", label: "Contact", icon: Mail },
   { href: "/roof_tiles", label: "Roofing", icon: Home },
+  { href: "/step_riser", label: "Step/Riser", icon: Layers3 },
 ];
 
 export function Navigation() {
