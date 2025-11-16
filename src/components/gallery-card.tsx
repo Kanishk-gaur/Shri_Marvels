@@ -26,9 +26,10 @@ export default function GalleryCard({
     "col-span-12 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
 
   switch (sizeString) {
-    case "(POLISHED)12x24":
+
+    case "400x600 mm (16x24 inch)":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-11";
+        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-8 lg:row-span-19";
       break;
     case "(LUSTER)12x24":
       gridClass =
