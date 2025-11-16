@@ -161,7 +161,7 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <Image
-                src="/images/home/home_tile1.jpg"
+                src="/images/home/home_tile2.png"
                 alt="Modern interior with stylish decorative tiles"
                 fill
                 className="object-cover"

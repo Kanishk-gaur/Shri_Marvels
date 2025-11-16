@@ -10,8 +10,8 @@ interface SubCategoryData {
 
 const customCategoryImages: Record<string, string> = {
   // Tiles / Border Categories
-  "Border Tiles": "/images/your-uploaded-border-tile.jpg",
-  "Digital Border Tiles": "/images/your-uploaded-digital-border.jpg",
+  "Border Tiles": "/images/border.png",
+  "Digital Border Tiles": "/images/home/Digital_Border.png",
   "Imported Pencil Border Tiles": "/images/your-uploaded-pencil-border.jpg",
   "GVT Wall & Floor Border Tiles": "/images/your-uploaded-gvt-border.jpg",
   "Golden & Silver Border Tiles": "/images/your-uploaded-gold-silver.jpg",
@@ -19,9 +19,9 @@ const customCategoryImages: Record<string, string> = {
   // Posters & Wall Tiles
   "Digital God Posters": "/images/your-uploaded-god-poster.jpg",
   "Digital Plain Poster Tiles": "/images/your-uploaded-plain-poster.jpg",
-  "Digital Gate Punch Picture Tiles": "/images/your-uploaded-gate-punch.jpg",
+  "Digital Gate Punch Picture Tiles": "/images/home/gate_punch.png",
   "Kitchen Colorfull Poster": "/images/your-uploaded-kitchen.jpg",
-  "Daimond Collection Posters": "/images/your-uploaded-diamond.jpg",
+  "Daimond Collection Posters": "/images/Daimond.png",
   
   // High Gloss
   "High Gloss Posters": "/images/your-uploaded-high-gloss.jpg",

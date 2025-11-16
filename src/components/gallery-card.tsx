@@ -17,20 +17,40 @@ export default function GalleryCard({
   index = 0,
   priority = false,
 }: GalleryCardProps) {
-  const [isLoaded, setIsLoaded] = useState(false); 
+  const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
 
   // Grid classes structure: mobile (default) -> tablet (md:) -> desktop (lg:)
- // Default is now col-span-12 (half of 24) instead of col-span-6 (half of 12)
+  // Default is now col-span-12 (half of 24) instead of col-span-6 (half of 12)
   let gridClass =
     "col-span-12 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
 
   switch (sizeString) {
-     case "300x63 mm (12x2.5 inch)":
+    case "(POLISHED)12x24":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-11";
+      break;
+    case "(LUSTER)12x24":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-11";
+      break;
+    case "(SUGAR)12x24":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-11";
+      break;
+    case "(Sugar)300x600 mm (11.8x23.6 inch)":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+      break;
+    case "(GLUE)300x600 mm (11.8x23.6 inch)":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+      break;
+    case "300x63 mm (12x2.5 inch)":
       gridClass =
         "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-8";
       break;
-     case "Polishing Series 300x600 mm (12x24 inch)":
+    case "Polishing Series 300x600 mm (12x24 inch)":
       gridClass =
         "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
       break;
