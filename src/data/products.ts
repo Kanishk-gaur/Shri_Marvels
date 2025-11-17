@@ -40293,7 +40293,7 @@ export const allProducts: Product[] = [
     "name": "3D-3213",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["300x200 mm (12x8 inch)"],
+    "sizes": ["200x300 mm (8x12 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3213.png",
     "images": ["/images/posters_8x12/3D-3213.png"],
@@ -40569,7 +40569,7 @@ export const allProducts: Product[] = [
     "name": "3D-3236",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["200x300 mm (8x12 inch)"],
+    "sizes": ["300x200 mm (12x8 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3236.png",
     "images": ["/images/posters_8x12/3D-3236.png"],
@@ -40708,18 +40708,7 @@ export const allProducts: Product[] = [
     "dimensions": { "length": 300, "width": 200, "unit": "mm" },
     "rating": 4.5
   },
-  {
-    "id": 4670,
-    "name": "3D-3248",
-    "category": "tiles",
-    "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["300x200 mm (12x8 inch)"],
-    "material": "Full Digital Emboss",
-    "image": "/images/posters_8x12/3D-3248.png",
-    "images": ["/images/posters_8x12/3D-3248.png"],
-    "dimensions": { "length": 200, "width": 300, "unit": "mm" },
-    "rating": 4.5
-  },
+
   {
     "id": 4671,
     "name": "3D-3249",
@@ -40893,7 +40882,7 @@ export const allProducts: Product[] = [
     "name": "3D-3263",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["300x200 mm (12x8 inch)"],
+    "sizes": ["200x300 mm (8x12 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3263.png",
     "images": ["/images/posters_8x12/3D-3263.png"],
@@ -41013,7 +41002,7 @@ export const allProducts: Product[] = [
     "name": "3D-3273",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["200x300 mm (8x12 inch)"],
+    "sizes": ["300x200 mm (12x8 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3273.png",
     "images": ["/images/posters_8x12/3D-3273.png"],
@@ -41025,7 +41014,7 @@ export const allProducts: Product[] = [
     "name": "3D-3274",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["300x200 mm (12x8 inch)"],
+    "sizes": ["200x300 mm (8x12 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3274.png",
     "images": ["/images/posters_8x12/3D-3274.png"],
@@ -41176,18 +41165,7 @@ export const allProducts: Product[] = [
     "dimensions": { "length": 300, "width": 200, "unit": "mm" },
     "rating": 4.5
   },
-  {
-    "id": 4709,
-    "name": "3D-3287",
-    "category": "tiles",
-    "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["200x300 mm (8x12 inch)"],
-    "material": "Full Digital Emboss",
-    "image": "/images/posters_8x12/3D-3287.png",
-    "images": ["/images/posters_8x12/3D-3287.png"],
-    "dimensions": { "length": 300, "width": 200, "unit": "mm" },
-    "rating": 4.5
-  },
+ 
   {
     "id": 4710,
     "name": "3D-3288",
@@ -41284,18 +41262,7 @@ export const allProducts: Product[] = [
     "dimensions": { "length": 200, "width": 300, "unit": "mm" },
     "rating": 4.5
   },
-  {
-    "id": 4718,
-    "name": "3D-3296",
-    "category": "tiles",
-    "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["300x200 mm (12x8 inch)"],
-    "material": "Full Digital Emboss",
-    "image": "/images/posters_8x12/3D-3296.png",
-    "images": ["/images/posters_8x12/3D-3296.png"],
-    "dimensions": { "length": 200, "width": 300, "unit": "mm" },
-    "rating": 4.5
-  },
+  
   {
     "id": 4719,
     "name": "3D-3297",
@@ -41332,18 +41299,7 @@ export const allProducts: Product[] = [
     "dimensions": { "length": 300, "width": 200, "unit": "mm" },
     "rating": 4.5
   },
-  {
-    "id": 4722,
-    "name": "3D-3300",
-    "category": "tiles",
-    "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["200x300 mm (8x12 inch)"],
-    "material": "Full Digital Emboss",
-    "image": "/images/posters_8x12/3D-3200.png",
-    "images": ["/images/posters_8x12/3D-3299.png"],
-    "dimensions": { "length": 300, "width": 200, "unit": "mm" },
-    "rating": 4.5
-  },
+  
   {
     "id": 4723,
     "name": "3D-3301",
@@ -41361,7 +41317,7 @@ export const allProducts: Product[] = [
     "name": "3D-3302",
     "category": "tiles",
     "subcategory": "High Gloss 3D Emboss Poster Tiles",
-    "sizes": ["200x300 mm (8x12 inch)"],
+    "sizes": ["300x200 mm (12x8 inch)"],
     "material": "Full Digital Emboss",
     "image": "/images/posters_8x12/3D-3302.png",
     "images": ["/images/posters_8x12/3D-3302.png"],
