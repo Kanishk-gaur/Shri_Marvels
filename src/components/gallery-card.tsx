@@ -100,6 +100,10 @@ export default function GalleryCard({
       gridClass =
         "col-span-24 row-span-5 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-6";
       break;
+       case "900x600 mm":
+      gridClass =
+        "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
+      break;
     case "900x600 mm (36x24 inch)":
       gridClass =
         "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
@@ -108,13 +112,25 @@ export default function GalleryCard({
       gridClass =
         "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
       break;
+       case "600x600 mm":
+      gridClass =
+        "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+      break;
     case "600x600 mm (23.6x23.6 inch)":
       gridClass =
         "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
       break;
+       case "600x900 mm":
+      gridClass =
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-26";
+      break;
     case "600x900 mm (24x36 inch)":
       gridClass =
         "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-37";
+      break;
+       case "1200x600 mm":
+      gridClass =
+        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-19";
       break;
     case "1200x600 mm (48x24 inch)":
       gridClass =
@@ -250,10 +266,16 @@ export default function GalleryCard({
       gridClass =
         "col-span-12 row-span-5 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-7";
       break;
+     
     case "4x2":
       // Was 3 -> 6
       gridClass =
         "col-span-6 row-span-13 md:col-span-4 md:row-span-20 lg:col-span-4 lg:row-span-33";
+      break;
+      case "600x1200 mm":
+      // Was 6 -> 12
+      gridClass =
+        "col-span-12 row-span-25 md:col-span-6 md:row-span-28 lg:col-span-4 lg:row-span-33";
       break;
     case "2x4":
       // Was 6 -> 12
