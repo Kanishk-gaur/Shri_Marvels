@@ -3,6 +3,108 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowDown, CheckCircle2, Layers, ShieldCheck } from "lucide-react";
 
+// Data for the new Texture/Design Collection Grid
+const textureCollection = [
+  { "code": "01", "image": "/images/step_riser_tiles/01.png" },
+  { "code": "02", "image": "/images/step_riser_tiles/02.png" },
+  { "code": "04", "image": "/images/step_riser_tiles/04.png" },
+  { "code": "06", "image": "/images/step_riser_tiles/06.png" },
+  { "code": "08", "image": "/images/step_riser_tiles/08.png" },
+  { "code": "09", "image": "/images/step_riser_tiles/09.png" },
+  { "code": "12", "image": "/images/step_riser_tiles/12.png" },
+  { "code": "16", "image": "/images/step_riser_tiles/16.png" },
+  { "code": "29", "image": "/images/step_riser_tiles/29.png" },
+  { "code": "32", "image": "/images/step_riser_tiles/32.png" },
+  { "code": "34", "image": "/images/step_riser_tiles/34.png" },
+  { "code": "37", "image": "/images/step_riser_tiles/37.png" },
+  { "code": "38", "image": "/images/step_riser_tiles/38.png" },
+  { "code": "39", "image": "/images/step_riser_tiles/39.png" },
+  { "code": "40", "image": "/images/step_riser_tiles/40.png" },
+  { "code": "41", "image": "/images/step_riser_tiles/41.png" },
+  { "code": "42", "image": "/images/step_riser_tiles/42.png" },
+  { "code": "43", "image": "/images/step_riser_tiles/43.png" },
+  { "code": "44", "image": "/images/step_riser_tiles/44.png" },
+  { "code": "45", "image": "/images/step_riser_tiles/45.png" },
+  { "code": "DC-901", "image": "/images/step_riser_tiles/DC-901.png" },
+  { "code": "DC-902", "image": "/images/step_riser_tiles/DC-902.png" },
+  { "code": "DC-903", "image": "/images/step_riser_tiles/DC-903.png" },
+  { "code": "DC-904", "image": "/images/step_riser_tiles/DC-904.png" },
+  { "code": "DC-905", "image": "/images/step_riser_tiles/DC-905.png" },
+  { "code": "DC-908", "image": "/images/step_riser_tiles/DC-908.png" },
+  { "code": "DC-911", "image": "/images/step_riser_tiles/DC-911.png" },
+  { "code": "DC-913", "image": "/images/step_riser_tiles/DC-913.png" },
+  { "code": "DC-914", "image": "/images/step_riser_tiles/DC-914.png" },
+  { "code": "DC-917", "image": "/images/step_riser_tiles/DC-917.png" },
+  { "code": "DC-918", "image": "/images/step_riser_tiles/DC-918.png" },
+  { "code": "DC-919", "image": "/images/step_riser_tiles/DC-919.png" },
+  { "code": "DC-920", "image": "/images/step_riser_tiles/DC-920.png" },
+  { "code": "DC-921", "image": "/images/step_riser_tiles/DC-921.png" },
+  { "code": "DC-924", "image": "/images/step_riser_tiles/DC-924.png" },
+  { "code": "DC-928", "image": "/images/step_riser_tiles/DC-928.png" },
+  { "code": "501", "image": "/images/step_riser_tiles/501.png" },
+  { "code": "509", "image": "/images/step_riser_tiles/509.png" },
+  { "code": "559", "image": "/images/step_riser_tiles/559.png" },
+  { "code": "560", "image": "/images/step_riser_tiles/560.png" },
+  { "code": "562", "image": "/images/step_riser_tiles/562.png" },
+  { "code": "568", "image": "/images/step_riser_tiles/568.png" },
+  { "code": "570", "image": "/images/step_riser_tiles/570.png" },
+  { "code": "571", "image": "/images/step_riser_tiles/571.png" },
+  { "code": "572", "image": "/images/step_riser_tiles/572.png" },
+  { "code": "573", "image": "/images/step_riser_tiles/573.png" },
+  { "code": "574", "image": "/images/step_riser_tiles/574.png" },
+  { "code": "577", "image": "/images/step_riser_tiles/577.png" },
+  { "code": "701", "image": "/images/step_riser_tiles/701.png" },
+  { "code": "702", "image": "/images/step_riser_tiles/702.png" },
+  { "code": "703", "image": "/images/step_riser_tiles/703.png" },
+  { "code": "704", "image": "/images/step_riser_tiles/704.png" },
+  { "code": "706", "image": "/images/step_riser_tiles/706.png" },
+  { "code": "707", "image": "/images/step_riser_tiles/707.png" },
+  { "code": "708", "image": "/images/step_riser_tiles/708.png" },
+  { "code": "709", "image": "/images/step_riser_tiles/709.png" },
+  { "code": "711", "image": "/images/step_riser_tiles/711.png" },
+  { "code": "712", "image": "/images/step_riser_tiles/712.png" },
+  { "code": "714", "image": "/images/step_riser_tiles/714.png" },
+  { "code": "715", "image": "/images/step_riser_tiles/715.png" },
+  { "code": "716", "image": "/images/step_riser_tiles/716.png" },
+  { "code": "717", "image": "/images/step_riser_tiles/717.png" },
+  { "code": "718", "image": "/images/step_riser_tiles/718.png" },
+  { "code": "720", "image": "/images/step_riser_tiles/720.png" },
+  { "code": "101", "image": "/images/step_riser_tiles/101.png" },
+  { "code": "104", "image": "/images/step_riser_tiles/104.png" },
+  { "code": "105", "image": "/images/step_riser_tiles/105.png" },
+  { "code": "108", "image": "/images/step_riser_tiles/108.png" },
+  { "code": "109", "image": "/images/step_riser_tiles/109.png" },
+  { "code": "110", "image": "/images/step_riser_tiles/110.png" },
+  { "code": "111", "image": "/images/step_riser_tiles/111.png" },
+  { "code": "151", "image": "/images/step_riser_tiles/151.png" },
+  { "code": "152", "image": "/images/step_riser_tiles/152.png" },
+  { "code": "154", "image": "/images/step_riser_tiles/154.png" },
+  { "code": "157", "image": "/images/step_riser_tiles/157.png" },
+  { "code": "158", "image": "/images/step_riser_tiles/158.png" },
+  { "code": "159", "image": "/images/step_riser_tiles/159.png" },
+  { "code": "160", "image": "/images/step_riser_tiles/160.png" },
+  { "code": "168", "image": "/images/step_riser_tiles/168.png" },
+  { "code": "169", "image": "/images/step_riser_tiles/169.png" },
+  { "code": "170", "image": "/images/step_riser_tiles/170.png" },
+  { "code": "173", "image": "/images/step_riser_tiles/173.png" },
+  { "code": "174", "image": "/images/step_riser_tiles/174.png" },
+  { "code": "175", "image": "/images/step_riser_tiles/175.png" },
+  { "code": "201", "image": "/images/step_riser_tiles/201.png" },
+  { "code": "202", "image": "/images/step_riser_tiles/202.png" },
+  { "code": "204", "image": "/images/step_riser_tiles/204.png" },
+  { "code": "205", "image": "/images/step_riser_tiles/205.png" },
+  { "code": "206", "image": "/images/step_riser_tiles/206.png" },
+  { "code": "1001", "image": "/images/step_riser_tiles/1001.png" },
+  { "code": "1002", "image": "/images/step_riser_tiles/1002.png" },
+  { "code": "1003", "image": "/images/step_riser_tiles/1003.png" },
+  { "code": "1004", "image": "/images/step_riser_tiles/1004.png" },
+  { "code": "1005", "image": "/images/step_riser_tiles/1005.png" },
+  { "code": "301", "image": "/images/step_riser_tiles/301.png" },
+  { "code": "302", "image": "/images/step_riser_tiles/302.png" },
+  { "code": "306", "image": "/images/step_riser_tiles/306.png" },
+  { "code": "307", "image": "/images/step_riser_tiles/307.png" }
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-white font-sans selection:bg-black selection:text-white">
@@ -129,7 +231,7 @@ export default function Home() {
       </section>
 
       {/* =========================================
-          PRODUCT SHOWCASE GRID (Existing Logic)
+          PRODUCT SHOWCASE GRID
       ========================================= */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -791,7 +893,55 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Product Details Section */}
+      {/* =========================================
+          TEXTURE GALLERY GRID (NEW SECTION)
+      ========================================= */}
+      <section className="py-16 px-4 md:px-8 bg-white border-t border-neutral-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+              Design Collection
+            </h2>
+            <p className="text-neutral-500 tracking-widest text-sm uppercase">
+              Premium Textures & Finishes
+            </p>
+          </div>
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+  {textureCollection.map((item) => (
+    <motion.div
+      key={item.code}
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="group cursor-pointer"
+    >
+      {/* Image Container - Slightly decreased height */}
+      <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden bg-neutral-100 shadow-sm border border-neutral-200 group-hover:shadow-md transition-all duration-300">
+        <img
+          src={item.image}
+          alt={`Texture finish ${item.code}`}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        {/* Optional Overlay on Hover */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+      </div>
+
+      {/* Label */}
+      <div className="mt-3 px-1">
+        <p className="text-sm font-semibold text-neutral-700 group-hover:text-black transition-colors">
+          {item.code}
+        </p>
+      </div>
+    </motion.div>
+  ))}
+</div>
+        </div>
+      </section>
+
+      {/* =========================================
+          PRODUCT SPECIFICATIONS
+      ========================================= */}
       <section
         style={{ background: "#f9f9f9" }}
         className="py-16 md:py-24 px-4 md:px-8"
