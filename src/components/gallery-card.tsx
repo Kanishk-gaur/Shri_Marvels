@@ -26,6 +26,11 @@ export default function GalleryCard({
     "col-span-12 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
 
   switch (sizeString) {
+    case "(POLISHED)12x24":
+      // Was 4 -> 8
+      gridClass =
+        "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-11";
+      break;
     case "18x12/8x12":
       // Was 4 -> 8
       gridClass =
@@ -374,7 +379,7 @@ export default function GalleryCard({
       gridClass =
         "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
       break;
-      case "300x200 mm (12x8 inch)":
+    case "300x200 mm (12x8 inch)":
       // Was 4 -> 8
       gridClass =
         "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
