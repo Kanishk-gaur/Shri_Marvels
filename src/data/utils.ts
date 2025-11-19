@@ -17,7 +17,7 @@ const customCategoryImages: Record<string, string> = {
   "Golden & Silver Border Tiles": "/images/your-uploaded-gold-silver.jpg",
   
   // Posters & Wall Tiles
-  "Digital God Posters": "/images/your-uploaded-god-poster.jpg",
+  "Digital God Posters": "/images/home/digital_god.png",
   "Digital Plain Poster Tiles": "/images/your-uploaded-plain-poster.jpg",
   "Digital Gate Punch Picture Tiles": "/images/home/gate_punch.png",
   "Kitchen Colorfull Poster": "/images/your-uploaded-kitchen.jpg",
