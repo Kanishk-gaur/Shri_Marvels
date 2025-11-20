@@ -40,34 +40,37 @@ const PADDING_HEIGHT = 10;
 
 // Define the priority order for sorting
 const priorityOrder: Record<string, number> = {
-  "Border Tiles": 5,
-  "Daimond Collection Posters": 2,
-  "Digital Border Tiles": 3,
-  "Digital Gate Punch Picture Tiles": 4,
-  "Digital God Posters": 1,
-  "Digital Plain God Picture Tiles": 6,
-  "Digital Plain Poster Tiles": 7,
-  "Glitter Emboss": 8,
-  "God GVT": 9,
-  "GOD picture": 10,
-  "Golden & Silver Border Tiles": 11,
-  "Golden Rangoli Decorative Tiles": 12,
+  "Glitter Emboss": 1,
+  "High Gloss 3D Emboss Poster Tiles": 2,
+  // "Wooden Emboss Poster": 2, // NO DIRECT MATCH - Skipping, but reserving priority 2 if a name is found.
+  "High Gloss Posters": 3, // CORRECTED: Now targets the actual "High Gloss Posters" subcategory (e.g. Diamond posters)
+  "Kitchen Colorfull Poster": 4,
+  "God GVT": 5,
+  "Digital Posters": 6, // CORRECTED: Now targets the actual "Digital Posters" subcategory (e.g. God Posters)
+  "VITROSA GOD picture": 7,
+  "GOD picture": 8,
+  "Border Tiles": 9,
+  "Golden & Silver Border Tiles": 10,
+  "Digital Border Tiles": 11,
+  "GVT Wall & Floor Border Tiles": 12,
   "GOLDEN SILVER HIGHLIGHTER": 13,
-  "Golden Silver Highlighter Tiles": 14,
-  "GVT rangoli": 15,
-  "GVT Wall & Floor Border Tiles": 16,
-  "High Gloss 3D Emboss Poster Tiles": 17,
-  "High Gloss Plain & Glitter Poster": 18,
-  "High Gloss Posters": 19,
-  "High Gloss Posters 2x4": 20,
-  "High Gloss Posters 4x2": 21,
-  "Imported Pencil Border Tiles": 22,
-  "Kitchen Colorfull Poster": 23,
-  "Rangoli": 24,
-  "Steel Welcome": 25,
-  "Step & Riser Tiles": 26,
-  "VITROSA GOD picture": 27,
-  "Welcome": 28,
+  "GVT rangoli": 14,
+  "Golden Rangoli Decorative Tiles": 15,
+
+  // --- Remaining items from the original priority list (16+) ---
+  // Note: Priority 2 is unused. Start from 16 to keep the existing original items lower priority.
+  // "Imported Border": 1,
+  "Digital Gate Punch Picture Tiles": 17,
+  "Digital Plain God Picture Tiles": 18,
+  "Digital Plain Poster Tiles": 19,
+
+  "Golden Silver Highlighter Tiles": 21,
+  // "High Gloss Posters": 23, // Removed as it was re-mapped to position 3
+
+  Rangoli: 26,
+  "Steel Welcome": 27,
+  "Step & Riser Tiles": 28,
+  Welcome: 29,
 };
 
 export function ProductFilter({

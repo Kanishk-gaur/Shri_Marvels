@@ -24,7 +24,7 @@ const subCategoryDisplayNames: Record<string, string> = {
    "GVT rangoli": "GVT Rangoli",
    "GVT Wall & Floor Border Tiles": "GVT Border",
    "High Gloss 3D Emboss Poster Tiles": "Wooden Emboss Poster",
-   "High Gloss Posters": "High Gloss Diamond Poster",
+   "High Gloss Posters": "High Gloss Diamond Poster", // MATCHES High Gloss Posters (used for Diamond in product data)
    "Kitchen Colorfull Poster": "High Gloss Kitchen Poster",
    "VITROSA GOD picture": "Vitrosa Picture",
 
@@ -73,34 +73,33 @@ const customCategoryImages: Record<string, string> = {
 // --- 2. PRIORITY ORDER REMAINS KEYED BY ORIGINAL NAME ---
 const priorityOrder: Record<string, number> = {
   // --- Mapped from Image (1-15) ---
-  "High Gloss Plain & Glitter Poster": 1, // HIGH GLOSS GLITTER EMBOSS POSTER
+  "Glitter Emboss": 1,
+  "High Gloss 3D Emboss Poster Tiles": 2, 
   // "Wooden Emboss Poster": 2, // NO DIRECT MATCH - Skipping, but reserving priority 2 if a name is found.
-  "Daimond Collection Posters": 3, // HIGH GLOSS DIAMOND POSTER
-  "Kitchen Colorfull Poster": 4, // HIGH GLOSS KITCHEN POSTER
-  "God GVT": 5, // GVT POSTER
-  "Digital God Posters": 6, // DIGITAL POSTER (Assuming Digital God, could also be Digital Plain)
-  "VITROSA GOD picture": 7, // VITROSA PICTURE
-  "GOD picture": 8, // PLAIN PICTURE
-  "Imported Pencil Border Tiles": 9, // IMPORTED BORDER
-  "Golden & Silver Border Tiles": 10, // GOLDEN & SILVER BORDER
-  "Digital Border Tiles": 11, // DIGITAL BORDER
-  "GVT Wall & Floor Border Tiles": 12, // GVT BORDER
-  "GOLDEN SILVER HIGHLIGHTER": 13, // GOLDEN & SILVER HIGHLIGHTER
-  "GVT rangoli": 14, // GVT RANGOLI
-  "Golden Rangoli Decorative Tiles": 15, // GOLDEN RANGOLI
+  "High Gloss Posters": 3, // CORRECTED: Now targets the actual "High Gloss Posters" subcategory (e.g. Diamond posters)
+  "Kitchen Colorfull Poster": 4, 
+  "God GVT": 5, 
+  "Digital Posters": 6, // CORRECTED: Now targets the actual "Digital Posters" subcategory (e.g. God Posters)
+  "VITROSA GOD picture": 7, 
+  "GOD picture": 8, 
+  "Border Tiles": 9, 
+  "Golden & Silver Border Tiles": 10, 
+  "Digital Border Tiles": 11, 
+  "GVT Wall & Floor Border Tiles": 12, 
+  "GOLDEN SILVER HIGHLIGHTER": 13, 
+  "GVT rangoli": 14, 
+  "Golden Rangoli Decorative Tiles": 15, 
 
   // --- Remaining items from the original priority list (16+) ---
   // Note: Priority 2 is unused. Start from 16 to keep the existing original items lower priority.
   // "Imported Border": 1,
   "Digital Gate Punch Picture Tiles": 17,
-  "Digital Plain God Picture Tiles": 18, // Was originally priority 6
-  "Digital Plain Poster Tiles": 19, // Was originally priority 7
-  "Glitter Emboss": 20,
+  "Digital Plain God Picture Tiles": 18, 
+  "Digital Plain Poster Tiles": 19, 
+  
   "Golden Silver Highlighter Tiles": 21,
-  "High Gloss 3D Emboss Poster Tiles": 22,
-  "High Gloss Posters": 23,
-  "High Gloss Posters 2x4": 24,
-  "High Gloss Posters 4x2": 25,
+  // "High Gloss Posters": 23, // Removed as it was re-mapped to position 3
+
   "Rangoli": 26,
   "Steel Welcome": 27,
   "Step & Riser Tiles": 28,
@@ -148,6 +147,8 @@ export const generateCategories = (products: Product[]) => {
     return list.sort((a, b) => {
       // Find the original name by matching either the display name or the ID slug, 
       // then use that to look up the priority.
+      // This is necessary because the original subcategory name (the key for priorityOrder) 
+      // is not stored explicitly as a property on the sorted object (a or b).
       const originalNameA = Object.keys(priorityOrder).find(key => subCategoryDisplayNames[key] === a.name || key.toLowerCase().replace(/ /g, "-") === a.id);
       const originalNameB = Object.keys(priorityOrder).find(key => subCategoryDisplayNames[key] === b.name || key.toLowerCase().replace(/ /g, "-") === b.id);
       
