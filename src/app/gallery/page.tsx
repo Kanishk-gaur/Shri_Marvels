@@ -11,57 +11,25 @@ import { useSearchParams } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
 
-// --- CUSTOM SORTING LOGIC ---
-// 1. Define the priority order
-const priorityOrder: Record<string, number> = {
-  "Border Tiles": 5,
-  "Daimond Collection Posters": 2,
-  "Digital Border Tiles": 3,
-  "Digital Gate Punch Picture Tiles": 4,
-  "Digital God Posters": 1,
-  "Digital Plain God Picture Tiles": 6,
-  "Digital Plain Poster Tiles": 7,
-  "Glitter Emboss": 8,
-  "God GVT": 9,
-  "GOD picture": 10,
-  "Golden & Silver Border Tiles": 11,
-  "Golden Rangoli Decorative Tiles": 12,
-  "GOLDEN SILVER HIGHLIGHTER": 13,
-  "Golden Silver Highlighter Tiles": 14,
-  "GVT rangoli": 15,
-  "GVT Wall & Floor Border Tiles": 16,
-  "High Gloss 3D Emboss Poster Tiles": 17,
-  "High Gloss Plain & Glitter Poster": 18,
-  "High Gloss Posters": 19,
-  "High Gloss Posters 2x4": 20,
-  "High Gloss Posters 4x2": 21,
-  "Imported Pencil Border Tiles": 22,
-  "Kitchen Colorfull Poster": 23,
-  "Rangoli": 24,
-  "Steel Welcome": 25,
-  "Step & Riser Tiles": 26,
-  "VITROSA GOD picture": 27,
-  "Welcome": 28,
+// --- START: Lookup Map based on processed data ---
+// Create a map from the slug/id (which is based on the raw name) to the new display name.
+const subcategoryNameMap = new Map<string, string>();
+[...categories.tiles, ...categories.marvel].forEach(cat => {
+    // The ID holds the slug of the original subcategory, and the name holds the new display name.
+    subcategoryNameMap.set(cat.id, cat.name);
+});
+
+// Function to convert the raw subcategory name (found in allProducts) to the display name.
+const getDisplayName = (rawSubcategory: string): string => {
+    // Convert raw name to slug/id to perform the lookup
+    const id = rawSubcategory.toLowerCase().replace(/ /g, "-");
+    return subcategoryNameMap.get(id) || rawSubcategory; // Fallback to raw name if no mapping is found
 };
 
-// 2. Helper function to parse the group key (e.g., "Subcategory (8x6")")
-const getPartsFromGroupKey = (groupKey: string) => {
-  const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
-  if (match) {
-    return { subcat: match[1], size: match[2] };
-  }
-  return { subcat: groupKey, size: "" }; // Fallback
-};
+// Use the structure of the already sorted categories to sort the product grouping keys.
+const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(cat => cat.name);
 
-// 3. Helper function to sort sizes numerically
-const sortSizes = (a: string, b: string) => {
-  const numA = parseInt(a, 10);
-  const numB = parseInt(b, 10);
-  if (isNaN(numA)) return 1;
-  if (isNaN(numB)) return -1;
-  return numA - numB;
-};
-// --- END OF CUSTOM SORTING LOGIC ---
+// --- END: Lookup Map based on processed data ---
 
 
 export default function GalleryPage() {
@@ -76,7 +44,7 @@ export default function GalleryPage() {
   );
   const [activeProductFilter, setActiveProductFilter] = useState<{
     category: "marvel" | "tiles";
-    subcategory: string;
+    subcategory: string; // This holds the ID/slug
     size: string;
   } | null>(null);
 
@@ -105,13 +73,14 @@ export default function GalleryPage() {
   const groupedProducts = useMemo(() => {
     let products = allProducts;
 
+    // Filter logic remains the same (uses product.subcategory which holds the original raw name)
     if (activeProductFilter) {
       products = products.filter(
         (p) =>
           p.category === activeProductFilter.category &&
           p.subcategory.toLowerCase().replace(/ /g, "-") ===
             activeProductFilter.subcategory &&
-          p.sizes.includes(activeProductFilter.size)
+          p.sizes.some(size => size.toLowerCase() === activeProductFilter.size.toLowerCase())
       );
     } else {
       if (selectedMainCategory !== "all") {
@@ -129,7 +98,10 @@ export default function GalleryPage() {
     const grouped: { [key: string]: Product[] } = {};
     products.forEach((product) => {
       product.sizes.forEach((size) => {
-        const groupKey = `${product.subcategory} (${size}")`;
+        // --- FIX IS HERE: USE THE DISPLAY NAME for the Group Key ---
+        const displayName = getDisplayName(product.subcategory);
+        const groupKey = `${displayName} (${size}")`; 
+        
         if (!grouped[groupKey]) {
           grouped[groupKey] = [];
         }
@@ -146,21 +118,40 @@ export default function GalleryPage() {
     return grouped;
   }, [selectedMainCategory, selectedSubcategory, activeProductFilter]);
 
-  // Use the custom sorting logic to create the master list of group keys
+  // Use the new simplified sorting logic
   const allSortedGroupKeys = useMemo(() => {
-    return Object.keys(groupedProducts).sort((a, b) => {
-      const partsA = getPartsFromGroupKey(a);
-      const partsB = getPartsFromGroupKey(b);
+    const allKeys = Object.keys(groupedProducts);
 
-      const priorityA = priorityOrder[partsA.subcat] || 999;
-      const priorityB = priorityOrder[partsB.subcat] || 999;
+    const sortSizes = (a: string, b: string) => {
+        const numA = parseInt(a, 10);
+        const numB = parseInt(b, 10);
+        if (isNaN(numA)) return 1;
+        if (isNaN(numB)) return -1;
+        return numA - numB;
+    };
+    
+    // Sort keys primarily by the sorted display name order, then by size
+    return allKeys.sort((a, b) => {
+      const matchA = a.match(/^(.*?) \((.*?)\"?\)$/);
+      const matchB = b.match(/^(.*?) \((.*?)\"?\)$/);
+      
+      const subcatA = matchA ? matchA[1] : a;
+      const sizeA = matchA ? matchA[2] : "";
+      
+      const subcatB = matchB ? matchB[1] : b;
+      const sizeB = matchB ? matchB[2] : "";
+      
+      const indexA = subcategorySortKeys.indexOf(subcatA);
+      const indexB = subcategorySortKeys.indexOf(subcatB);
 
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB; // Sort by subcategory priority
+      if (indexA !== indexB) {
+        // Sort by subcategory display name order based on the pre-sorted array
+        // We use || 999 to push non-matching/new categories to the end.
+        return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
       }
 
       // If same subcategory, sort by size
-      return sortSizes(partsA.size, partsB.size);
+      return sortSizes(sizeA, sizeB);
     });
   }, [groupedProducts]);
 
@@ -225,7 +216,7 @@ export default function GalleryPage() {
   );
 
   useEffect(() => {
-    // Use the pre-sorted list of keys
+    // Reset visible groups whenever the filtered list changes
     setVisibleGroups(allSortedGroupKeys.slice(0, 1)); // Start with the first group
     setHasMore(allSortedGroupKeys.length > 1);
   }, [allSortedGroupKeys]);
@@ -233,18 +224,9 @@ export default function GalleryPage() {
   const filterChipCategories = useMemo(() => {
     if (selectedMainCategory === "marvel") return categories.marvel;
     if (selectedMainCategory === "tiles") return categories.tiles;
-    const combined = [...categories.marvel, ...categories.tiles];
     
-    // Use the priority list to sort the combined filter chips
-    return combined.sort((a, b) => {
-      const priorityA = priorityOrder[a.name] || 999;
-      const priorityB = priorityOrder[b.name] || 999;
-
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB;
-      }
-      return a.name.localeCompare(b.name);
-    });
+    // Combine and return the already correctly sorted categories from the initial data processing
+    return [...categories.tiles, ...categories.marvel];
   }, [selectedMainCategory]);
 
   const isFilterActive =
