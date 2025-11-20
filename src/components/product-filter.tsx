@@ -39,38 +39,32 @@ const HEADER_HEIGHT = 50;
 const PADDING_HEIGHT = 10;
 
 // Define the priority order for sorting
-const priorityOrder: Record<string, number> = {
-  "Glitter Emboss": 1,
-  "High Gloss 3D Emboss Poster Tiles": 2,
-  // "Wooden Emboss Poster": 2, // NO DIRECT MATCH - Skipping, but reserving priority 2 if a name is found.
-  "High Gloss Posters": 3, // CORRECTED: Now targets the actual "High Gloss Posters" subcategory (e.g. Diamond posters)
-  "Kitchen Colorfull Poster": 4,
-  "God GVT": 5,
-  "Digital Posters": 6, // CORRECTED: Now targets the actual "Digital Posters" subcategory (e.g. God Posters)
-  "VITROSA GOD picture": 7,
-  "GOD picture": 8,
-  "Border Tiles": 9,
-  "Golden & Silver Border Tiles": 10,
-  "Digital Border Tiles": 11,
-  "GVT Wall & Floor Border Tiles": 12,
-  "GOLDEN SILVER HIGHLIGHTER": 13,
-  "GVT rangoli": 14,
-  "Golden Rangoli Decorative Tiles": 15,
-
+const priorityOrder: Record<string, number> ={
+  "High Gloss Glitter Emboss Poster": 1,
+  "Wooden Emboss Poster": 2,
+  "High Gloss Diamond Poster": 3,
+  "High Gloss Kitchen Poster": 4,
+  "GVT Poster": 5,
+  "Digital Posters": 6,
+  "Vitrosa Picture": 7,
+  "Plain Picture": 8,
+  "Imported Border": 9,
+  "Golden & Silver Border": 10,
+  "Digital Border": 11,
+  "GVT Border": 12,
+  "Golden & Silver Highlighter": 13,
+  "GVT Rangoli": 14,
+  "Golden Rangoli": 15,
+  
   // --- Remaining items from the original priority list (16+) ---
-  // Note: Priority 2 is unused. Start from 16 to keep the existing original items lower priority.
-  // "Imported Border": 1,
   "Digital Gate Punch Picture Tiles": 17,
   "Digital Plain God Picture Tiles": 18,
   "Digital Plain Poster Tiles": 19,
-
   "Golden Silver Highlighter Tiles": 21,
-  // "High Gloss Posters": 23, // Removed as it was re-mapped to position 3
-
-  Rangoli: 26,
-  "Steel Welcome": 27,
+  "Rangoli": 26,
+  "Steel Welcome Accents": 27,
   "Step & Riser Tiles": 28,
-  Welcome: 29,
+  "Welcome Door Sills": 29
 };
 
 export function ProductFilter({
