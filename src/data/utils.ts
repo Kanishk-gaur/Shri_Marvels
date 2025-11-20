@@ -13,12 +13,8 @@ interface SubCategoryData {
 const subCategoryDisplayNames: Record<string, string> = {
   // Tiles
   
-  "Border Tiles": "Imported Border",
+   "Border Tiles": "Imported Border",
    "Digital Border Tiles": "Digital Border",
-  //  "Digital Gate Punch Picture Tiles": "Digital Poster",
-  //  "Digital God Posters": "Digital Poster",
-  //  "Digital Plain God Picture Tiles": "Digital Poster",
-  //  "Digital Plain Poster Tiles": "Digital Poster",
    "Glitter Emboss": "High Gloss Glitter Emboss Poster",
    "God GVT": "GVT Poster",
    "GOD picture": "Plain Picture",
@@ -95,7 +91,7 @@ const priorityOrder: Record<string, number> = {
 
   // --- Remaining items from the original priority list (16+) ---
   // Note: Priority 2 is unused. Start from 16 to keep the existing original items lower priority.
-  "Border Tiles": 16,
+  // "Imported Border": 1,
   "Digital Gate Punch Picture Tiles": 17,
   "Digital Plain God Picture Tiles": 18, // Was originally priority 6
   "Digital Plain Poster Tiles": 19, // Was originally priority 7
