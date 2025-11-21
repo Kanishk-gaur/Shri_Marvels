@@ -35,6 +35,72 @@ const subCategoryDisplayNames: Record<string, string> = {
   // Add more mappings here for cleaner display names
 }
 
+// --- NEW: MAP THE INTERNAL SIZE NAME TO ITS DISPLAY NAME ---
+// All user-facing size labels should be taken from the mapped value.
+const sizeDisplayNames: Record<string, string> = {
+  "600x900 mm (24x36 inch)": "2x3/12x8/12x18/18x24/2x2",
+  "900x600 mm (36x24 inch)": "3x2/18x12/24x16/30x20/36x24",
+  "200x300 mm (8x12 inch)": "8x12/18x12",
+  "300x200 mm (12x8 inch)": "12x8/18x12",
+  "600x1200 mm": "2x4",
+  
+  // New entries for high gloss diamond
+  "200x300 mm": "8x12/12x18",
+  "300x200 mm": "12x8/18x12",
+  "600x600 mm (23.6x23.6 inch)": "2x2",
+  "600x600 mm": "2x2",
+  "600x900 mm": "2x3",
+  "900x600 mm": "3x2",
+  "1200x600 mm": "4x2",
+  "600x1200 mm (24x48 inch)": "2x4",
+  "1200x600 mm (48x24 inch)": "4x2",
+  
+  // New entry
+  "18x12 inch": "3x2/4x2",
+  
+  // New entry for GVT posters
+  "24x24 inch": "2x2",
+  
+  // New entries for inch sizes
+  "8x6": "6x8",
+  "8x12 in": "8x12",
+  "12x18 inches": "12x18",
+  "12x8 in": "12x8",
+  
+  // New entries for 8x12
+  "8x12": "8x12/6x6/12x18",
+  "8x12 inches": "2x2",
+  
+  // New entries for millimeter sizes
+  "10x600 mm (0.39x23.6 inch)": "10x600",
+  "10x450 mm (0.39x17.7 inch)": "10x450",
+  "12x600 mm (0.47x23.6 inch)": "12x600",
+  "12x1200 mm (0.47x47.2 inch)": "12x1200",
+  "20x600 mm (0.79x23.6 inch)": "20x600",
+  "20x1200 mm (0.79x47.2 inch)": "20x1200",
+  "25x600 mm (0.98x23.6 inch)": "25x600",
+  "40x600 mm (1.57x23.6 inch)": "40x600",
+  "45x600 mm (1.77x23.6 inch)": "45x600",
+  "48x600 mm (1.89x23.6 inch)": "48x600",
+  
+  // New entries
+  "4x48": "48x4",
+  "6x48": "48x6",
+  
+  // New entries for specific products
+  "300x600 mm (11.8x23.6 inch)": "24x12",
+  "300x450 mm (11.8x17.7 inch)": "18x12",
+  "(Sugar)300x600 mm (11.8x23.6 inch)": "(Sugar)24x12",
+  "(GLUE)300x600 mm (11.8x23.6 inch)": "(GLUE)24x12",
+  "Polishing Series 300x600 mm (12x24 inch)": "Polishing Series 24x12",
+  
+  // New entries
+  "4x6": "6x4",
+  "400x600 mm (16x24 inch)": "6x4",
+  "600x600 mm (24x24 inch)": "2x2",
+  "1200x1200 mm (48x48 inch)": "4x4",
+}
+
 const customCategoryImages: Record<string, string> = {
   // Keys must remain the original subcategory name to correctly link to product data.
   "Border Tiles": "/images/border.png",
@@ -105,6 +171,7 @@ const priorityOrder: Record<string, number> = {
   "Step & Riser Tiles": 28,
   "Welcome": 29,
 };
+
 export const generateCategories = (products: Product[]) => {
   const categoryMap: {
     marvel: Record<string, SubCategoryData>
@@ -128,27 +195,37 @@ export const generateCategories = (products: Product[]) => {
         count: 0,
         // Use custom image (keyed by original name) if available, otherwise use the product's image
         exampleImage: customCategoryImages[subcategory] || image, 
+        // Sizes are temporarily stored as original names here, mapped later
         sizes: [], 
       }
     }
     categoryMap[category][subcategory].count++
+    // Store original size names for correct numeric sorting
     categoryMap[category][subcategory].sizes.push(...sizes)
   })
 
+  // This sorting function relies on the original numeric/simple size string
   const sortSizes = (a: string, b: string) => parseInt(a, 10) - parseInt(b, 10)
 
   const processCategory = (cat: Record<string, SubCategoryData>) => {
-    const list = Object.values(cat).map((subcat) => ({
-      ...subcat,
-      sizes: Array.from(new Set(subcat.sizes)).sort(sortSizes),
-    }));
+    const list = Object.values(cat).map((subcat) => {
+        
+      // 1. Get unique sizes and sort them using the original size names
+      const uniqueSortedSizes = Array.from(new Set(subcat.sizes)).sort(sortSizes);
+      
+      // 2. Map the sorted original size names to their display names
+      const displayedSizes = uniqueSortedSizes.map(size => sizeDisplayNames[size] || size);
+        
+      return ({
+        ...subcat,
+        sizes: displayedSizes, // Use the new display names for display
+      });
+    });
 
     // Sort based on the priority order, which still uses the original subcategory names as keys
     return list.sort((a, b) => {
       // Find the original name by matching either the display name or the ID slug, 
       // then use that to look up the priority.
-      // This is necessary because the original subcategory name (the key for priorityOrder) 
-      // is not stored explicitly as a property on the sorted object (a or b).
       const originalNameA = Object.keys(priorityOrder).find(key => subCategoryDisplayNames[key] === a.name || key.toLowerCase().replace(/ /g, "-") === a.id);
       const originalNameB = Object.keys(priorityOrder).find(key => subCategoryDisplayNames[key] === b.name || key.toLowerCase().replace(/ /g, "-") === b.id);
       
@@ -178,15 +255,25 @@ export const generateSizes = (products: Product[]) => {
   }
 
   products.forEach((product) => {
+    // Collect the *original* size names
     product.sizes.forEach((size) => {
       sizeSets[product.category].add(size)
     })
   })
 
+  // This sorting function relies on the original numeric/simple size string
   const sortSizes = (a: string, b: string) => parseInt(a, 10) - parseInt(b, 10)
 
+  const processSizes = (sizeSet: Set<string>): string[] => {
+    // 1. Convert set to array and sort using original size names
+    const uniqueSortedSizes = Array.from(sizeSet).sort(sortSizes);
+    
+    // 2. Map the sorted original size names to their display names
+    return uniqueSortedSizes.map(size => sizeDisplayNames[size] || size);
+  }
+
   return {
-    marvel: Array.from(sizeSets.marvel).sort(sortSizes),
-    tiles: Array.from(sizeSets.tiles).sort(sortSizes),
+    marvel: processSizes(sizeSets.marvel),
+    tiles: processSizes(sizeSets.tiles),
   }
 }

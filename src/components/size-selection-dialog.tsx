@@ -23,6 +23,8 @@ export function SizeSelectionDialog({
   const router = useRouter()
 
   const handleSizeSelect = (size: string) => {
+    // 'size' is the display name (e.g., "300 x 450 mm (Wall)")
+    // The router automatically handles URL encoding.
     router.push(`/gallery?category=${mainCategory}&subcategory=${subcategory}&size=${size}`)
     onClose()
   }
@@ -63,7 +65,7 @@ export function SizeSelectionDialog({
                   onClick={() => handleSizeSelect(size)}
                   className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300"
                 >
-                  {size}&quot;
+                  {size} {/* FIX: Removed &quot; */}
                 </Button>
               ))}
             </div>

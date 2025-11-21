@@ -108,6 +108,7 @@ export function ProductFilter({
 
   const handleSizeSelect = (size: string) => {
     if (activeSubcategory) {
+      // 'size' here is the new display name (e.g., "300 x 450 mm (Wall)")
       onFilterSelect(
         activeSubcategory.mainCategory,
         activeSubcategory.id,
@@ -121,7 +122,8 @@ export function ProductFilter({
     if (selectedFilter) {
       const allSubs = [...categories.marvel, ...categories.tiles];
       const sub = allSubs.find((s) => s.id === selectedFilter.subcategory);
-      if (sub) return `${sub.name} (${selectedFilter.size}")`;
+      // FIX: Removed the extraneous quote (") appended to selectedFilter.size
+      if (sub) return `${sub.name} (${selectedFilter.size})`;
     }
     return buttonText;
   };
@@ -216,7 +218,7 @@ export function ProductFilter({
                             onClick={() => handleSizeSelect(size)}
                             className="w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 hover:bg-slate-100 cursor-pointer"
                           >
-                            &quot;{size}&quot;
+                            {size} {/* FIX: Removed &quot; and &quot; */}
                           </button>
                         ))
                       ) : (

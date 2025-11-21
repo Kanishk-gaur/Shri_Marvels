@@ -12,24 +12,106 @@ import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
 
 // --- START: Lookup Map based on processed data ---
-// Create a map from the slug/id (which is based on the raw name) to the new display name.
 const subcategoryNameMap = new Map<string, string>();
 [...categories.tiles, ...categories.marvel].forEach(cat => {
-    // The ID holds the slug of the original subcategory, and the name holds the new display name.
     subcategoryNameMap.set(cat.id, cat.name);
 });
 
-// Function to convert the raw subcategory name (found in allProducts) to the display name.
 const getDisplayName = (rawSubcategory: string): string => {
-    // Convert raw name to slug/id to perform the lookup
     const id = rawSubcategory.toLowerCase().replace(/ /g, "-");
-    return subcategoryNameMap.get(id) || rawSubcategory; // Fallback to raw name if no mapping is found
+    return subcategoryNameMap.get(id) || rawSubcategory;
 };
 
-// Use the structure of the already sorted categories to sort the product grouping keys.
 const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(cat => cat.name);
 
 // --- END: Lookup Map based on processed data ---
+
+// ---------------------------------------------------------------------
+// --- START: Size Mapping (Replicated from src/data/utils.ts for display AND REVERSE LOOKUP) ---
+const sizeDisplayNames: Record<string, string> = {
+  "600x900 mm (24x36 inch)": "2x3/12x8/12x18/18x24/2x2",
+  "900x600 mm (36x24 inch)": "3x2/18x12/24x16/30x20/36x24",
+  "200x300 mm (8x12 inch)": "8x12/18x12",
+  "300x200 mm (12x8 inch)": "12x8/18x12",
+  "600x1200 mm": "2x4",
+  
+  // New entries for high gloss diamond
+  "200x300 mm": "8x12/12x18",
+  "300x200 mm": "12x8/18x12",
+  "600x600 mm (23.6x23.6 inch)": "2x2",
+  "600x600 mm": "2x2",
+  "600x900 mm": "2x3",
+  "900x600 mm": "3x2",
+  "1200x600 mm": "4x2",
+  "600x1200 mm (24x48 inch)": "2x4",
+  "1200x600 mm (48x24 inch)": "4x2",
+  
+  // New entry
+  "18x12 inch": "3x2/4x2",
+  
+  // New entry for GVT posters
+  "24x24 inch": "2x2",
+  
+  // New entries for inch sizes
+  "8x6": "6x8",
+  "8x12 in": "8x12",
+  "12x18 inches": "12x18",
+  "12x8 in": "12x8",
+  
+  // New entries for 8x12
+  "8x12": "8x12/6x6/12x18",
+  "8x12 inches": "2x2",
+  
+  // New entries for millimeter sizes
+  "10x600 mm (0.39x23.6 inch)": "10x600",
+  "10x450 mm (0.39x17.7 inch)": "10x450",
+  "12x600 mm (0.47x23.6 inch)": "12x600",
+  "12x1200 mm (0.47x47.2 inch)": "12x1200",
+  "20x600 mm (0.79x23.6 inch)": "20x600",
+  "20x1200 mm (0.79x47.2 inch)": "20x1200",
+  "25x600 mm (0.98x23.6 inch)": "25x600",
+  "40x600 mm (1.57x23.6 inch)": "40x600",
+  "45x600 mm (1.77x23.6 inch)": "45x600",
+  "48x600 mm (1.89x23.6 inch)": "48x600",
+  
+  // New entries
+  "4x48": "48x4",
+  "6x48": "48x6",
+  
+  // New entries for specific products
+  "300x600 mm (11.8x23.6 inch)": "24x12",
+  "300x450 mm (11.8x17.7 inch)": "18x12",
+  "(Sugar)300x600 mm (11.8x23.6 inch)": "(Sugar)24x12",
+  "(GLUE)300x600 mm (11.8x23.6 inch)": "(GLUE)24x12",
+  "Polishing Series 300x600 mm (12x24 inch)": "Polishing Series 24x12",
+  
+  // New entries
+  "4x6": "6x4",
+  "400x600 mm (16x24 inch)": "6x4",
+  "600x600 mm (24x24 inch)": "2x2",
+  "1200x1200 mm (48x48 inch)": "4x4",
+}
+// NEW REVERSE LOOKUP MAP: Maps the display name (lowercase and trimmed) back to the raw size name.
+const rawSizeLookupMap = new Map<string, string>();
+Object.entries(sizeDisplayNames).forEach(([rawSize, displayName]) => {
+  // Added .trim() for robustness
+  rawSizeLookupMap.set(displayName.toLowerCase().trim(), rawSize);
+});
+
+// Function to convert the raw size name (used in allProducts) to the display name.
+const getSizeDisplayName = (rawSize: string): string => {
+    return sizeDisplayNames[rawSize] || rawSize;
+};
+
+// Function to get the raw size for filtering (handles display name or raw name input)
+const getRawSizeForFilter = (selectedSize: string): string => {
+    // Added .trim() to the selected size before lookup
+    const lookupKey = selectedSize.toLowerCase().trim();
+    const rawSize = rawSizeLookupMap.get(lookupKey);
+    return rawSize || selectedSize; // If lookup fails, returns the input string (which works for unmapped sizes)
+}
+// --- END: Size Mapping ---
+// ---------------------------------------------------------------------
 
 
 export default function GalleryPage() {
@@ -45,7 +127,7 @@ export default function GalleryPage() {
   const [activeProductFilter, setActiveProductFilter] = useState<{
     category: "marvel" | "tiles";
     subcategory: string; // This holds the ID/slug
-    size: string;
+    size: string; // This holds the selected size (display name or raw name)
   } | null>(null);
 
   const [visibleGroups, setVisibleGroups] = useState<string[]>([]);
@@ -73,14 +155,17 @@ export default function GalleryPage() {
   const groupedProducts = useMemo(() => {
     let products = allProducts;
 
-    // Filter logic remains the same (uses product.subcategory which holds the original raw name)
+    // FIX: Use the robust reverse lookup to get the raw size for filtering
     if (activeProductFilter) {
+      const rawSizeToFilter = getRawSizeForFilter(activeProductFilter.size);
+
       products = products.filter(
         (p) =>
           p.category === activeProductFilter.category &&
           p.subcategory.toLowerCase().replace(/ /g, "-") ===
             activeProductFilter.subcategory &&
-          p.sizes.some(size => size.toLowerCase() === activeProductFilter.size.toLowerCase())
+          // Compare against the raw size string stored in p.sizes.
+          p.sizes.some(size => size.toLowerCase() === rawSizeToFilter.toLowerCase())
       );
     } else {
       if (selectedMainCategory !== "all") {
@@ -98,7 +183,7 @@ export default function GalleryPage() {
     const grouped: { [key: string]: Product[] } = {};
     products.forEach((product) => {
       product.sizes.forEach((size) => {
-        // --- FIX IS HERE: USE THE DISPLAY NAME for the Group Key ---
+        // Group Key still uses Subcategory Display Name + Raw Size (for stable sorting)
         const displayName = getDisplayName(product.subcategory);
         const groupKey = `${displayName} (${size}")`; 
         
@@ -136,17 +221,15 @@ export default function GalleryPage() {
       const matchB = b.match(/^(.*?) \((.*?)\"?\)$/);
       
       const subcatA = matchA ? matchA[1] : a;
-      const sizeA = matchA ? matchA[2] : "";
+      const sizeA = matchA ? matchA[2] : ""; 
       
       const subcatB = matchB ? matchB[1] : b;
-      const sizeB = matchB ? matchB[2] : "";
+      const sizeB = matchB ? matchB[2] : ""; 
       
       const indexA = subcategorySortKeys.indexOf(subcatA);
       const indexB = subcategorySortKeys.indexOf(subcatB);
 
       if (indexA !== indexB) {
-        // Sort by subcategory display name order based on the pre-sorted array
-        // We use || 999 to push non-matching/new categories to the end.
         return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
       }
 
@@ -343,7 +426,18 @@ export default function GalleryPage() {
               visibleGroups.map((groupKey, groupIndex) => (
                 <div key={groupKey} className="mb-12">
                   <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
-                    {groupKey}
+                    {/* Display logic: uses the raw size to look up the display size for the heading */}
+                    {(() => {
+                        const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
+                        if (!match) return groupKey;
+
+                        const subcategory = match[1];
+                        const rawSize = match[2];
+                        
+                        const displaySize = getSizeDisplayName(rawSize);
+                        
+                        return `${subcategory} (${displaySize})`;
+                    })()}
                   </h2>
                   <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense">
                     {Array.isArray(groupedProducts[groupKey]) &&
