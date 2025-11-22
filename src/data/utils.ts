@@ -38,15 +38,15 @@ const subCategoryDisplayNames: Record<string, string> = {
 // --- NEW: MAP THE INTERNAL SIZE NAME TO ITS DISPLAY NAME ---
 // All user-facing size labels should be taken from the mapped value.
 const sizeDisplayNames: Record<string, string> = {
-  "600x900 mm (24x36 inch)": "2x3/12x8/12x18/18x24/2x2",
-  "900x600 mm (36x24 inch)": "3x2/18x12/24x16/30x20/36x24",
-  "200x300 mm (8x12 inch)": "8x12/18x12",
-  "300x200 mm (12x8 inch)": "12x8/18x12",
+  "600x900 mm (24x36 inch)": "2x3, 12x8, 12x18, 18x24, 2x2",
+  "900x600 mm (36x24 inch)": "3x2, 18x12, 24x16, 30x20, 36x24",
+  "200x300 mm (8x12 inch)": "8x12,18x12",
+  "300x200 mm (12x8 inch)": "12x8,18x12",
   "600x1200 mm": "2x4",
   
   // New entries for high gloss diamond
-  "200x300 mm": "8x12/12x18",
-  "300x200 mm": "12x8/18x12",
+  "200x300 mm": "8x12,12x18",
+  "300x200 mm": "12x8,18x12",
   "600x600 mm (23.6x23.6 inch)": "2x2",
   "600x600 mm": "2x2",
   "600x900 mm": "2x3",
@@ -56,7 +56,7 @@ const sizeDisplayNames: Record<string, string> = {
   "1200x600 mm (48x24 inch)": "4x2",
   
   // New entry
-  "18x12 inch": "3x2/4x2",
+  "18x12 inch": "3x2, 4x2",
   
   // New entry for GVT posters
   "24x24 inch": "2x2",
@@ -68,7 +68,7 @@ const sizeDisplayNames: Record<string, string> = {
   "12x8 in": "12x8",
   
   // New entries for 8x12
-  "8x12": "8x12/6x6/12x18",
+  "8x12": "8x12, 6x6, 12x18",
   "8x12 inches": "2x2",
   
   // New entries for millimeter sizes
