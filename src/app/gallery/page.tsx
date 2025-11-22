@@ -13,28 +13,30 @@ import { ProductFilter } from "@/components/product-filter";
 
 // --- START: Lookup Map based on processed data ---
 const subcategoryNameMap = new Map<string, string>();
-[...categories.tiles, ...categories.marvel].forEach(cat => {
-    subcategoryNameMap.set(cat.id, cat.name);
+[...categories.tiles, ...categories.marvel].forEach((cat) => {
+  subcategoryNameMap.set(cat.id, cat.name);
 });
 
 const getDisplayName = (rawSubcategory: string): string => {
-    const id = rawSubcategory.toLowerCase().replace(/ /g, "-");
-    return subcategoryNameMap.get(id) || rawSubcategory;
+  const id = rawSubcategory.toLowerCase().replace(/ /g, "-");
+  return subcategoryNameMap.get(id) || rawSubcategory;
 };
 
-const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(cat => cat.name);
+const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(
+  (cat) => cat.name
+);
 
 // --- END: Lookup Map based on processed data ---
 
 // ---------------------------------------------------------------------
 // --- START: Size Mapping (Replicated from src/data/utils.ts for display AND REVERSE LOOKUP) ---
 const sizeDisplayNames: Record<string, string> = {
-  "600x900 mm (24x36 inch)": "2x3, 12x8, 12x18, 18x24, 2x2",
-  "900x600 mm (36x24 inch)": "3x2, 18x12, 24x16, 30x20, 36x24",
-  "200x300 mm (8x12 inch)": "8x12,18x12",
+  "600x900 mm (24x36 inch)": "2x3",
+  "900x600 mm (36x24 inch)": "3x2",
+  "200x300 mm (8x12 inch)": "8x12,12x18",
   "300x200 mm (12x8 inch)": "12x8,18x12",
   "600x1200 mm": "2x4",
-  
+
   // New entries for high gloss diamond
   "200x300 mm": "8x12,12x18",
   "300x200 mm": "12x8,18x12",
@@ -45,23 +47,23 @@ const sizeDisplayNames: Record<string, string> = {
   "1200x600 mm": "4x2",
   "600x1200 mm (24x48 inch)": "2x4",
   "1200x600 mm (48x24 inch)": "4x2",
-  
+
   // New entry
-  "18x12 inch": "3x2, 4x2",
-  
+  "18x12 inch": "18x12, 3x2, 4x2",
+
   // New entry for GVT posters
   "24x24 inch": "2x2",
-  
+
   // New entries for inch sizes
   "8x6": "6x8",
   "8x12 in": "8x12",
   "12x18 inches": "12x18",
   "12x8 in": "12x8",
-  
+
   // New entries for 8x12
   "8x12": "8x12, 6x6, 12x18",
   "8x12 inches": "2x2",
-  
+
   // New entries for millimeter sizes
   "10x600 mm (0.39x23.6 inch)": "10x600",
   "10x450 mm (0.39x17.7 inch)": "10x450",
@@ -73,24 +75,25 @@ const sizeDisplayNames: Record<string, string> = {
   "40x600 mm (1.57x23.6 inch)": "40x600",
   "45x600 mm (1.77x23.6 inch)": "45x600",
   "48x600 mm (1.89x23.6 inch)": "48x600",
-  
+  "300x63 mm (12x2.5 inch)": "12x2.5",
+
   // New entries
   "4x48": "48x4",
   "6x48": "48x6",
-  
+
   // New entries for specific products
   "300x600 mm (11.8x23.6 inch)": "24x12",
   "300x450 mm (11.8x17.7 inch)": "18x12",
   "(Sugar)300x600 mm (11.8x23.6 inch)": "(Sugar)24x12",
   "(GLUE)300x600 mm (11.8x23.6 inch)": "(GLUE)24x12",
   "Polishing Series 300x600 mm (12x24 inch)": "Polishing Series 24x12",
-  
+
   // New entries
   "4x6": "6x4",
   "400x600 mm (16x24 inch)": "6x4",
   "600x600 mm (24x24 inch)": "2x2",
   "1200x1200 mm (48x48 inch)": "4x4",
-}
+};
 // NEW REVERSE LOOKUP MAP: Maps the display name (lowercase and trimmed) back to the raw size name.
 const rawSizeLookupMap = new Map<string, string>();
 Object.entries(sizeDisplayNames).forEach(([rawSize, displayName]) => {
@@ -100,19 +103,18 @@ Object.entries(sizeDisplayNames).forEach(([rawSize, displayName]) => {
 
 // Function to convert the raw size name (used in allProducts) to the display name.
 const getSizeDisplayName = (rawSize: string): string => {
-    return sizeDisplayNames[rawSize] || rawSize;
+  return sizeDisplayNames[rawSize] || rawSize;
 };
 
 // Function to get the raw size for filtering (handles display name or raw name input)
 const getRawSizeForFilter = (selectedSize: string): string => {
-    // Added .trim() to the selected size before lookup
-    const lookupKey = selectedSize.toLowerCase().trim();
-    const rawSize = rawSizeLookupMap.get(lookupKey);
-    return rawSize || selectedSize; // If lookup fails, returns the input string (which works for unmapped sizes)
-}
+  // Added .trim() to the selected size before lookup
+  const lookupKey = selectedSize.toLowerCase().trim();
+  const rawSize = rawSizeLookupMap.get(lookupKey);
+  return rawSize || selectedSize; // If lookup fails, returns the input string (which works for unmapped sizes)
+};
 // --- END: Size Mapping ---
 // ---------------------------------------------------------------------
-
 
 export default function GalleryPage() {
   const searchParams = useSearchParams();
@@ -165,7 +167,9 @@ export default function GalleryPage() {
           p.subcategory.toLowerCase().replace(/ /g, "-") ===
             activeProductFilter.subcategory &&
           // Compare against the raw size string stored in p.sizes.
-          p.sizes.some(size => size.toLowerCase() === rawSizeToFilter.toLowerCase())
+          p.sizes.some(
+            (size) => size.toLowerCase() === rawSizeToFilter.toLowerCase()
+          )
       );
     } else {
       if (selectedMainCategory !== "all") {
@@ -185,8 +189,8 @@ export default function GalleryPage() {
       product.sizes.forEach((size) => {
         // Group Key still uses Subcategory Display Name + Raw Size (for stable sorting)
         const displayName = getDisplayName(product.subcategory);
-        const groupKey = `${displayName} (${size}")`; 
-        
+        const groupKey = `${displayName} (${size}")`;
+
         if (!grouped[groupKey]) {
           grouped[groupKey] = [];
         }
@@ -208,24 +212,24 @@ export default function GalleryPage() {
     const allKeys = Object.keys(groupedProducts);
 
     const sortSizes = (a: string, b: string) => {
-        const numA = parseInt(a, 10);
-        const numB = parseInt(b, 10);
-        if (isNaN(numA)) return 1;
-        if (isNaN(numB)) return -1;
-        return numA - numB;
+      const numA = parseInt(a, 10);
+      const numB = parseInt(b, 10);
+      if (isNaN(numA)) return 1;
+      if (isNaN(numB)) return -1;
+      return numA - numB;
     };
-    
+
     // Sort keys primarily by the sorted display name order, then by size
     return allKeys.sort((a, b) => {
       const matchA = a.match(/^(.*?) \((.*?)\"?\)$/);
       const matchB = b.match(/^(.*?) \((.*?)\"?\)$/);
-      
+
       const subcatA = matchA ? matchA[1] : a;
-      const sizeA = matchA ? matchA[2] : ""; 
-      
+      const sizeA = matchA ? matchA[2] : "";
+
       const subcatB = matchB ? matchB[1] : b;
-      const sizeB = matchB ? matchB[2] : ""; 
-      
+      const sizeB = matchB ? matchB[2] : "";
+
       const indexA = subcategorySortKeys.indexOf(subcatA);
       const indexB = subcategorySortKeys.indexOf(subcatB);
 
@@ -307,7 +311,7 @@ export default function GalleryPage() {
   const filterChipCategories = useMemo(() => {
     if (selectedMainCategory === "marvel") return categories.marvel;
     if (selectedMainCategory === "tiles") return categories.tiles;
-    
+
     // Combine and return the already correctly sorted categories from the initial data processing
     return [...categories.tiles, ...categories.marvel];
   }, [selectedMainCategory]);
@@ -428,15 +432,15 @@ export default function GalleryPage() {
                   <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
                     {/* Display logic: uses the raw size to look up the display size for the heading */}
                     {(() => {
-                        const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
-                        if (!match) return groupKey;
+                      const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
+                      if (!match) return groupKey;
 
-                        const subcategory = match[1];
-                        const rawSize = match[2];
-                        
-                        const displaySize = getSizeDisplayName(rawSize);
-                        
-                        return `${subcategory} (${displaySize})`;
+                      const subcategory = match[1];
+                      const rawSize = match[2];
+
+                      const displaySize = getSizeDisplayName(rawSize);
+
+                      return `${subcategory} (${displaySize})`;
                     })()}
                   </h2>
                   <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense">
