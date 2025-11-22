@@ -109,35 +109,36 @@ const customCategoryImages: Record<string, string> = {
   "Border Tiles": "/images/border.png",
   "Digital Border Tiles": "/images/home/Digital_Border.png",
   "Imported Pencil Border Tiles": "/images/your-uploaded-pencil-border.jpg",
-  "GVT Wall & Floor Border Tiles": "/images/your-uploaded-gvt-border.jpg",
-  "Golden & Silver Border Tiles": "/images/your-uploaded-gold-silver.jpg",
+  "GVT Wall & Floor Border Tiles": "/images/home/gvt_border.png",
+  "Golden & Silver Border Tiles": "/images/home/golden_border.png",
 
   "Digital God Posters": "/images/home/digital_god.png",
   "Digital Plain Poster Tiles": "/images/your-uploaded-plain-poster.jpg",
   "Digital Gate Punch Picture Tiles": "/images/home/gate_punch.png",
-  "Kitchen Colorfull Poster": "/images/your-uploaded-kitchen.jpg",
+  "Kitchen Colorfull Poster": "/images/home/K-49.png",
   "Daimond Collection Posters": "/images/Daimond.png",
 
-  "High Gloss Posters": "/images/your-uploaded-high-gloss.jpg",
-  "High Gloss Posters 2x4": "/images/your-uploaded-hg-2x4.jpg",
-  "High Gloss Posters 4x2": "/images/your-uploaded-hg-4x2.jpg",
-  "High Gloss 3D Emboss Poster Tiles": "/images/your-uploaded-3d-emboss.jpg",
+  "High Gloss Posters": "/images/home/DIAMOND236.jpg",
+  "High Gloss 3D Emboss Poster Tiles": "/images/home/3D-3261.png",
   "High Gloss Plain & Glitter Poster": "/images/your-uploaded-glitter.jpg",
-  "Glitter Emboss": "/images/your-uploaded-glitter-emboss.jpg",
+  "Glitter Emboss": "/images/home/GE-1559.png",
 
-  "God GVT": "/images/your-uploaded-god-gvt.jpg",
-  "GOD picture": "/images/your-uploaded-god-pic.jpg",
-  "VITROSA GOD picture": "/images/your-uploaded-vitrosa.jpg",
-  Rangoli: "/images/your-uploaded-rangoli.jpg",
-  "GVT rangoli": "/images/your-uploaded-gvt-rangoli.png",
-  "Golden Rangoli Decorative Tiles": "/images/your-uploaded-gold-rangoli.jpg",
+  "God GVT": "/images/home/G-421.png",
+  "GOD picture": "/images/home/plain.jpg",
+  "VITROSA GOD picture": "/images/home/vitrosa.png",
+ "Rangoli": "/images/your-uploaded-rangoli.jpg",
+  "GVT rangoli": "/images/home/gvt_rangoli.png",
+  "Golden Rangoli Decorative Tiles": "/images/home/golden_rangoli.png",
+  "Digital Posters": "/images/home/2506.png",
 
-  "GOLDEN SILVER HIGHLIGHTER": "/images/your-uploaded-highlighter.jpg",
+  "GOLDEN SILVER HIGHLIGHTER": "/images/home/golden_high.png",
   "Golden Silver Highlighter Tiles":
     "/images/your-uploaded-highlighter-tiles.jpg",
   "Steel Welcome": "/images/your-uploaded-steel-welcome.jpg",
   Welcome: "/images/your-uploaded-welcome.jpg",
   "Step & Riser Tiles": "/images/your-uploaded-step-riser.jpg",
+  "GLITTER BRASS PATTI": "/images/GBP/GBP-01.jpeg",
+  
 };
 
 // --- 2. PRIORITY ORDER REMAINS KEYED BY ORIGINAL NAME ---
