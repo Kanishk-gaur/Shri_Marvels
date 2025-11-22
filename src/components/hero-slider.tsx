@@ -56,6 +56,14 @@ const slides: Slide[] = [
     // The href remains the same as it links to 'digital-glossy-poster'
     href: "/gallery", 
   },
+  {
+    imageSrc: "/images/home/step.png",
+    // --- UPDATED TITLE AND SUBTITLE BELOW ---
+    title: "STAIR STEP AND RISER TILES", 
+    subtitle: "DURABLE TREADS AND VERTICAL FINISHES",
+    // The href remains the same
+    href: "/step_riser", 
+},
 ];
 
 // --- Sub-Components ---
