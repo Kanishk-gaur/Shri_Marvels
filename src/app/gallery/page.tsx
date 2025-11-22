@@ -93,6 +93,8 @@ const sizeDisplayNames: Record<string, string> = {
   "400x600 mm (16x24 inch)": "6x4",
   "600x600 mm (24x24 inch)": "2x2",
   "1200x1200 mm (48x48 inch)": "4x4",
+  "6x36(w)": "6x36 ,9x36,12x36",
+  "(God)6x36": "(God)6x36 ,9x36 ,12x36",
 };
 // NEW REVERSE LOOKUP MAP: Maps the display name (lowercase and trimmed) back to the raw size name.
 const rawSizeLookupMap = new Map<string, string>();
