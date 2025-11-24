@@ -139,8 +139,8 @@ const customCategoryImages: Record<string, string> = {
   "GOLDEN SILVER HIGHLIGHTER": "/images/home/golden_high.png",
   "Golden Silver Highlighter Tiles":
     "/images/your-uploaded-highlighter-tiles.jpg",
-  "Steel Welcome": "/images/your-uploaded-steel-welcome.jpg",
-  "Welcome": "/images/your-uploaded-welcome.jpg",
+  "Steel Welcome": "/images/steel_welcome/23.jpeg",
+  "Welcome": "/images/welcome/18.jpeg",
   "Step & Riser Tiles": "/images/your-uploaded-step-riser.jpg",
   "GLITTER BRASS PATTI": "/images/GBP/GBP-01.jpeg",
   

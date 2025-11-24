@@ -116,18 +116,25 @@ export default function HomePage() {
 
       {/* --- Quick Navigation Carousels --- */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
-        <CategoryCarousel
-          title="Tile Collections"
-          subtitle="Explore our curated selections of ceramic and porcelain tiles."
-          categories={categories.tiles}
-          categoryType="tiles"
-        />
-        <CategoryCarousel
-          title="Marble Varieties"
-          subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
-          categories={categories.marvel}
-          categoryType="marvel"
-        />
+        // In your HomePage component, update the CategoryCarousel calls:
+
+{/* Tile Collections - Keep original height */}
+<CategoryCarousel
+  title="Tile Collections"
+  subtitle="Explore our curated selections of ceramic and porcelain tiles."
+  categories={categories.tiles}
+  categoryType="tiles"
+  imageAspectRatio="aspect-[16/11]" // Original aspect ratio
+/>
+
+{/* Marble Varieties - Reduced height */}
+<CategoryCarousel
+  title="Marble Varieties"
+  subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
+  categories={categories.marvel}
+  categoryType="marvel"
+  imageAspectRatio="aspect-[16/3]" // Shorter height (16:8 instead of 16:10)
+/>
       </section>
 
       {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
