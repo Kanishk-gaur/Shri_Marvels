@@ -5,7 +5,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, Info, Mail, LayoutGrid, Gem, Layers3 } from "lucide-react";
+import { Menu, X, Home, Info, Mail, LayoutGrid,  Layers3 } from "lucide-react";
 
 // Updated nav items including Step/Riser
 const navItems = [

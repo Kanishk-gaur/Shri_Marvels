@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowDown, CheckCircle2, Layers, ShieldCheck } from "lucide-react";
+import { ArrowDown, CheckCircle2, Layers, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 
 // Data for the new Texture/Design Collection Grid
 const textureCollection = [
@@ -173,9 +174,10 @@ export default function Home() {
                 
                 {/* Main Image Container */}
                 <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-stone-900/20 group">
-                   <img
+                  <Image
                     src="/images/step/kp1.png"
                     alt="KP Ceramic Steps and Risers"
+                    fill
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   
@@ -240,7 +242,6 @@ export default function Home() {
             title="FULL BODY SANDY BLACK"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#888888"
             image="/images/step/1.png"
             isReversed={false}
             tiles={[
@@ -262,7 +263,6 @@ export default function Home() {
             title="FULL BODY SANDY CHOCO"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#e8dcc8"
             image="/images/step/4.png"
             isReversed={true}
             tiles={[
@@ -284,7 +284,6 @@ export default function Home() {
             title="FULL BODY SANDY NERO"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#6b4423"
             image="/images/step/7.png"
             isReversed={false}
             tiles={[
@@ -306,7 +305,6 @@ export default function Home() {
             title="FULL BODY SANDY COPPER"
             sizes="600X1200 / 300X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/11.png"
             isReversed={true}
             tiles={[
@@ -328,7 +326,6 @@ export default function Home() {
             title="FULL BODY SANDY KOTA"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/14.png"
             isReversed={false}
             tiles={[
@@ -350,7 +347,6 @@ export default function Home() {
             title="FULL BODY SANDY VERDE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/17.png"
             isReversed={true}
             tiles={[
@@ -370,7 +366,6 @@ export default function Home() {
             title="FULL BODY SANDY ROMAN"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#888888"
             image="/images/step/20.png"
             isReversed={false}
             tiles={[
@@ -392,7 +387,6 @@ export default function Home() {
             title="FULL BODY SANDY MOCHA"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#e8dcc8"
             image="/images/step/21.png"
             isReversed={true}
             tiles={[
@@ -414,7 +408,6 @@ export default function Home() {
             title="FULL BODY SANDY DOVE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#6b4423"
             image="/images/step/22.png"
             isReversed={false}
             tiles={[
@@ -436,7 +429,6 @@ export default function Home() {
             title="FULL BODY SANDY CREMA"
             sizes="600X1200 / 300X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/23.png"
             isReversed={true}
             tiles={[
@@ -458,7 +450,6 @@ export default function Home() {
             title="FULL BODY SANDY BEIGE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/24.png"
             isReversed={false}
             tiles={[
@@ -480,7 +471,6 @@ export default function Home() {
             title="FULL BODY SANDY WHITE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
-            color="#8b6f47"
             image="/images/step/25.png"
             isReversed={true}
             tiles={[
@@ -500,7 +490,6 @@ export default function Home() {
             title="FULL BODY HL-JET BLACK SP"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
-            color="#888888"
             image="/images/step/38.png"
             isReversed={false}
             tiles={[
@@ -521,7 +510,6 @@ export default function Home() {
             title="FULL BODY HL-WHITE"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
-            color="#888888"
             image="/images/step/39.png"
             isReversed={true}
             tiles={[
@@ -543,7 +531,6 @@ export default function Home() {
             title="FULL BODY HL-CHOCO"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
-            color="#e8dcc8"
             image="/images/step/40.png"
             isReversed={false}
             tiles={[
@@ -565,7 +552,6 @@ export default function Home() {
             title="FULL BODY HL-NERO"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
-            color="#6b4423"
             image="/images/step/41.png"
             isReversed={true}
             tiles={[
@@ -587,7 +573,6 @@ export default function Home() {
             title="FULL BODY HL-PEACH"
             sizes="600X1200 / 300X1200MM"
             finish="4 FT"
-            color="#8b6f47"
             image="/images/step/42.png"
             isReversed={false}
             tiles={[
@@ -609,7 +594,6 @@ export default function Home() {
             title="FULL BODY HL-RIVER"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
-            color="#8b6f47"
             image="/images/step/43.png"
             isReversed={true}
             tiles={[
@@ -630,7 +614,6 @@ export default function Home() {
             title="GVT 901"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/56.png"
             isReversed={false}
             tiles={[
@@ -642,7 +625,6 @@ export default function Home() {
             title="GVT 902"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/57.png"
             isReversed={true}
             tiles={[
@@ -654,7 +636,6 @@ export default function Home() {
             title="GVT 903"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/58.png"
             isReversed={false}
             tiles={[
@@ -666,7 +647,6 @@ export default function Home() {
             title="GVT 904"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/59.png"
             isReversed={true}
             tiles={[
@@ -678,7 +658,6 @@ export default function Home() {
             title="GVT 905"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/60.png"
             isReversed={false}
             tiles={[
@@ -690,7 +669,6 @@ export default function Home() {
             title="GVT 923"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/61.png"
             isReversed={true}
             tiles={[
@@ -702,7 +680,6 @@ export default function Home() {
             title="GVT 924"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/62.png"
             isReversed={false}
             tiles={[
@@ -714,7 +691,6 @@ export default function Home() {
             title="GVT 906"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/63.png"
             isReversed={true}
             tiles={[
@@ -726,7 +702,6 @@ export default function Home() {
             title="GVT 907"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/64.png"
             isReversed={false}
             tiles={[
@@ -738,7 +713,6 @@ export default function Home() {
             title="GVT 908"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/65.png"
             isReversed={true}
             tiles={[
@@ -750,7 +724,6 @@ export default function Home() {
             title="GVT 909"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/66.png"
             isReversed={false}
             tiles={[
@@ -762,7 +735,6 @@ export default function Home() {
             title="GVT 910"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/67.png"
             isReversed={true}
             tiles={[
@@ -774,7 +746,6 @@ export default function Home() {
             title="GVT 911"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/68.png"
             isReversed={false}
             tiles={[
@@ -786,7 +757,6 @@ export default function Home() {
             title="GVT 912"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/69.png"
             isReversed={true}
             tiles={[
@@ -798,7 +768,6 @@ export default function Home() {
             title="GVT 913"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/70.png"
             isReversed={false}
             tiles={[
@@ -810,7 +779,6 @@ export default function Home() {
             title="GVT 914"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/71.png"
             isReversed={true}
             tiles={[
@@ -822,7 +790,6 @@ export default function Home() {
             title="GVT 915"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/72.png"
             isReversed={false}
             tiles={[
@@ -834,7 +801,6 @@ export default function Home() {
             title="GVT 916"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/73.png"
             isReversed={true}
             tiles={[
@@ -846,7 +812,6 @@ export default function Home() {
             title="GVT 917"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/74.png"
             isReversed={false}
             tiles={[
@@ -858,7 +823,6 @@ export default function Home() {
             title="GVT 919"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/75.png"
             isReversed={true}
             tiles={[
@@ -870,7 +834,6 @@ export default function Home() {
             title="GVT 921"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/76.png"
             isReversed={false}
             tiles={[
@@ -882,7 +845,6 @@ export default function Home() {
             title="GVT 922"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
-            color="#8b6f47"
             image="/images/step/77.png"
             isReversed={true}
             tiles={[
@@ -918,9 +880,10 @@ export default function Home() {
     >
       {/* Image Container - Slightly decreased height */}
       <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden bg-neutral-100 shadow-sm border border-neutral-200 group-hover:shadow-md transition-all duration-300">
-        <img
+        <Image
           src={item.image}
           alt={`Texture finish ${item.code}`}
+          fill
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         {/* Optional Overlay on Hover */}
@@ -1004,7 +967,6 @@ function ProductShowcase({
   title,
   sizes,
   finish,
-  color,
   image,
   isReversed,
   tiles = [],
@@ -1012,7 +974,6 @@ function ProductShowcase({
   title: string;
   sizes: string;
   finish: string;
-  color: string;
   image: string;
   isReversed: boolean;
   tiles?: Array<{ imageUrl: string; width: number; height: number }>;
@@ -1034,9 +995,10 @@ function ProductShowcase({
           {/* Decorative Border Frame */}
           <div className="absolute inset-0 border-2 border-white/20 z-10 pointer-events-none rounded-2xl"></div>
           
-          <img
+          <Image
             src={image || "/placeholder.svg"}
             alt={`${title} installed in stairs`}
+            fill
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           
@@ -1096,10 +1058,12 @@ function ProductShowcase({
                   }}
                   className="rounded-lg shadow-md overflow-hidden border border-neutral-200 relative"
                 >
-                   <div 
-                    className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                    style={{ backgroundImage: `url(${tile.imageUrl})` }}
-                   />
+                  <Image
+                    src={tile.imageUrl}
+                    alt={`${title} tile variation ${idx + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
                 </div>
                 <p className="mt-2 text-xs text-neutral-400 font-medium">Size: {tile.width}px</p>
               </div>

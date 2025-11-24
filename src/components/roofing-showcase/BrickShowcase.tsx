@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { BrickShowcaseSection } from "./types";
 
 interface BrickShowcaseProps {
@@ -20,9 +21,10 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
             {/* Product image */}
             <div className="mb-6 flex justify-center">
               <div className="relative overflow-hidden rounded-lg border-2 border-gray-200 shadow-md w-48 h-48">
-                <img
+                <Image
                   src={section.product.image || "/placeholder.svg"}
                   alt={section.product.name}
+                  fill
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -59,10 +61,11 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
             This makes the wrapper expand to fill the vertical space provided by the parent flex container.
           */}
           <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-lg h-full">
-            <img
+            <Image
               src={section.lifestyle || "/placeholder.svg"}
               alt={`${section.product.name} lifestyle application`}
               // Adjusted height for different screen sizes - lg:h-full now works correctly
+              fill
               className="w-full h-[250px] sm:h-[400px] lg:h-full object-cover"
             />
             <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
@@ -71,6 +74,7 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div> 
+    
   );
 }

@@ -58,7 +58,7 @@ export const roofingSections: RoofingSection[] = [
     type: "brick-showcase",
     product: {
       name: "Silver Bamboo",
-      image: "/images/roof_tiles/roof.png",
+      image: "/images/roof_tiles/silver_bamboo.png",
       size: "8 x 4 inch",
       weight: "450 Gms.",
       require: "450 Pcs to Cover 100 Sq. Ft.",

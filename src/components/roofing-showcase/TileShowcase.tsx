@@ -2,6 +2,7 @@
 
 import { TileShowcaseSection } from "./types";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface TileShowcaseProps {
   section: TileShowcaseSection;
@@ -18,14 +19,14 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
       <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10">
         {/* House Image Container - full width on small screens, 60% on large */}
         <div className="w-full lg:w-[60%]">
-          <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-md">
-            <img
+          <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-md h-[250px] sm:h-[350px] lg:h-[400px]">
+            <Image
               src={house}
               alt={`House example ${sectionIndex}`}
-              // Adjusted height for different screen sizes
-              className="w-full h-[250px] sm:h-[350px] lg:h-[400px] object-cover"
+              fill
+              className="w-full h-full object-cover"
             />
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
+            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1 z-10">
               <span className="text-sm font-semibold text-gray-800">Style #{sectionIndex + 1}</span>
             </div>
           </div>
@@ -40,14 +41,15 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
               className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 p-4 border border-gray-100 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 hover:border-orange-200 transition-all duration-300 group"
             >
               <motion.div
-                className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-orange-300 transition-colors flex-shrink-0"
+                className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-orange-300 transition-colors flex-shrink-0 w-36 h-26"
                 whileHover={{ scale: 1.05, rotateY: 15 }}
                 transition={{ duration: 0.3 }}
               >
-                <img
+                <Image
                   src={tile.image || "/placeholder.svg"}
                   alt={tile.label}
-                  className="w-36 h-26 object-cover"
+                  fill
+                  className="object-cover"
                 />
               </motion.div>
               <div className="flex-1 w-full">
