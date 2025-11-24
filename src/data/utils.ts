@@ -31,6 +31,10 @@ const subCategoryDisplayNames: Record<string, string> = {
   // Marvel
   "Steel Welcome": "Steel Welcome Accents",
   "Welcome": "Welcome Door Sills",
+  "GLITTER BRASS PATTI": "Glitter Brass Patti",
+  "RADIUM GLITTER PATTI": "Radium Glitter Patti",
+  "composite riser": "Composite Riser",
+  
 
   // Add more mappings here for cleaner display names
 };
@@ -102,6 +106,7 @@ const sizeDisplayNames: Record<string, string> = {
   "1200x1200 mm (48x48 inch)": "4x4",
    "6x36(w)":"6x36 ,9x36,12x36",
    "(God)6x36":"(God)6x36 ,9x36 ,12x36",
+  "6x36 in (c)":"6x36",
 };
 
 const customCategoryImages: Record<string, string> = {
@@ -135,7 +140,7 @@ const customCategoryImages: Record<string, string> = {
   "Golden Silver Highlighter Tiles":
     "/images/your-uploaded-highlighter-tiles.jpg",
   "Steel Welcome": "/images/your-uploaded-steel-welcome.jpg",
-  Welcome: "/images/your-uploaded-welcome.jpg",
+  "Welcome": "/images/your-uploaded-welcome.jpg",
   "Step & Riser Tiles": "/images/your-uploaded-step-riser.jpg",
   "GLITTER BRASS PATTI": "/images/GBP/GBP-01.jpeg",
   

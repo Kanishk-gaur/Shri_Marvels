@@ -35983,7 +35983,152 @@ export const allProducts: Product[] = [
     "images": ["/images/RGP/RGP-10.jpeg"],
     "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
     "rating": 4.5
+  },
+  {
+    "id": 4851,
+    "name": "CR-01",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-01.jpeg",
+    "images": ["/images/composite_riser/r-01.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4852,
+    "name": "CR-02",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-02.jpeg",
+    "images": ["/images/composite_riser/r-02.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4853,
+    "name": "CR-03",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-03.jpeg",
+    "images": ["/images/composite_riser/r-03.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4854,
+    "name": "CR-04",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-04.jpeg",
+    "images": ["/images/composite_riser/r-04.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4855,
+    "name": "CR-05",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-05.jpeg",
+    "images": ["/images/composite_riser/r-05.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4856,
+    "name": "CR-06",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-06.jpeg",
+    "images": ["/images/composite_riser/r-06.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4857,
+    "name": "CR-07",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-07.jpeg",
+    "images": ["/images/composite_riser/r-07.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4858,
+    "name": "CR-08",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-08.jpeg",
+    "images": ["/images/composite_riser/r-08.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4859,
+    "name": "CR-09",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-09.jpeg",
+    "images": ["/images/composite_riser/r-09.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4860,
+    "name": "CR-10",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-10.jpeg",
+    "images": ["/images/composite_riser/r-10.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4861,
+    "name": "CR-11",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-11.jpeg",
+    "images": ["/images/composite_riser/r-11.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
+  },
+  {
+    "id": 4862,
+    "name": "CR-12",
+    "category": "marvel",
+    "subcategory": "composite riser",
+    "sizes": ["6x36 in (c)"],
+    "material": "Full Digital Emboss",
+    "image": "/images/composite_riser/r-12.jpeg",
+    "images": ["/images/composite_riser/r-12.jpeg"],
+    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
+    "rating": 4.5
   }
+
 
 
 ];
