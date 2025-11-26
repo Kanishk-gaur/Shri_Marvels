@@ -201,10 +201,15 @@ export default function GalleryCard({
       gridClass =
         "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-10";
       break;
+      case "6x36 ,9x36,12x36":
+      // Was 6 -> 12
+      gridClass =
+        "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-15";
+      break;
     case "6x36(w)":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-8 lg:row-span-9";
+        "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-11";
       break;
     case "9x36":
       // Was 6 -> 12
