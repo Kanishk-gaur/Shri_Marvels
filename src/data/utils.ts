@@ -29,8 +29,8 @@ const subCategoryDisplayNames: Record<string, string> = {
   "VITROSA GOD picture": "Vitrosa Picture",
 
   // Marvel
-  "Steel Welcome": "Steel Welcome Accents",
-  "Welcome": "Welcome Door Sills",
+  "Steel Welcome": "Composite Steel Welcome",
+  "Welcome": "Composite Glitter Welcome",
   "GLITTER BRASS PATTI": "Glitter Brass Patti",
   "RADIUM GLITTER PATTI": "Radium Glitter Patti",
   "composite riser": "Composite Riser",
@@ -107,6 +107,8 @@ const sizeDisplayNames: Record<string, string> = {
    "6x36(w)":"6x36 ,9x36,12x36",
    "(God)6x36":"(God)6x36 ,9x36 ,12x36",
   "6x36 in (c)":"6x36",
+  "6x36 in":"2 Soot",
+  "6x36": "6x36 ,9x36,12x36",
 };
 
 const customCategoryImages: Record<string, string> = {
