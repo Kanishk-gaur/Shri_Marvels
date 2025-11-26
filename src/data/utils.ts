@@ -176,10 +176,11 @@ const priorityOrder: Record<string, number> = {
   "Golden Silver Highlighter Tiles": 21,
   // "High Gloss Posters": 23, // Removed as it was re-mapped to position 3
 
-  Rangoli: 26,
+  "Rangoli": 26,
   "Steel Welcome": 27,
-  "Step & Riser Tiles": 28,
-  Welcome: 29,
+  "composite riser": 28,
+ "GLITTER BRASS PATTI": 29,
+  Welcome: 30,
 };
 
 export const generateCategories = (products: Product[]) => {

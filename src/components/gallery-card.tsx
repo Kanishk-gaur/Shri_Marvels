@@ -219,7 +219,7 @@ export default function GalleryCard({
     case "6x36":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-6 lg:row-span-8";
+        "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-14";
       break;
        case "6x36 in":
       // Was 6 -> 12
