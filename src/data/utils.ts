@@ -113,16 +113,16 @@ const sizeDisplayNames: Record<string, string> = {
 
 const customCategoryImages: Record<string, string> = {
   // Keys must remain the original subcategory name to correctly link to product data.
-  "Border Tiles": "/images/border.png",
-  "Digital Border Tiles": "/images/home/Digital_Border.png",
+  "Border Tiles": "/images/home/imported_pen.jpeg",
+  "Digital Border Tiles": "/images/home/digital.jpeg",
   "Imported Pencil Border Tiles": "/images/your-uploaded-pencil-border.jpg",
-  "GVT Wall & Floor Border Tiles": "/images/home/gvt_border.png",
-  "Golden & Silver Border Tiles": "/images/home/golden_border.png",
+  "GVT Wall & Floor Border Tiles": "/images/home/gvt_border.jpeg",
+  "Golden & Silver Border Tiles": "/images/home/border3.jpeg",
 
   "Digital God Posters": "/images/home/digital_god.png",
   "Digital Plain Poster Tiles": "/images/your-uploaded-plain-poster.jpg",
   "Digital Gate Punch Picture Tiles": "/images/home/gate_punch.png",
-  "Kitchen Colorfull Poster": "/images/home/K-49.png",
+  "Kitchen Colorfull Poster": "/images/home/hi_gloss.jpeg",
   "Daimond Collection Posters": "/images/Daimond.png",
 
   "High Gloss Posters": "/images/home/DIAMOND236.jpg",
@@ -130,12 +130,12 @@ const customCategoryImages: Record<string, string> = {
   "High Gloss Plain & Glitter Poster": "/images/your-uploaded-glitter.jpg",
   "Glitter Emboss": "/images/home/GE-1559.png",
 
-  "God GVT": "/images/home/G-421.png",
+  "God GVT": "/images/home/gvt_poster.jpeg",
   "GOD picture": "/images/home/plain.jpg",
   "VITROSA GOD picture": "/images/home/vitrosa.png",
  "Rangoli": "/images/your-uploaded-rangoli.jpg",
   "GVT rangoli": "/images/home/gvt_rangoli.png",
-  "Golden Rangoli Decorative Tiles": "/images/home/golden_rangoli.png",
+  "Golden Rangoli Decorative Tiles": "/images/home/golden_r.jpeg",
   "Digital Posters": "/images/home/2506.png",
 
   "GOLDEN SILVER HIGHLIGHTER": "/images/home/golven_silver.jpeg",
