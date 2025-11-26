@@ -138,7 +138,7 @@ const customCategoryImages: Record<string, string> = {
   "Golden Rangoli Decorative Tiles": "/images/home/golden_rangoli.png",
   "Digital Posters": "/images/home/2506.png",
 
-  "GOLDEN SILVER HIGHLIGHTER": "/images/home/golden_high.png",
+  "GOLDEN SILVER HIGHLIGHTER": "/images/home/golven_silver.jpeg",
   "Golden Silver Highlighter Tiles":
     "/images/your-uploaded-highlighter-tiles.jpg",
   "Steel Welcome": "/images/steel_welcome/23.jpeg",
