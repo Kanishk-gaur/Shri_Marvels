@@ -30,11 +30,10 @@ const subCategoryDisplayNames: Record<string, string> = {
 
   // Marvel
   "Steel Welcome": "Composite Steel Welcome",
-  "Welcome": "Composite Glitter Welcome",
+  Welcome: "Composite Glitter Welcome",
   "GLITTER BRASS PATTI": "Glitter Brass Patti",
   "RADIUM GLITTER PATTI": "Radium Glitter Patti",
   "composite riser": "Composite Riser",
-  
 
   // Add more mappings here for cleaner display names
 };
@@ -104,10 +103,10 @@ const sizeDisplayNames: Record<string, string> = {
   "400x600 mm (16x24 inch)": "6x4",
   "600x600 mm (24x24 inch)": "2x2",
   "1200x1200 mm (48x48 inch)": "4x4",
-   "6x36(w)":"6x36 ,9x36,12x36",
-   "(God)6x36":"(God)6x36 ,9x36 ,12x36",
-  "6x36 in (c)":"6x36",
-  "6x36 in":"2 Soot",
+  "6x36(w)": "6x36 ,9x36,12x36",
+  "(God)6x36": "(God)6x36 ,9x36 ,12x36",
+  "6x36 in (c)": "6x36",
+  "6x36 in": "2 Soot",
   "6x36": "6x36 ,9x36,12x36",
 };
 
@@ -132,9 +131,9 @@ const customCategoryImages: Record<string, string> = {
 
   "God GVT": "/images/home/gvt_poster.jpeg",
   "GOD picture": "/images/home/plain.jpg",
-  "VITROSA GOD picture": "/images/home/vitrosa.png",
- "Rangoli": "/images/your-uploaded-rangoli.jpg",
-  "GVT rangoli": "/images/home/gvt_rangoli.png",
+  "VITROSA GOD picture": "/images/home/vistora.jpeg",
+  Rangoli: "/images/your-uploaded-rangoli.jpg",
+  "GVT rangoli": "/images/home/gvt_ran.jpeg",
   "Golden Rangoli Decorative Tiles": "/images/home/golden_r.jpeg",
   "Digital Posters": "/images/home/2506.png",
 
@@ -142,10 +141,9 @@ const customCategoryImages: Record<string, string> = {
   "Golden Silver Highlighter Tiles":
     "/images/your-uploaded-highlighter-tiles.jpg",
   "Steel Welcome": "/images/steel_welcome/23.jpeg",
-  "Welcome": "/images/welcome/18.jpeg",
+  Welcome: "/images/welcome/18.jpeg",
   "Step & Riser Tiles": "/images/your-uploaded-step-riser.jpg",
   "GLITTER BRASS PATTI": "/images/GBP/GBP-01.jpeg",
-  
 };
 
 // --- 2. PRIORITY ORDER REMAINS KEYED BY ORIGINAL NAME ---
@@ -178,10 +176,10 @@ const priorityOrder: Record<string, number> = {
   "Golden Silver Highlighter Tiles": 21,
   // "High Gloss Posters": 23, // Removed as it was re-mapped to position 3
 
-  "Rangoli": 26,
+  Rangoli: 26,
   "Steel Welcome": 27,
   "composite riser": 28,
- "GLITTER BRASS PATTI": 29,
+  "GLITTER BRASS PATTI": 29,
   Welcome: 30,
 };
 
