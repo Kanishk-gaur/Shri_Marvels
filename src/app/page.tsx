@@ -12,8 +12,6 @@ import {
   Droplets,
   TrendingUp,
   Award,
-  Footprints, // New icon for steps/risers
-  Ruler, // New icon for precision
 } from "lucide-react";
 import { categories } from "@/data";
 import { HeroSlider } from "@/components/hero-slider";
@@ -66,30 +64,6 @@ const marbleAttributes = [
     icon: <Sparkles className="w-8 h-8 text-emerald-700" />,
     title: "Luminous Quality",
     desc: "Its inherent translucence interacts with light to create a unique and captivating glow.",
-  },
-];
-
-// New Data for Step & Riser Section
-const stepRiserAttributes = [
-  {
-    icon: <Footprints className="w-8 h-8 text-blue-700" />,
-    title: "Safety First Design",
-    desc: "Features like anti-slip grooves and finishes for maximum safety on every step.",
-  },
-  {
-    icon: <Ruler className="w-8 h-8 text-blue-700" />,
-    title: "Perfect Fit & Finish",
-    desc: "Available in precise dimensions and custom cuts to ensure seamless installation.",
-  },
-  {
-    icon: <Palette className="w-8 h-8 text-blue-700" />,
-    title: "Coordinating Colors",
-    desc: "Designed to perfectly match or complement your main floor and wall tiles.",
-  },
-  {
-    icon: <ShieldCheck className="w-8 h-8 text-blue-700" />,
-    title: "Extreme Durability",
-    desc: "Built to endure concentrated foot traffic and harsh cleaning agents.",
   },
 ];
 
@@ -187,8 +161,9 @@ export default function HomePage() {
                     <span className="font-semibold text-emerald-700">
                       three decades
                     </span>
-                    , we have been the premier source for the world's most
-                    exquisite tiles, decorative marvels, and roofing solutions.
+                    , we have been the premier source for the **world&apos;s**
+                    most exquisite tiles, decorative marvels, and roofing
+                    solutions.
                   </p>
                 </div>
 
@@ -285,7 +260,7 @@ export default function HomePage() {
         />
 
         {/* 2. NEW: Step and Riser Collection Section */}
-       <StepRiserShowcase />
+        <StepRiserShowcase />
         {/* END NEW SECTION */}
 
         {/* 3. Marble Varieties - Reduced height */}
@@ -298,7 +273,6 @@ export default function HomePage() {
           isPaginated={false}
         />
       </section>
-       
 
       {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
       <section className="bg-slate-50 py-24">

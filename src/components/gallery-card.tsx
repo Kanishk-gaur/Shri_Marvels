@@ -191,17 +191,17 @@ export default function GalleryCard({
       gridClass =
         "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-13";
       break;
-      case "(God)6x36":
+    case "(God)6x36":
       // Was 6 -> 12
       gridClass =
         "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-8 lg:row-span-12";
       break;
-      case "6x36 in (c)":
+    case "6x36 in (c)":
       // Was 6 -> 12
       gridClass =
         "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-10";
       break;
-      case "6x36 ,9x36,12x36":
+    case "6x36 ,9x36,12x36":
       // Was 6 -> 12
       gridClass =
         "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-15";
@@ -221,7 +221,7 @@ export default function GalleryCard({
       gridClass =
         "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-14";
       break;
-       case "6x36 in":
+    case "6x36 in":
       // Was 6 -> 12
       gridClass =
         "col-span-12 row-span-6 md:col-span-8 md:row-span-6 lg:col-span-8 lg:row-span-7";
@@ -460,9 +460,9 @@ export default function GalleryCard({
             <div className="absolute inset-0 bg-gray-300"></div>
           )}
         </div>
-        <div className="p-3">
+        <div className="p-1 h-6 flex items-center">
           <h3
-            className="text-zinc-800 font-semibold text-xs truncate"
+            className="text-zinc-800 font-semibold text-[9px] md:text-[12px] truncate w-full"
             title={product.name}
           >
             {product.name}
