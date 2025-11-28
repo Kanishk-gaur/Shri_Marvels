@@ -281,6 +281,7 @@ export default function HomePage() {
           categories={categories.tiles}
           categoryType="tiles"
           imageAspectRatio="aspect-[16/11]" // Original aspect ratio
+          isPaginated={true}
         />
 
         {/* 2. NEW: Step and Riser Collection Section */}
@@ -293,7 +294,8 @@ export default function HomePage() {
           subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
           categories={categories.marvel}
           categoryType="marvel"
-          imageAspectRatio="aspect-[16/4]" // Shorter height (16:8 instead of 16:10)
+          imageAspectRatio="aspect-[16/3]" // Shorter height (16:8 instead of 16:10)
+          isPaginated={false}
         />
       </section>
        

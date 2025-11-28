@@ -19,22 +19,31 @@ interface CategoryCarouselProps {
   subtitle: string;
   categories: Category[];
   categoryType: "marvel" | "tiles";
-  imageAspectRatio?: string; // New prop for custom aspect ratio
+  imageAspectRatio?: string;
+  isPaginated?: boolean; // New prop to control pagination
 }
 
-const ITEMS_PER_PAGE = 3;
+const DEFAULT_ITEMS_PER_PAGE = 3;
+const SHOW_ALL_ITEMS_PER_PAGE = 999; // A large number to display all items
 
 export function CategoryCarousel({ 
   title, 
   subtitle, 
   categories, 
   categoryType, 
-  imageAspectRatio = "aspect-[16/10]" // Default aspect ratio
+  imageAspectRatio = "aspect-[16/10]",
+  // Default to false for the specific 'marvel' use case where you want all visible.
+  // Note: If you want 'tiles' to be paginated, you must explicitly pass isPaginated={true} for tiles.
+  isPaginated = false 
 }: CategoryCarouselProps) {
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = Math.ceil(categories.length / ITEMS_PER_PAGE);
-  const startIndex = currentPage * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // Determine the number of items per page based on the prop
+  const itemsPerPage = isPaginated ? DEFAULT_ITEMS_PER_PAGE : SHOW_ALL_ITEMS_PER_PAGE;
+  
+  const totalPages = Math.ceil(categories.length / itemsPerPage);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
   const currentCategories = categories.slice(startIndex, endIndex);
 
   const carouselVariants = {
@@ -51,26 +60,30 @@ export function CategoryCarousel({
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">{title}</h2>
             <p className="mt-3 text-lg text-slate-600">{subtitle}</p>
           </div>
-          <div className="flex-shrink-0 flex items-center gap-3">
-            <Button
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
-              disabled={currentPage === 0}
-              size="icon"
-              variant="outline"
-              className="rounded-full h-12 w-12 border-slate-300 text-slate-500 hover:bg-slate-100 disabled:opacity-40"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </Button>
-            <Button
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages - 1))}
-              disabled={currentPage >= totalPages - 1}
-              size="icon"
-              variant="outline"
-              className="rounded-full h-12 w-12 border-slate-300 text-slate-500 hover:bg-slate-100 disabled:opacity-40"
-            >
-              <ArrowRight className="w-6 h-6" />
-            </Button>
-          </div>
+          
+          {/* Only render navigation controls if pagination is enabled and there's more than one page */}
+          {isPaginated && totalPages > 1 && (
+            <div className="flex-shrink-0 flex items-center gap-3">
+              <Button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
+                disabled={currentPage === 0}
+                size="icon"
+                variant="outline"
+                className="rounded-full h-12 w-12 border-slate-300 text-slate-500 hover:bg-slate-100 disabled:opacity-40"
+              >
+                <ArrowLeft className="w-6 h-6" />
+              </Button>
+              <Button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages - 1))}
+                disabled={currentPage >= totalPages - 1}
+                size="icon"
+                variant="outline"
+                className="rounded-full h-12 w-12 border-slate-300 text-slate-500 hover:bg-slate-100 disabled:opacity-40"
+              >
+                <ArrowRight className="w-6 h-6" />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -78,44 +91,56 @@ export function CategoryCarousel({
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
-            className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            // ⚠️ MODIFIED: Use flex and justify-center to allow last row centering
+            className="flex flex-wrap justify-center gap-8"
             variants={carouselVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {currentCategories.map((category) => (
-              <Link key={category.id} href={`/gallery?category=${categoryType}&subcategory=${category.id}`} className="group block">
-                <motion.div 
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm transition-shadow duration-300 group-hover:shadow-xl h-full flex flex-col"
-                  whileHover={{ y: -5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  {/* Image Container with custom aspect ratio */}
-                  <div className={`relative ${imageAspectRatio} overflow-hidden`}>
-                    <Image
-                      src={category.exampleImage}
-                      alt={category.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                  </div>
-                  
-                  <div className="p-6 flex-grow flex flex-col">
-                    <h3 className="text-xl font-semibold text-slate-800">{category.name}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{category.count} Products</p>
-                    <div className="mt-auto pt-4">
-                      <div className="inline-flex items-center font-semibold text-emerald-700 group-hover:text-emerald-600 transition-colors">
-                        View Collection
-                        <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+            {currentCategories.map((category) => {
+              // Set the width for each card to mimic the original 3-column grid structure
+              const cardWidthClass = "w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.333rem)]";
+
+              return (
+                // Use a standard div wrapper to control the width for Flexbox
+                <div key={category.id} className={cardWidthClass}>
+                  <Link 
+                    href={`/gallery?category=${categoryType}&subcategory=${category.id}`} 
+                    className="group block h-full"
+                  >
+                    <motion.div 
+                      className="bg-white rounded-2xl overflow-hidden shadow-sm transition-shadow duration-300 group-hover:shadow-xl h-full flex flex-col"
+                      whileHover={{ y: -5 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      {/* Image Container with custom aspect ratio */}
+                      <div className={`relative ${imageAspectRatio} overflow-hidden`}>
+                        <Image
+                          src={category.exampleImage}
+                          alt={category.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
                       </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
+                      
+                      <div className="p-6 flex-grow flex flex-col">
+                        <h3 className="text-xl font-semibold text-slate-800">{category.name}</h3>
+                        <p className="text-sm text-slate-500 mt-1">{category.count} Products</p>
+                        <div className="mt-auto pt-4">
+                          <div className="inline-flex items-center font-semibold text-emerald-700 group-hover:text-emerald-600 transition-colors">
+                            View Collection
+                            <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                </div>
+              );
+            })}
           </motion.div>
         </AnimatePresence>
       </div>
