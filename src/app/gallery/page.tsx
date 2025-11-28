@@ -5,11 +5,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Filter, X } from "lucide-react";
 import GalleryCard from "@/components/gallery-card";
-import { allProducts, categories, Product } from "@/data";
+import { allProducts, categories, Product } from "@/data"; // <-- FIX: Added Product type here
 import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
+import { getOriginalSizeFilterValues } from "@/data/utils"; // Import the utility for correct filtering
 
 // --- START: Lookup Map based on processed data (KEEP) ---
 const subcategoryNameMap = new Map<string, string>();
@@ -30,7 +31,9 @@ const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(
 
 // ---------------------------------------------------------------------
 // --- START: Size Mapping (KEEP) ---
-const sizeDisplayNames: Record<string, string> = {
+// Note: Keeping a local copy of sizeDisplayNames for the UI grouping logic below
+// but the core filtering logic uses the dedicated utility in src/data/utils.ts
+const sizeDisplayNames: Record<string, string> = { 
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
   "200x300 mm (8x12 inch)": "8x12,12x18",
@@ -99,25 +102,12 @@ const sizeDisplayNames: Record<string, string> = {
   "6x36 in": "2 Soot",
   "6x36": "6x36 ,9x36,12x36",
 };
-// NEW REVERSE LOOKUP MAP: Maps the display name (lowercase and trimmed) back to the raw size name.
-const rawSizeLookupMap = new Map<string, string>();
-Object.entries(sizeDisplayNames).forEach(([rawSize, displayName]) => {
-  // Added .trim() for robustness
-  rawSizeLookupMap.set(displayName.toLowerCase().trim(), rawSize);
-});
 
 // Function to convert the raw size name (used in allProducts) to the display name.
 const getSizeDisplayName = (rawSize: string): string => {
   return sizeDisplayNames[rawSize] || rawSize;
 };
 
-// Function to get the raw size for filtering (handles display name or raw name input)
-const getRawSizeForFilter = (selectedSize: string): string => {
-  // Added .trim() to the selected size before lookup
-  const lookupKey = selectedSize.toLowerCase().trim();
-  const rawSize = rawSizeLookupMap.get(lookupKey);
-  return rawSize || selectedSize; // If lookup fails, returns the input string (which works for unmapped sizes)
-};
 // --- END: Size Mapping ---
 // ---------------------------------------------------------------------
 
@@ -187,17 +177,23 @@ export default function GalleryPage() {
 
     // 1. Filter by specific Product/Size filter first (highest priority, driven by URL params)
     if (activeProductFilter) {
-      const rawSizeToFilter = getRawSizeForFilter(activeProductFilter.size);
+      // Get all possible raw size strings corresponding to the selected display size
+      const rawSizesToFilter = getOriginalSizeFilterValues(activeProductFilter.size);
 
-      products = products.filter(
-        (p) =>
-          p.category === activeProductFilter.category &&
-          p.subcategory.toLowerCase().replace(/ /g, "-") ===
-            activeProductFilter.subcategory &&
-          p.sizes.some(
-            (size) => size.toLowerCase() === rawSizeToFilter.toLowerCase()
-          )
-      );
+      products = products.filter((p) => {
+        // 1a. Filter by category
+        const isCategoryMatch = p.category === activeProductFilter.category;
+        
+        // 1b. Filter by subcategory (ID slug)
+        const isSubcategoryMatch = p.subcategory.toLowerCase().replace(/ /g, "-") === activeProductFilter.subcategory;
+
+        // 1c. Filter by size: check if any of the product's raw sizes match any of the required raw sizes
+        const isSizeMatch = p.sizes.some(productRawSize => 
+            rawSizesToFilter.some(filterRawSize => productRawSize.toLowerCase() === filterRawSize.toLowerCase())
+        );
+
+        return isCategoryMatch && isSubcategoryMatch && isSizeMatch;
+      });
     }
     // 2. Otherwise, filter by Main Category and then Subcategory (chips/URL params)
     else {
@@ -218,7 +214,8 @@ export default function GalleryPage() {
       product.sizes.forEach((size) => {
         // Group Key still uses Subcategory Display Name + Raw Size (for stable sorting)
         const displayName = getDisplayName(product.subcategory);
-        const groupKey = `${displayName} (${size}")`;
+        const rawSize = size; // Use raw size here for stable and correct grouping
+        const groupKey = `${displayName} (${rawSize}")`;
 
         if (!grouped[groupKey]) {
           grouped[groupKey] = [];
@@ -254,10 +251,10 @@ export default function GalleryPage() {
       const matchB = b.match(/^(.*?) \((.*?)\"?\)$/);
 
       const subcatA = matchA ? matchA[1] : a;
-      const sizeA = matchA ? matchA[2] : "";
+      const rawSizeA = matchA ? matchA[2] : "";
 
       const subcatB = matchB ? matchB[1] : b;
-      const sizeB = matchB ? matchB[2] : "";
+      const rawSizeB = matchB ? matchB[2] : "";
 
       const indexA = subcategorySortKeys.indexOf(subcatA);
       const indexB = subcategorySortKeys.indexOf(subcatB);
@@ -267,7 +264,7 @@ export default function GalleryPage() {
       }
 
       // If same subcategory, sort by size
-      return sortSizes(sizeA, sizeB);
+      return sortSizes(rawSizeA, rawSizeB);
     });
   }, [groupedProducts]);
 

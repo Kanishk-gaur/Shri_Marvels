@@ -110,6 +110,41 @@ const sizeDisplayNames: Record<string, string> = {
   "6x36": "6x36 ,9x36,12x36",
 };
 
+// --- NEW REVERSE LOOKUP MAP for size filtering ---
+const sizeReverseMap: Record<string, string[]> = {};
+Object.entries(sizeDisplayNames).forEach(([rawSize, displayName]) => {
+    // Normalize display name for robust lookup
+    const key = displayName.toLowerCase().trim();
+    if (!sizeReverseMap[key]) {
+        sizeReverseMap[key] = [];
+    }
+    // Store the original raw size
+    sizeReverseMap[key].push(rawSize);
+});
+
+/**
+ * Translates a user-facing display size back to all possible original raw size strings
+ * for filtering the raw product data.
+ * The input is expected to be the value from the 'size' URL parameter.
+ * Also handles cases where the raw size name itself is the size.
+ */
+export const getOriginalSizeFilterValues = (displayName: string | null): string[] => {
+    if (!displayName) {
+        return [];
+    }
+    // Normalize display name for robust lookup
+    const lookupKey = displayName.toLowerCase().trim();
+    
+    // 1. Look up the reverse map (for mapped sizes like "8x12,12x18")
+    if (sizeReverseMap[lookupKey]) {
+        return sizeReverseMap[lookupKey];
+    }
+    
+    // 2. Fallback: If not found in map, assume the display name is the raw size name itself
+    // (This is primarily for unmapped sizes like the working "2x3" or other simple size strings)
+    return [displayName]; 
+};
+
 const customCategoryImages: Record<string, string> = {
   // Keys must remain the original subcategory name to correctly link to product data.
   "Border Tiles": "/images/home/imported_pen.jpeg",
@@ -298,3 +333,6 @@ export const generateSizes = (products: Product[]) => {
     tiles: processSizes(sizeSets.tiles),
   };
 };
+
+// Export sizeDisplayNames and subCategoryDisplayNames for use elsewhere if needed
+export { sizeDisplayNames, subCategoryDisplayNames };
