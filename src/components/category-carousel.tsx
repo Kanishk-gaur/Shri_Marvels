@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 💡 MODIFIED: Added useEffect
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,8 +32,6 @@ export function CategoryCarousel({
   categories, 
   categoryType, 
   imageAspectRatio = "aspect-[16/10]",
-  // Default to false for the specific 'marvel' use case where you want all visible.
-  // Note: If you want 'tiles' to be paginated, you must explicitly pass isPaginated={true} for tiles.
   isPaginated = false 
 }: CategoryCarouselProps) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -46,6 +44,26 @@ export function CategoryCarousel({
   const endIndex = startIndex + itemsPerPage;
   const currentCategories = categories.slice(startIndex, endIndex);
 
+  // 🚀 NEW CODE: Auto-scrolling logic
+  useEffect(() => {
+    // Only enable auto-scrolling if pagination is on and there is more than one page
+    if (isPaginated && totalPages > 1) {
+      const scrollInterval = setInterval(() => {
+        setCurrentPage((prevPage) => {
+          // Increment the page, and use modulo (%) to loop back to the first page (0) 
+          // when the current page is the last one.
+          const nextPage = (prevPage + 1) % totalPages;
+          return nextPage;
+        });
+      }, 3000); // Scroll every 2000 milliseconds (2 seconds)
+
+      // Cleanup function: Clear the interval when the component unmounts or dependencies change
+      return () => clearInterval(scrollInterval);
+    }
+    // Dependency array: totalPages is included because the modulo operation depends on it
+  }, [isPaginated, totalPages]); 
+  // 🔚 END NEW CODE
+  
   const carouselVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
@@ -91,7 +109,7 @@ export function CategoryCarousel({
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
-            // ⚠️ MODIFIED: Use flex and justify-center to allow last row centering
+            // MODIFIED: Use flex and justify-center to allow last row centering
             className="flex flex-wrap justify-center gap-8"
             variants={carouselVariants}
             initial="hidden"

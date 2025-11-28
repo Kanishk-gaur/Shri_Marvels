@@ -33,14 +33,20 @@ const DOT_BASE_CLASS = "h-2 rounded-full transition-all duration-300 cursor-poin
 
 // Slide Data (Explicitly typed)
 const slides: Slide[] = [
+ {
+imageSrc: "/images/home/god (1).jpg",
+title: "Divine Tiles",
+subtitle: "EMANATE SERENITY & BLESSINGS",
+href: "/gallery",
+},
   {
     imageSrc: "/images/home/home_5.png",
-    title: "DIVINE COLLECTION TILES",
+    title: "Highlither Tiles",
     subtitle: "BRING HOME THE DIVINITY",
     href: "/gallery",
   },
  {
-    imageSrc: "/images/home/roof4.png",
+    imageSrc: "/images/home/roof5.jpeg",
     title: "ROOF AND EXTERIOR TILES", 
     subtitle: "DURABLE, PROTECTIVE & DECORATIVE",
     href: "/roof_tiles", 
