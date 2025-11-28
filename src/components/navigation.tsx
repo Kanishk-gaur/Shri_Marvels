@@ -1,4 +1,3 @@
-// src/components/navigation.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Home, Info, Mail, LayoutGrid,  Layers3 } from "lucide-react";
+// Import ProductFilter
+import { ProductFilter } from "@/components/product-filter";
 
 // Updated nav items including Step/Riser
 const navItems = [
@@ -44,6 +45,8 @@ export function Navigation() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-4">
+              {/* Added the ProductFilter to the desktop menu */}
+              <ProductFilter buttonText="Filter Products" />
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -89,6 +92,10 @@ export function Navigation() {
               exit={{ y: -100 }}
             >
               <div className="px-4 py-6 space-y-4">
+                {/* Added the ProductFilter to the mobile menu */}
+                <div onClick={() => setIsOpen(false)}>
+                    <ProductFilter buttonText="Filter Products" />
+                </div>
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;

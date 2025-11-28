@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState, useMemo } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown, LayoutGrid, ChevronRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,16 +21,6 @@ type SubcategoryWithMainCategory = {
 };
 
 interface ProductFilterProps {
-  onFilterSelect: (
-    mainCategory: "marvel" | "tiles",
-    subcategory: string,
-    size: string
-  ) => void;
-  selectedFilter: {
-    subcategory: string;
-    size: string;
-  } | null;
-  mainCategory: "all" | "marvel" | "tiles";
   buttonText?: string;
 }
 
@@ -68,11 +59,20 @@ const priorityOrder: Record<string, number> ={
 };
 
 export function ProductFilter({
-  onFilterSelect,
-  selectedFilter,
-  mainCategory,
   buttonText = "Select a Product",
 }: ProductFilterProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Get current filter values from URL
+  const currentCategory = searchParams.get("category") || null;
+  const currentSubcategory = searchParams.get("subcategory") || null;
+  const currentSize = searchParams.get("size") || null;
+  
+  // Determine the main category filter to apply to the subcategory list
+  const mainCategoryFilter = (currentCategory === "marvel" || currentCategory === "tiles") ? currentCategory : "all";
+  
   const [open, setOpen] = useState(false);
   const [activeSubcategory, setActiveSubcategory] =
     useState<SubcategoryWithMainCategory | null>(null);
@@ -90,9 +90,9 @@ export function ProductFilter({
     ];
 
     const filtered =
-      mainCategory === "all"
+      mainCategoryFilter === "all"
         ? combined
-        : combined.filter((sub) => sub.mainCategory === mainCategory);
+        : combined.filter((sub) => sub.mainCategory === mainCategoryFilter);
 
     // Apply the custom priority sort instead of alphabetical
     return filtered.sort((a, b) => {
@@ -104,35 +104,57 @@ export function ProductFilter({
       }
       return a.name.localeCompare(b.name);
     });
-  }, [mainCategory]);
+  }, [mainCategoryFilter]);
 
   const handleSizeSelect = (size: string) => {
     if (activeSubcategory) {
-      // 'size' here is the new display name (e.g., "300 x 450 mm (Wall)")
-      onFilterSelect(
-        activeSubcategory.mainCategory,
-        activeSubcategory.id,
-        size
-      );
+      const params = new URLSearchParams();
+      // Set the category, subcategory (ID), and specific size
+      params.set("category", activeSubcategory.mainCategory);
+      params.set("subcategory", activeSubcategory.id);
+      params.set("size", size);
+
+      // Navigate to /gallery with all filter parameters
+      router.push(`/gallery?${params.toString()}`);
       setOpen(false);
+      
+      // Reset the local state after navigation
+      setActiveSubcategory(null);
     }
   };
 
   const getSelectedFilterName = () => {
-    if (selectedFilter) {
+    // Check if the current page is /gallery and if the product-specific filter is active
+    // We check the full URL on pathname
+    if (currentSubcategory && currentSize && pathname.startsWith('/gallery')) {
       const allSubs = [...categories.marvel, ...categories.tiles];
-      const sub = allSubs.find((s) => s.id === selectedFilter.subcategory);
-      // FIX: Removed the extraneous quote (") appended to selectedFilter.size
-      if (sub) return `${sub.name} (${selectedFilter.size})`;
+      const sub = allSubs.find((s) => s.id === currentSubcategory);
+      // Display the selected filter: Subcategory Name (Size)
+      if (sub) return `${sub.name} (${currentSize})`;
     }
     return buttonText;
   };
 
+  // Logic to re-open the subcategory view if a product filter is active
   React.useEffect(() => {
     if (!open) {
       setTimeout(() => setActiveSubcategory(null), 300);
     }
-  }, [open]);
+    // Only attempt to set active subcategory if a single product filter is applied
+    if (open && currentSubcategory && currentSize) {
+        const activeSub = allSubcategories.find(s => s.id === currentSubcategory);
+        if (activeSub) {
+            setActiveSubcategory(activeSub);
+        }
+    } else if (open && currentSubcategory && !currentSize) {
+      // If only subcategory chip is active, also open it in filter for ease of use
+        const activeSub = allSubcategories.find(s => s.id === currentSubcategory);
+        if (activeSub) {
+            setActiveSubcategory(activeSub);
+        }
+    }
+  }, [open, currentSubcategory, currentSize, allSubcategories]);
+
 
   const listHeight =
     Math.min(allSubcategories.length, MAX_ITEMS_VISIBLE) * ITEM_HEIGHT +
@@ -179,7 +201,8 @@ export function ProductFilter({
                   key={sub.id}
                   onClick={() => setActiveSubcategory(sub)}
                   className={`w-full flex items-center justify-between px-3 py-2 text-sm rounded-md text-slate-700 hover:bg-slate-100 focus:outline-none transition-colors text-left relative ${
-                    activeSubcategory?.id === sub.id ? "bg-slate-100" : ""
+                    // Highlight the subcategory if it is selected in the main category filter
+                    currentSubcategory === sub.id ? "bg-slate-100 font-semibold" : ""
                   }`}
                 >
                   <span className="truncate">{sub.name}</span>
@@ -218,7 +241,7 @@ export function ProductFilter({
                             onClick={() => handleSizeSelect(size)}
                             className="w-full text-left px-3 py-2 text-sm rounded-md text-slate-700 hover:bg-slate-100 cursor-pointer"
                           >
-                            {size} {/* FIX: Removed &quot; and &quot; */}
+                            {size}
                           </button>
                         ))
                       ) : (

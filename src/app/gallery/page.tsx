@@ -7,11 +7,11 @@ import { ArrowLeft, Filter, X } from "lucide-react";
 import GalleryCard from "@/components/gallery-card";
 import { allProducts, categories, Product } from "@/data";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
 
-// --- START: Lookup Map based on processed data ---
+// --- START: Lookup Map based on processed data (KEEP) ---
 const subcategoryNameMap = new Map<string, string>();
 [...categories.tiles, ...categories.marvel].forEach((cat) => {
   subcategoryNameMap.set(cat.id, cat.name);
@@ -29,7 +29,7 @@ const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(
 // --- END: Lookup Map based on processed data ---
 
 // ---------------------------------------------------------------------
-// --- START: Size Mapping (Replicated from src/data/utils.ts for display AND REVERSE LOOKUP) ---
+// --- START: Size Mapping (KEEP) ---
 const sizeDisplayNames: Record<string, string> = {
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
@@ -93,11 +93,11 @@ const sizeDisplayNames: Record<string, string> = {
   "400x600 mm (16x24 inch)": "6x4",
   "600x600 mm (24x24 inch)": "2x2",
   "1200x1200 mm (48x48 inch)": "4x4",
-   "6x36(w)":"6x36 ,9x36,12x36",
-   "(God)6x36":"(God)6x36 ,9x36 ,12x36",
-  "6x36 in (c)":"6x36",
-  "6x36 in":"2 Soot",
-    "6x36": "6x36 ,9x36,12x36",
+  "6x36(w)": "6x36 ,9x36,12x36",
+  "(God)6x36": "(God)6x36 ,9x36 ,12x36",
+  "6x36 in (c)": "6x36",
+  "6x36 in": "2 Soot",
+  "6x36": "6x36 ,9x36,12x36",
 };
 // NEW REVERSE LOOKUP MAP: Maps the display name (lowercase and trimmed) back to the raw size name.
 const rawSizeLookupMap = new Map<string, string>();
@@ -122,47 +122,70 @@ const getRawSizeForFilter = (selectedSize: string): string => {
 // ---------------------------------------------------------------------
 
 export default function GalleryPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const [selectedMainCategory, setSelectedMainCategory] = useState<
-    "all" | "marvel" | "tiles"
-  >("all");
-  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(
-    null
-  );
-  const [activeProductFilter, setActiveProductFilter] = useState<{
-    category: "marvel" | "tiles";
-    subcategory: string; // This holds the ID/slug
-    size: string; // This holds the selected size (display name or raw name)
-  } | null>(null);
+  // Derive filter state directly from URL query parameters
+  const selectedMainCategory =
+    (searchParams.get("category") as "all" | "marvel" | "tiles") || "all";
+  const selectedSubcategory = searchParams.get("subcategory") || null;
+
+  // Consolidate the specific product/size filter from the URL
+  const activeProductFilter = useMemo(() => {
+    const category =
+      (searchParams.get("category") as "marvel" | "tiles") || null;
+    const subcategory = searchParams.get("subcategory") || null;
+    const size = searchParams.get("size") || null;
+
+    if (category && subcategory && size) {
+      return { category, subcategory, size };
+    }
+    return null;
+  }, [searchParams]);
 
   const [visibleGroups, setVisibleGroups] = useState<string[]>([]);
-
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const category =
-      (searchParams.get("category") as "all" | "marvel" | "tiles") || "all";
-    const subcategory = searchParams.get("subcategory");
-    const size = searchParams.get("size");
-
-    setSelectedMainCategory(category);
-
-    if (category !== "all" && subcategory && size) {
-      setActiveProductFilter({ category, subcategory, size });
-      setSelectedSubcategory(null);
-    } else {
-      setSelectedSubcategory(subcategory);
-      setActiveProductFilter(null);
+  // Function to update the URL for Main Category selection
+  const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
+    const params = new URLSearchParams();
+    if (category !== "all") {
+      params.set("category", category);
     }
-  }, [searchParams]);
+    // Navigate to the clean URL, implicitly clearing subcategory and size filters
+    router.push(`/gallery?${params.toString()}`);
+  };
+
+  // Function to update the URL for Subcategory selection
+  const handleSubcategorySelect = (subcategory: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("size"); // Always clear granular product filter when selecting a subcategory chip
+
+    if (subcategory) {
+      params.set("subcategory", subcategory);
+    } else {
+      params.delete("subcategory");
+    }
+
+    // Ensure the main category filter remains if it was set
+    if (!params.get("category") && selectedMainCategory !== "all") {
+      params.set("category", selectedMainCategory);
+    }
+
+    router.push(`/gallery?${params.toString()}`);
+  };
+
+  // Function to clear all filters by navigating to a clean URL
+  const handleClearAllFilters = () => {
+    router.push("/gallery");
+  };
 
   const groupedProducts = useMemo(() => {
     let products = allProducts;
 
-    // FIX: Use the robust reverse lookup to get the raw size for filtering
+    // 1. Filter by specific Product/Size filter first (highest priority, driven by URL params)
     if (activeProductFilter) {
       const rawSizeToFilter = getRawSizeForFilter(activeProductFilter.size);
 
@@ -171,12 +194,13 @@ export default function GalleryPage() {
           p.category === activeProductFilter.category &&
           p.subcategory.toLowerCase().replace(/ /g, "-") ===
             activeProductFilter.subcategory &&
-          // Compare against the raw size string stored in p.sizes.
           p.sizes.some(
             (size) => size.toLowerCase() === rawSizeToFilter.toLowerCase()
           )
       );
-    } else {
+    }
+    // 2. Otherwise, filter by Main Category and then Subcategory (chips/URL params)
+    else {
       if (selectedMainCategory !== "all") {
         products = products.filter((p) => p.category === selectedMainCategory);
       }
@@ -247,38 +271,10 @@ export default function GalleryPage() {
     });
   }, [groupedProducts]);
 
-  const handleClearAllFilters = () => {
-    setSelectedMainCategory("all");
-    setSelectedSubcategory(null);
-    setActiveProductFilter(null);
-  };
-
-  const handleMainCategorySelect = (category: "all" | "marvel" | "tiles") => {
-    setSelectedMainCategory(category);
-    setSelectedSubcategory(null);
-    setActiveProductFilter(null);
-  };
-
-  const handleSubcategorySelect = (subcategory: string | null) => {
-    setSelectedSubcategory(subcategory);
-    setActiveProductFilter(null);
-  };
-
-  const handleProductFilterSelect = (
-    category: "marvel" | "tiles",
-    subcategory: string,
-    size: string
-  ) => {
-    setActiveProductFilter({ category, subcategory, size });
-    setSelectedMainCategory(category);
-    setSelectedSubcategory(null);
-  };
-
   const loadMoreProducts = useCallback(() => {
     if (loading) return;
     setLoading(true);
 
-    // Use the pre-sorted list of keys
     const nextGroupKeys = allSortedGroupKeys.slice(
       visibleGroups.length,
       visibleGroups.length + 1
@@ -307,8 +303,8 @@ export default function GalleryPage() {
     [loading, hasMore, loadMoreProducts]
   );
 
+  // Reset visible groups whenever the filtered list changes
   useEffect(() => {
-    // Reset visible groups whenever the filtered list changes
     setVisibleGroups(allSortedGroupKeys.slice(0, 1)); // Start with the first group
     setHasMore(allSortedGroupKeys.length > 1);
   }, [allSortedGroupKeys]);
@@ -361,6 +357,7 @@ export default function GalleryPage() {
         <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-zinc-200/80 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6">
             <div className="flex items-center flex-wrap gap-4 mb-4 lg:mb-0 lg:flex-nowrap">
+              {/* Main Category Buttons - Now controlling the URL state */}
               <div className="flex items-center space-x-2 bg-zinc-200/60 rounded-lg p-1">
                 <Button
                   onClick={() => handleMainCategorySelect("all")}
@@ -396,13 +393,12 @@ export default function GalleryPage() {
                   Tiles
                 </Button>
               </div>
+
+              {/* RE-ADDING ProductFilter in the gallery page filter bar */}
               <div className="flex-shrink-0">
-                <ProductFilter
-                  onFilterSelect={handleProductFilterSelect}
-                  selectedFilter={activeProductFilter}
-                  mainCategory={selectedMainCategory}
-                />
+                <ProductFilter buttonText="Filter By Name/Size" />
               </div>
+
               {isFilterActive && (
                 <Button
                   onClick={handleClearAllFilters}
@@ -415,6 +411,7 @@ export default function GalleryPage() {
               )}
             </div>
             <div className="flex-grow overflow-x-auto">
+              {/* Filter Chips - Now controlling the URL state */}
               <FilterChips
                 categories={filterChipCategories}
                 selectedCategory={selectedSubcategory}
