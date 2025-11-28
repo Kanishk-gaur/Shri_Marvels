@@ -115,7 +115,139 @@ export default function HomePage() {
       <HeroSlider />
 
       {/* --- Quick Navigation Carousels --- */}
-            {/* --- Quick Navigation Carousels --- */}
+      {/* --- Quick Navigation Carousels --- */}
+
+      <section className="bg-gradient-to-br from-slate-50 to-white py-28 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Text Content - Appears first on mobile */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="space-y-8 order-2 lg:order-1"
+            >
+              {/* Enhanced badge */}
+              <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span className="text-emerald-700 text-sm font-semibold uppercase tracking-wider">
+                  Our Legacy
+                </span>
+              </div>
+
+              {/* Enhanced heading */}
+              <div className="space-y-4">
+                <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+                  Crafting Spaces of{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">
+                    Distinction
+                  </span>
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full"></div>
+              </div>
+
+              {/* Enhanced content with icons */}
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  </div>
+                  <p className="text-lg text-slate-700 leading-relaxed">
+                    For over{" "}
+                    <span className="font-semibold text-emerald-700">
+                      three decades
+                    </span>
+                    , we have been the premier source for the world's most
+                    exquisite tiles, marbles, and roofing solutions.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  </div>
+                  <p className="text-lg text-slate-700 leading-relaxed">
+                    Our commitment is to the fusion of{" "}
+                    <span className="font-semibold text-slate-900">
+                      unparalleled quality
+                    </span>
+                    ,{" "}
+                    <span className="font-semibold text-slate-900">
+                      timeless design
+                    </span>
+                    , and{" "}
+                    <span className="font-semibold text-slate-900">
+                      sustainable sourcing
+                    </span>
+                    .
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                  </div>
+                  <p className="text-lg text-slate-700 leading-relaxed">
+                    We partner with architects, designers, and homeowners to
+                    transform visions into enduring realities, ensuring every
+                    project reflects perfection.
+                  </p>
+                </div>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="flex items-center gap-6 pt-6 border-t border-slate-200">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">5000+</div>
+                  <div className="text-sm text-slate-600">Projects</div>
+                </div>
+                <div className="w-px h-8 bg-slate-300"></div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">94%</div>
+                  <div className="text-sm text-slate-600">Satisfaction</div>
+                </div>
+                <div className="w-px h-8 bg-slate-300"></div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-slate-900">5+</div>
+                  <div className="text-sm text-slate-600">States</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Image - Appears second on mobile with reduced size */}
+            <motion.div
+              className="relative group order-1 lg:order-2"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl max-w-md mx-auto lg:max-w-none">
+                <Image
+                  src="/images/home/logo.jpeg"
+                  alt="Architect reviewing tile samples"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  priority
+                />
+                {/* Enhanced overlay with gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+                {/* Floating stats badge */}
+                <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg"></div>
+              </div>
+
+              {/* Decorative element - hidden on mobile */}
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-emerald-500 rounded-2xl -z-10 rotate-12 opacity-20 hidden lg:block"></div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
         {/* Tile Collections - Keep original height */}
         <CategoryCarousel
@@ -167,7 +299,7 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
             >
               <Image
-                src="/images/home/home_tile2.png"
+                src="/images/home/home_tile3.png"
                 alt="Modern interior with stylish decorative tiles"
                 fill
                 className="object-cover"

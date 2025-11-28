@@ -127,7 +127,7 @@ const customCategoryImages: Record<string, string> = {
   "High Gloss Posters": "/images/home/DIAMOND236.jpg",
   "High Gloss 3D Emboss Poster Tiles": "/images/home/3D-3261.png",
   "High Gloss Plain & Glitter Poster": "/images/your-uploaded-glitter.jpg",
-  "Glitter Emboss": "/images/home/GE-1559.png",
+  "Glitter Emboss": "/images/home/GE-1553.png",
 
   "God GVT": "/images/home/gvt_poster.jpeg",
   "GOD picture": "/images/home/plain.jpg",
