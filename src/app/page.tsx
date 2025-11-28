@@ -12,11 +12,14 @@ import {
   Droplets,
   TrendingUp,
   Award,
+  Footprints, // New icon for steps/risers
+  Ruler, // New icon for precision
 } from "lucide-react";
 import { categories } from "@/data";
 import { HeroSlider } from "@/components/hero-slider";
 import { CategoryCarousel } from "@/components/category-carousel";
 import Image from "next/image";
+import { StepRiserShowcase } from "@/components/StepRiserShowcase";
 
 // --- Data for Balanced Sections (with new premium color palette) ---
 
@@ -63,6 +66,30 @@ const marbleAttributes = [
     icon: <Sparkles className="w-8 h-8 text-emerald-700" />,
     title: "Luminous Quality",
     desc: "Its inherent translucence interacts with light to create a unique and captivating glow.",
+  },
+];
+
+// New Data for Step & Riser Section
+const stepRiserAttributes = [
+  {
+    icon: <Footprints className="w-8 h-8 text-blue-700" />,
+    title: "Safety First Design",
+    desc: "Features like anti-slip grooves and finishes for maximum safety on every step.",
+  },
+  {
+    icon: <Ruler className="w-8 h-8 text-blue-700" />,
+    title: "Perfect Fit & Finish",
+    desc: "Available in precise dimensions and custom cuts to ensure seamless installation.",
+  },
+  {
+    icon: <Palette className="w-8 h-8 text-blue-700" />,
+    title: "Coordinating Colors",
+    desc: "Designed to perfectly match or complement your main floor and wall tiles.",
+  },
+  {
+    icon: <ShieldCheck className="w-8 h-8 text-blue-700" />,
+    title: "Extreme Durability",
+    desc: "Built to endure concentrated foot traffic and harsh cleaning agents.",
   },
 ];
 
@@ -115,8 +142,6 @@ export default function HomePage() {
       <HeroSlider />
 
       {/* --- Quick Navigation Carousels --- */}
-      {/* --- Quick Navigation Carousels --- */}
-
       <section className="bg-gradient-to-br from-slate-50 to-white py-28 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -163,7 +188,7 @@ export default function HomePage() {
                       three decades
                     </span>
                     , we have been the premier source for the world's most
-                    exquisite tiles, marbles, and roofing solutions.
+                    exquisite tiles, decorative marvels, and roofing solutions.
                   </p>
                 </div>
 
@@ -249,7 +274,7 @@ export default function HomePage() {
         </div>
       </section>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
-        {/* Tile Collections - Keep original height */}
+        {/* 1. Tile Collections */}
         <CategoryCarousel
           title="Tile Collections"
           subtitle="Explore our curated selections of ceramic and porcelain tiles."
@@ -258,15 +283,20 @@ export default function HomePage() {
           imageAspectRatio="aspect-[16/11]" // Original aspect ratio
         />
 
-        {/* Marble Varieties - Reduced height */}
+        {/* 2. NEW: Step and Riser Collection Section */}
+       <StepRiserShowcase />
+        {/* END NEW SECTION */}
+
+        {/* 3. Marble Varieties - Reduced height */}
         <CategoryCarousel
-          title="Marble Varieties"
+          title="Decorative Marvels"
           subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
           categories={categories.marvel}
           categoryType="marvel"
-          imageAspectRatio="aspect-[16/3]" // Shorter height (16:8 instead of 16:10)
+          imageAspectRatio="aspect-[16/4]" // Shorter height (16:8 instead of 16:10)
         />
       </section>
+       
 
       {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
       <section className="bg-slate-50 py-24">
