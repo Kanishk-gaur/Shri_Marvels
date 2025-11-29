@@ -4,23 +4,85 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, Info, Mail, LayoutGrid,  Layers3 } from "lucide-react";
+// Imported SlidersHorizontal for the filter icon
+import { Menu, X, Home, Info, Mail, LayoutGrid, Layers3, SlidersHorizontal, LucideIcon } from "lucide-react"; 
 // Import ProductFilter
 import { ProductFilter } from "@/components/product-filter";
 
-// Updated nav items including Step/Riser
-const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/about", label: "About", icon: Info },
-  { href: "/gallery", label: "Gallery", icon: LayoutGrid },
-  { href: "/contact", label: "Contact", icon: Mail },
-  { href: "/roof_tiles", label: "Roofing", icon: Home },
-  { href: "/step_riser", label: "Step/Riser", icon: Layers3 },
+// 1. Define the TypeScript types for your navigation items
+// Standard Link Item
+type NavLinkItem = {
+  href: string; // Must have href
+  label: string;
+  icon: LucideIcon;
+  type?: 'link'; // Optional discriminator
+};
+
+// Filter Placeholder Item
+type FilterItem = {
+  type: 'filter'; // Must have type 'filter'
+  label: string;
+  icon: LucideIcon;
+  key: string; // Used for unique key prop
+};
+
+// Union Type: A nav item is either a standard link or a filter placeholder
+type NavItem = NavLinkItem | FilterItem;
+
+
+// Updated nav items: ProductFilter is now a conceptual item in the list
+// We use the new NavItem type for the array
+const navItems: NavItem[] = [
+  { href: "/", label: "Home", icon: Home, type: 'link' },
+  // Placeholder item for ProductFilter
+  { type: "filter", label: "Filter Products", icon: SlidersHorizontal, key: "product_filter" }, 
+  { href: "/gallery", label: "Gallery", icon: LayoutGrid, type: 'link' },
+  { href: "/roof_tiles", label: "Roofing", icon: Home, type: 'link' },
+  { href: "/step_riser", label: "Step/Riser", icon: Layers3, type: 'link' },
+  { href: "/contact", label: "Contact", icon: Mail, type: 'link' },
 ];
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  const closeMobileMenu = () => setIsOpen(false);
+
+  // Function to render a single nav item or the ProductFilter
+  // We use the NavItem type for the item parameter: (item: NavItem)
+  const renderNavItem = (item: NavItem) => {
+    // Check for the filter item type
+    if (item.type === "filter") {
+      // TypeScript knows this is a FilterItem, so it has 'key'
+      return (
+        // The ProductFilter component itself handles its own button/link-like appearance
+        // On mobile, clicking the filter button should close the menu
+        <div key={item.key} onClick={closeMobileMenu}>
+          <ProductFilter buttonText={item.label} />
+        </div>
+      );
+    }
+
+    // TypeScript knows this is a NavLinkItem, so it has 'href'
+    // Render a standard Link item
+    const Icon = item.icon;
+    const isActive = pathname === item.href;
+    
+    return (
+      // 2. The type is now correct because we only pass items with 'href' to Link
+      <Link key={item.href} href={item.href} onClick={closeMobileMenu}> 
+        <motion.div
+          className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors 
+            ${isActive ? "bg-white/20 text-white" : "text-white/70 hover:text-white hover:bg-white/10"}
+          `}
+          whileHover={{ x: 5 }}
+        >
+          <Icon className="w-5 h-5" />
+          <span>{item.label}</span>
+        </motion.div>
+      </Link>
+    );
+  };
 
   return (
     <>
@@ -45,9 +107,18 @@ export function Navigation() {
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-4">
-              {/* Added the ProductFilter to the desktop menu */}
-              <ProductFilter buttonText="Filter Products" />
               {navItems.map((item) => {
+                // If the item is the filter, render the ProductFilter component 
+                if (item.type === "filter") {
+                  return (
+                    <div key={item.key}>
+                      <ProductFilter buttonText={item.label} />
+                    </div>
+                  );
+                }
+
+                // Otherwise, render a standard desktop link
+                // TypeScript now knows 'item' has 'href' and 'icon' here.
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
                 return (
@@ -84,7 +155,7 @@ export function Navigation() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="fixed inset-0 bg-black/50" onClick={() => setIsOpen(false)} />
+            <div className="fixed inset-0 bg-black/50" onClick={closeMobileMenu} />
             <motion.div
               className="fixed top-16 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-white/10"
               initial={{ y: -100 }}
@@ -92,27 +163,8 @@ export function Navigation() {
               exit={{ y: -100 }}
             >
               <div className="px-4 py-6 space-y-4">
-                {/* Added the ProductFilter to the mobile menu */}
-                <div onClick={() => setIsOpen(false)}>
-                    <ProductFilter buttonText="Filter Products" />
-                </div>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
-                      <motion.div
-                        className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                          isActive ? "bg-white/20 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
-                        }`}
-                        whileHover={{ x: 5 }}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span>{item.label}</span>
-                      </motion.div>
-                    </Link>
-                  );
-                })}
+                {/* Mobile menu items using the renderNavItem function */}
+                {navItems.map((item) => renderNavItem(item))}
               </div>
             </motion.div>
           </motion.div>

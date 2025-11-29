@@ -95,7 +95,8 @@ export function StepRiserShowcase() {
         
         {/* Left Column: Asymmetrical Three Images */}
         <motion.div
-          className="col-span-1 lg:col-span-2 h-[550px] md:h-[650px] lg:h-[550px]" 
+          // Height modified in previous step
+          className="col-span-1 lg:col-span-2 h-[300px] md:h-[450px] lg:h-[550px]" 
           variants={staggerVariants}
           initial="hidden"
           whileInView="visible"
@@ -119,8 +120,11 @@ export function StepRiserShowcase() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 40vw"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-                <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md">
-                  <span className="text-sm font-semibold text-slate-800">{item.title}</span>
+                
+                {/* 🛑 MODIFIED THIS LINE: Added 'hidden md:block' to hide the title on mobile */}
+                <div className="hidden md:block absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md">
+                  {/* Text size reduction (from previous step) is kept for consistency on md+ screens */}
+                  <span className="text-xs md:text-sm font-semibold text-slate-800">{item.title}</span>
                 </div>
               </motion.div>
             ))}
