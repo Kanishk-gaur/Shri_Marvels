@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from "react"; // <-- ADDED: Suspense import
+import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from "react"; 
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Filter, X } from "lucide-react";
 import GalleryCard from "@/components/gallery-card";
-import { allProducts, categories, Product } from "@/data"; // <-- FIX: Added Product type here
+import { allProducts, categories, Product } from "@/data"; 
 import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
-import { getOriginalSizeFilterValues } from "@/data/utils"; // Import the utility for correct filtering
+import { getOriginalSizeFilterValues } from "@/data/utils"; 
 
 // --- START: Lookup Map based on processed data (KEEP) ---
 const subcategoryNameMap = new Map<string, string>();
@@ -31,8 +31,6 @@ const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(
 
 // ---------------------------------------------------------------------
 // --- START: Size Mapping (KEEP) ---
-// Note: Keeping a local copy of sizeDisplayNames for the UI grouping logic below
-// but the core filtering logic uses the dedicated utility in src/data/utils.ts
 const sizeDisplayNames: Record<string, string> = { 
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
@@ -352,8 +350,10 @@ export default function GalleryPage() {
           </div>
         </motion.div>
 
-        <div className="max-w-screen-2xl mx-auto px-6 py-8">
-          <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-zinc-200/80 mb-8">
+        {/* MODIFIED: Outer container now has mobile padding px-4 (16px) */}
+        <div className="max-w-screen-2xl mx-auto py-8 px-4 sm:px-6">
+          {/* MODIFIED: Filter bar removed mobile margin (mx-4) to inherit parent px-4 */}
+          <div className="sticky top-16 z-40 bg-orange-50/80 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-zinc-200/80 mb-8 sm:mx-0">
             <div className="flex flex-col lg:flex-row lg:items-center lg:gap-6">
               <div className="flex items-center flex-wrap gap-4 mb-4 lg:mb-0 lg:flex-nowrap">
                 {/* Main Category Buttons - Now controlling the URL state */}
@@ -430,7 +430,8 @@ export default function GalleryPage() {
               {hasProducts ? (
                 visibleGroups.map((groupKey, groupIndex) => (
                   <div key={groupKey} className="mb-12">
-                    <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
+                    {/* MODIFIED: Heading removed mobile margin (mx-4) to inherit parent px-4 */}
+                    <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300 sm:mx-0">
                       {/* Display logic: uses the raw size to look up the display size for the heading */}
                       {(() => {
                         const match = groupKey.match(/^(.*?) \((.*?)\"?\)$/);
@@ -444,15 +445,18 @@ export default function GalleryPage() {
                         return `${subcategory} (${displaySize})`;
                       })()}
                     </h2>
-                    <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense">
-                      {Array.isArray(groupedProducts[groupKey]) &&
+                    
+                    {/* NEW: Grid container now has the standard negative margin compensation for mobile. 
+                        -mx-2 (8px) counters the half-gap of gap-4 (16px) relative to parent px-4 (16px). */}
+                    <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense -mx-2 sm:mx-0">
+                        {Array.isArray(groupedProducts[groupKey]) &&
                         groupedProducts[groupKey].map((product, index) => (
-                          <GalleryCard
+                            <GalleryCard
                             key={`${product.id}-${index}`}
                             product={product}
                             index={index}
                             priority={groupIndex === 0 && index < 10}
-                          />
+                            />
                         ))}
                     </div>
                   </div>
