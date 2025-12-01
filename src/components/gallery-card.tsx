@@ -42,7 +42,7 @@ export default function GalleryCard({
       break;
     case "400x600 mm (16x24 inch)":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-8 lg:row-span-19";
+        "col-span-12 row-span-8 md:col-span-3 md:row-span-6 lg:col-span-8 lg:row-span-18";
       break;
     case "(LUSTER)12x24":
       gridClass =
@@ -54,11 +54,11 @@ export default function GalleryCard({
       break;
     case "(Sugar)300x600 mm (11.8x23.6 inch)":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14";
       break;
     case "(GLUE)300x600 mm (11.8x23.6 inch)":
-      gridClass =
-        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+       gridClass =
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14";
       break;
     case "300x63 mm (12x2.5 inch)":
       gridClass =
@@ -66,19 +66,19 @@ export default function GalleryCard({
       break;
     case "Polishing Series 300x600 mm (12x24 inch)":
       gridClass =
-        "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14";
       break;
     case "600x1200 mm (24x48 inch)":
       gridClass =
-        "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-33";
+        "col-span-12 row-span-25 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-32";
       break;
     case "300x600 mm (11.8x23.6 inch)":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14";
       break;
     case "300x450 mm (11.8x17.7 inch)":
       gridClass =
-        "col-span-12 row-span-11 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-17";
+        "col-span-12 row-span-10 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-16";
       break;
     case "48x600 mm (1.89x23.6 inch)":
       gridClass =
@@ -102,35 +102,35 @@ export default function GalleryCard({
       break;
     case "10x600 mm (0.39x23.6 inch)":
       gridClass =
-        "col-span-24 row-span-5 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-6";
+        "col-span-24 row-span-4 md:col-span-2 md:row-span-12 lg:col-span-8 lg:row-span-4";
       break;
     case "900x600 mm":
       gridClass =
-        "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
+        "col-span-24 row-span-18 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-23";
       break;
     case "12x8, 18x12, 24x18, 2x2, 3x2, 4x2":
       gridClass =
-        "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
+        "col-span-24 row-span-18 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-23";
       break;
     case "900x600 mm (36x24 inch)":
       gridClass =
-        "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
+        "col-span-24 row-span-18 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-23";
       break;
     case "24x24 inch":
       gridClass =
-        "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+        "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-25";
       break;
     case "600x600 mm":
       gridClass =
-        "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+        "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-25";
       break;
     case "600x600 mm (23.6x23.6 inch)":
       gridClass =
-        "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+        "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-25";
       break;
     case "600x900 mm":
       gridClass =
-        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-26";
+        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-25";
       break;
     case "8x12, 12x18, 18x24, 2x2, 2x3, 2x4":
       gridClass =
@@ -138,15 +138,15 @@ export default function GalleryCard({
       break;
     case "600x900 mm (24x36 inch)":
       gridClass =
-        "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-37";
+        "col-span-12 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-36";
       break;
     case "1200x600 mm":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-19";
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-18";
       break;
     case "1200x600 mm (48x24 inch)":
       gridClass =
-        "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-19";
+        "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-18";
       break;
     case "20x1200 mm (0.79x47.2 inch)":
       gridClass =
@@ -154,7 +154,7 @@ export default function GalleryCard({
       break;
     case "12x600 mm (0.47x23.6 inch)":
       gridClass =
-        "col-span-24 row-span-5 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-5";
+        "col-span-24 row-span-4 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-4";
       break;
     case "12x1200 mm (0.47x47.2 inch)":
       gridClass =
@@ -171,11 +171,11 @@ export default function GalleryCard({
       break;
     case "600x600 mm (24x24 inch)":
       gridClass =
-        "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+        "col-span-12 row-span-13 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-25";
       break;
     case "1200x1200 mm (48x48 inch)":
       gridClass =
-        "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
+        "col-span-12 row-span-13 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-25";
       break;
     case "4x2 in":
       gridClass =
@@ -189,7 +189,7 @@ export default function GalleryCard({
     case "12x8 in":
       // Was 4 -> 8
       gridClass =
-        "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-13";
+        "col-span-8 row-span-7 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-12";
       break;
     case "(God)6x36":
       // Was 6 -> 12
@@ -234,7 +234,7 @@ export default function GalleryCard({
     case "18x12 inch":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-11 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-13";
+        "col-span-12 row-span-10 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-12";
       break;
     case "12x18 mm":
       // Was 6 -> 12
@@ -254,7 +254,7 @@ export default function GalleryCard({
     case "8x12 in":
       // Was 3 -> 6
       gridClass =
-        "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-20";
+        "col-span-6 row-span-10 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-19";
       break;
     case "12x18":
       // Was 6 -> 12
@@ -264,7 +264,7 @@ export default function GalleryCard({
     case "8x6":
       // Was 2 -> 4
       gridClass =
-        "col-span-4 row-span-8 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
+        "col-span-4 row-span-7 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-25";
       break;
     case "20x600":
       gridClass =
@@ -291,12 +291,12 @@ export default function GalleryCard({
     case "6x48":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-5 md:col-span-6 md:row-span-6 lg:col-span-12 lg:row-span-8";
+        "col-span-12 row-span-4 md:col-span-6 md:row-span-6 lg:col-span-12 lg:row-span-7";
       break;
     case "4x48":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-5 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-7";
+        "col-span-12 row-span-4 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-6";
       break;
 
     case "4x2":
@@ -317,7 +317,7 @@ export default function GalleryCard({
     case "4x6":
       // Was 16 -> 32 (Note: this might be too wide, check if 32 is intended or if you need full width 'col-span-24')
       gridClass =
-        "col-span-12 row-span-10 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
+        "col-span-12 row-span-10 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-17";
       break;
     case "4x4":
       // Was 6 -> 12
@@ -331,15 +331,15 @@ export default function GalleryCard({
       break;
     case "24x4":
       gridClass =
-        "col-span-24 row-span-7 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-7";
+        "col-span-24 row-span-5 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-6";
       break;
     case "24x2.5":
       gridClass =
-        "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-6";
+        "col-span-24 row-span-5 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-5";
       break;
     case "24x2":
       gridClass =
-        "col-span-24 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-6";
+        "col-span-24 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-5";
       break;
     case "12x2.5":
       // Was 6 -> 12
@@ -349,7 +349,7 @@ export default function GalleryCard({
     case "24x1":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-5";
+        "col-span-24 row-span-4 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-4";
       break;
     case "6x6":
       // Was 6 -> 12
@@ -384,12 +384,12 @@ export default function GalleryCard({
     case "200x300 mm (8x12 inch)":
       // Was 6 -> 12
       gridClass =
-        "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
+        "col-span-6 row-span-10 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-25";
       break;
     case "2x3":
       // Was 6 -> 12
       gridClass =
-        "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
+        "col-span-6 row-span-10 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-25";
       break;
     case "6x3":
       // Was 6 -> 12
@@ -409,12 +409,12 @@ export default function GalleryCard({
     case "300x200 mm (12x8 inch)":
       // Was 4 -> 8
       gridClass =
-        "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
+        "col-span-8 row-span-7 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-17";
       break;
     case "3x2":
       // Was 4 -> 8
       gridClass =
-        "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
+        "col-span-8 row-span-7 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-17";
       break;
     case "6x8":
       // Was 6 -> 12
@@ -424,7 +424,7 @@ export default function GalleryCard({
     case "24x3":
       // Was 6 -> 12
       gridClass =
-        "col-span-12 row-span-5 md:col-span-6 md:row-span-4 lg:col-span-6 lg:row-span-6";
+        "col-span-12 row-span-4 md:col-span-6 md:row-span-4 lg:col-span-6 lg:row-span-6";
       break;
     default:
       // Was 6 -> 12
