@@ -55,7 +55,7 @@ export function CategoryCarousel({
           const nextPage = (prevPage + 1) % totalPages;
           return nextPage;
         });
-      }, 3000); // Scroll every 2000 milliseconds (2 seconds)
+      }, 7000); // Scroll every 2000 milliseconds (2 seconds)
 
       // Cleanup function: Clear the interval when the component unmounts or dependencies change
       return () => clearInterval(scrollInterval);

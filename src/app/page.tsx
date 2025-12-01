@@ -331,7 +331,7 @@ export default function HomePage() {
                   harmony of imaginative design and exceptional craftsmanship.
                 </p>
                 <Link
-                  href="/tiles"
+                  href="/gallery?category=tiles"
                   className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
                   Explore Decorative Tiles →
@@ -424,7 +424,7 @@ export default function HomePage() {
                   property.
                 </p>
                 <Link
-                  href="/marble"
+                  href="/gallery?category=marvel"
                   className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
                   Discover Decorative Marvels →
