@@ -95,10 +95,11 @@ export function Navigation() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main wrapper maintains standard responsiveness */}
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8"> 
           <div className="flex items-center justify-between h-16 w-full">
-            {/* Logo */}
-            <div className="flex items-center"> 
+            {/* Logo - INCREASED MARGINS: ml-8 sm:ml-16 lg:ml-24 */}
+            <div className="flex items-center ml-8 sm:ml-16 lg:ml-24"> 
               <Link href="/">
                 <motion.div
                   className="flex items-center"
@@ -137,8 +138,8 @@ export function Navigation() {
 
             {/* Navigation Items */}
             <div className="flex items-center">
-              {/* Desktop Menu */}
-              <div className="hidden md:flex items-center space-x-4">
+              {/* Desktop Menu - INCREASED MARGINS: mr-8 sm:mr-16 lg:mr-24 */}
+              <div className="hidden md:flex items-center space-x-4 mr-8 sm:mr-16 lg:mr-24">
                 {navItems.map((item) => {
                   if (item.type === "filter") {
                     return (
@@ -169,7 +170,7 @@ export function Navigation() {
                 })}
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu Button - Removed redundant margin since the menu items now have an outer margin */}
               <button
                 className="md:hidden text-white ml-4 mr-4" 
                 onClick={() => setIsOpen(!isOpen)}
