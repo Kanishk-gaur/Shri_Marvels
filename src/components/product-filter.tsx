@@ -1,3 +1,5 @@
+// kanishk-gaur/shri_marvels/Shri_Marvels-b0d9b5cd02205b0339a7c9359697b7b2da2a2db0/src/components/product-filter.tsx
+
 "use client";
 
 import * as React from "react";
@@ -22,6 +24,7 @@ type SubcategoryWithMainCategory = {
 
 interface ProductFilterProps {
   buttonText?: string;
+  onFilterSelect?: () => void; 
 }
 
 const ITEM_HEIGHT = 40;
@@ -60,6 +63,7 @@ const priorityOrder: Record<string, number> ={
 
 export function ProductFilter({
   buttonText = "Select a Product",
+  onFilterSelect,
 }: ProductFilterProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -117,6 +121,11 @@ export function ProductFilter({
       // Navigate to /gallery with all filter parameters
       router.push(`/gallery?${params.toString()}`);
       setOpen(false);
+      
+      // Call the optional callback to signal selection
+      if (onFilterSelect) {
+        onFilterSelect(); 
+      }
       
       // Reset the local state after navigation
       setActiveSubcategory(null);
@@ -182,7 +191,8 @@ export function ProductFilter({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0 bg-white border-slate-200 shadow-xl rounded-lg"
+        // FIX: Increased z-index from z-50 to z-[56] to be above the mobile navigation menu (z-[55])
+        className="w-[var(--radix-popover-trigger-width)] p-0 bg-white border-slate-200 shadow-xl rounded-lg z-[56]"
         align="start"
       >
         <motion.div

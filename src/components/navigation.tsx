@@ -1,3 +1,5 @@
+// src/components/navigation.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -56,7 +58,7 @@ export function Navigation() {
   const renderNavItem = (item: NavItem) => {
     if (item.type === "filter") {
       return (
-        <div key={item.key} onClick={closeMobileMenu}>
+        <div key={item.key}> 
           <ProductFilter buttonText={item.label} />
         </div>
       );
@@ -88,15 +90,15 @@ export function Navigation() {
     <>
       {/* Desktop Navigation */}
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10"
+        className="fixed top-0 left-0 right-0 z-[60] bg-black/20 backdrop-blur-md border-b border-white/10"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 w-full">
-            {/* Logo - Shifted MORE right */}
-            <div className="flex items-center pl-8 md:pl-16 lg:pl-24">
+            {/* Logo */}
+            <div className="flex items-center"> 
               <Link href="/">
                 <motion.div
                   className="flex items-center"
@@ -113,10 +115,10 @@ export function Navigation() {
                       priority
                     />
                   </div>
-                  <div className="hidden sm:flex flex-col items-center justify-center ml-4">
+                  <div className="hidden sm:flex flex-col items-center justify-center ml-4 flex-shrink min-w-0">
                     <motion.span
                       className="text-2xl font-extrabold text-[#A0886A] uppercase tracking-wider 
-                   drop-shadow-[0_4px_3px_rgba(0,0,0,0.4)] leading-none text-center"
+                   drop-shadow-[0_4px_3px_rgba(0,0,0,0.4)] leading-none text-center truncate" 
                       style={{
                         textShadow:
                           "0 1px 0 #5B4832, 0 2px 0 #5B4832, 0 3px 0 #5B4832, 0 4px 0 #5B4832, 0 5px 4px rgba(0,0,0,0.5)",
@@ -133,8 +135,8 @@ export function Navigation() {
               </Link>
             </div>
 
-            {/* Navigation Items - Shifted MORE left */}
-            <div className="flex items-center pr-8 md:pr-16 lg:pr-24">
+            {/* Navigation Items */}
+            <div className="flex items-center">
               {/* Desktop Menu */}
               <div className="hidden md:flex items-center space-x-4">
                 {navItems.map((item) => {
@@ -169,7 +171,7 @@ export function Navigation() {
 
               {/* Mobile Menu Button */}
               <button
-                className="md:hidden text-white ml-4"
+                className="md:hidden text-white ml-4 mr-4" 
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {isOpen ? (
@@ -187,7 +189,7 @@ export function Navigation() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-40 md:hidden"
+            className="fixed inset-0 z-[55] md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -197,7 +199,8 @@ export function Navigation() {
               onClick={closeMobileMenu}
             />
             <motion.div
-              className="fixed top-16 left-0 right-0 bg-black/90 backdrop-blur-md border-b border-white/10"
+              // FIX: Changed right-0 to left-0 to align the reduced-width menu to the left
+              className="fixed top-16 left-0 w-3/4 bg-black/90 backdrop-blur-md border-b border-white/10"
               initial={{ y: -100 }}
               animate={{ y: 0 }}
               exit={{ y: -100 }}
