@@ -214,8 +214,8 @@ const priorityOrder: Record<string, number> = {
   Rangoli: 26,
   "Steel Welcome": 27,
   "composite riser": 28,
-  "GLITTER BRASS PATTI": 29,
-  Welcome: 30,
+  "GLITTER BRASS PATTI": 30,
+  Welcome: 29,
 };
 
 export const generateCategories = (products: Product[]) => {
