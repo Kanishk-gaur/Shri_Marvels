@@ -232,7 +232,7 @@ export default function HomePage() {
               >
                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl max-w-md mx-auto lg:max-w-none">
                   <Image
-                    src="/images/home/logo.jpeg"
+                    src="/images/home/logo2.png"
                     alt="Architect reviewing tile samples"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -240,9 +240,6 @@ export default function HomePage() {
                   />
                   {/* Enhanced overlay with gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-
-                  {/* Floating stats badge */}
-                  <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg"></div>
                 </div>
 
                 {/* Decorative element - hidden on mobile */}
