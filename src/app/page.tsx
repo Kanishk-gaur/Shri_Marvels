@@ -248,7 +248,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
+        <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
           {/* 1. Tile Collections */}
           <CategoryCarousel
             title="Tile Collections"
@@ -260,7 +260,8 @@ export default function HomePage() {
           />
 
           {/* 2. NEW: Step and Riser Collection Section */}
-          <StepRiserShowcase />
+           <StepRiserShowcase />
+
           {/* END NEW SECTION */}
 
           {/* 3. Marble Varieties - Reduced height */}
@@ -273,7 +274,7 @@ export default function HomePage() {
             isPaginated={false}
           />
         </section>
-
+       
         {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
         <section className="bg-slate-50 py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

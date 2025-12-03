@@ -1,4 +1,4 @@
-// components/StepRiserShowcase.jsx - Three-Image Asymmetrical Layout
+// components/StepRiserShowcase.jsx - Asymmetrical Layout with Image Below
 
 "use client";
 
@@ -37,6 +37,13 @@ const stepRiserImages = [
   },
 ];
 
+// NEW IMAGE DATA for the horizontal slot (replacing the right panel)
+const bottomImage = {
+  src: "/images/step/71.png", // Using a new image source for the full-width banner
+  alt: "Wide shot of a beautifully tiled staircase leading up",
+  title: "A Step Above: Our Commitment to Quality",
+};
+
 const stepRiserHighlights = [
   {
     icon: <Footprints className="w-5 h-5 text-blue-700" />,
@@ -73,102 +80,101 @@ export function StepRiserShowcase() {
   };
 
   return (
-    <div className="space-y-12">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6 }}
-        className="text-center"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-          Integrated <span className="text-blue-700">Step & Riser</span> Solutions
-        </h2>
-        <p className="mt-4 text-xl text-slate-600 font-light max-w-3xl mx-auto">
-          Elevate every transition. Engineered for safety, defined by precision, and perfected for any design aesthetic.
-        </p>
-      </motion.div>
-
-      {/* Main Content Grid: Images on Left, Highlights/CTA on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-        
-        {/* Left Column: Asymmetrical Three Images */}
+    // 🛑 WRAPPED ENTIRE CONTENT IN A MAX-WIDTH CONTAINER
+    <div className="max-w-[1400px] mx-auto px-4 font-[Inter]">
+      <div className="space-y-12">
+        {/* Header */}
         <motion.div
-          // Height modified in previous step
-          className="col-span-1 lg:col-span-2 h-[300px] md:h-[450px] lg:h-[550px]" 
-          variants={staggerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
         >
-          {/* ASYMMETRICAL 3x3 GRID LAYOUT */}
-          <div className="grid grid-cols-3 grid-rows-3 gap-4 h-full"> 
-            
-            {/* Map through all three images */}
-            {stepRiserImages.map((item, index) => (
-              <motion.div
-                key={item.title}
-                className={`relative rounded-xl overflow-hidden shadow-xl group ${item.class}`}
-                variants={itemVariants}
-              >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 40vw"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-                
-                {/* 🛑 MODIFIED THIS LINE: Added 'hidden md:block' to hide the title on mobile */}
-                <div className="hidden md:block absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md">
-                  {/* Text size reduction (from previous step) is kept for consistency on md+ screens */}
-                  <span className="text-xs md:text-sm font-semibold text-slate-800">{item.title}</span>
-                </div>
-              </motion.div>
-            ))}
-            
-            {/* The empty/spacer div is REMOVED */}
-          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
+            Integrated <span className="text-blue-700">Step & Riser</span> Solutions
+          </h2>
+          <p className="mt-4 text-xl text-slate-600 font-light max-w-3xl mx-auto">
+            Elevate every transition. Engineered for safety, defined by precision, and perfected for any design aesthetic.
+          </p>
         </motion.div>
 
-        {/* Right Column: Key Highlights & CTA */}
-        <motion.div
-          className="col-span-1 flex flex-col justify-between p-6 bg-slate-50 border border-blue-100 rounded-xl shadow-2xl h-full"
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="space-y-8">
-            <h3 className="text-3xl font-extrabold text-slate-900 border-b pb-4 border-blue-200">
-              The Professional Advantage
-            </h3>
-            
-            <div className="grid grid-cols-2 gap-x-4 gap-y-6"> 
-              {stepRiserHighlights.map((highlight, index) => (
-                <div key={index} className="flex flex-col gap-2 p-2 rounded-lg transition-all duration-200 hover:bg-blue-100/50">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-shrink-0 bg-blue-200 p-2 rounded-full"> 
-                        {highlight.icon}
-                    </div>
-                    <span className="font-bold text-slate-900 text-base"> 
-                      {highlight.title}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Main Content Grid: Images (Now Full Width) */}
+        <div className="grid grid-cols-1 gap-6"> {/* Reduced gap from 8 to 6 */}
 
-          <Link
-            href="/step_riser"
-            className="mt-8 block w-full text-center bg-blue-800 text-white font-bold tracking-wider px-10 py-4 rounded-full hover:bg-blue-900 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-blue-500/50"
+          {/* TOP: Asymmetrical Three Images */}
+          <motion.div
+            // ✅ INCREASED HEIGHT: From h-[350px] md:h-[500px] lg:h-[600px] to 400px, 600px, 750px
+            className="h-[400px] md:h-[600px] lg:h-[750px] w-full"
+            variants={staggerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
           >
-            Explore the Collection →
-          </Link>
-        </motion.div>
+            {/* ASYMMETRICAL 3x3 GRID LAYOUT */}
+            <div className="grid grid-cols-3 grid-rows-3 gap-4 h-full">
+
+              {/* Map through all three images */}
+              {stepRiserImages.map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  className={`relative rounded-xl overflow-hidden shadow-xl group ${item.class}`}
+                  variants={itemVariants}
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 90vw"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+
+                  <div className="hidden md:block absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md">
+                    <span className="text-xs md:text-sm font-semibold text-slate-800">{item.title}</span>
+                  </div>
+                </motion.div>
+              ))}
+
+            </div>
+          </motion.div>
+
+
+
+          {/* BOTTOM: Key Highlights & CTA (The "Professional Advantage" section, now horizontal and below the images) */}
+          <motion.div
+            className="p-6 bg-white border border-blue-100 rounded-xl shadow-2xl w-full" // Reduced p-8 to p-6
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-6"> {/* Reduced spacing */}
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-4 flex-grow"> {/* Reduced spacing */}
+                {stepRiserHighlights.map((highlight, index) => (
+                  <div key={index} className="flex flex-col gap-1 p-1 rounded-lg transition-all duration-200 items-start hover:bg-blue-100/50"> {/* Reduced padding */}
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex-shrink-0 bg-blue-200 p-1.5 rounded-full"> {/* Reduced padding */}
+                          {highlight.icon}
+                      </div>
+                      <span className="font-bold text-slate-900 text-sm md:text-base">
+                        {highlight.title}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/step_riser"
+                className="mt-4 lg:mt-0 block text-center bg-blue-800 text-white font-bold tracking-wider px-5 py-2.5 rounded-full hover:bg-blue-900 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/50 flex-shrink-0" // Reduced padding
+              >
+                Explore Collection →
+              </Link>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
