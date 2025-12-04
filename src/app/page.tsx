@@ -267,7 +267,7 @@ export default function HomePage() {
               >
                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl max-w-md mx-auto lg:max-w-none">
                   <Image
-                    src="/images/home/logo2.png"
+                    src="/images/home/logo3.png"
                     alt="Architect reviewing tile samples"
                     fill
                     className="object-cover" // Removed transition and hover
@@ -379,7 +379,7 @@ export default function HomePage() {
           {/* 1. Tile Collections */}
           <div className="mb-32">
             <CategoryCarousel
-              title="Tile Collections"
+              title="Tiles Collection"
               subtitle="Explore our curated selections of ceramic and porcelain tiles."
               categories={filteredTileCategories}
               categoryType="tiles"
@@ -430,10 +430,10 @@ export default function HomePage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-                The Beauty of Decorative Marbels
+                The Beauty of Decorative Marbles
               </h2>
               <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-                Each piece of our decorative marbels is a story told by the
+                Each piece of our decorative marbles is a story told by the
                 earth, bringing unparalleled elegance and a sense of natural
                 wonder into your home.
               </p>
@@ -465,7 +465,7 @@ export default function HomePage() {
                   An Ode to Timeless Beauty
                 </h3>
                 <p className="text-slate-600 leading-relaxed mb-6">
-                  To choose a decorative marvel is to choose a piece of history.
+                  To choose a decorative marble is to choose a piece of history.
                   Its unique, organic patterns ensure that no two installations
                   are ever the same, creating a truly one-of-a-kind environment.
                   As a symbol of luxury and sophistication, it not only enhances
@@ -476,7 +476,7 @@ export default function HomePage() {
                   href="/gallery?category=marvel"
                   className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
-                  Discover Decorative Marbels →
+                  Discover Decorative Marbles →
                 </Link>
               </motion.div>
             </div>
@@ -584,7 +584,7 @@ export default function HomePage() {
               <p className="text-lg text-emerald-100 max-w-2xl mx-auto mb-10">
                 Your design journey starts here. Whether you&apos;re drawn to
                 the artistic flair of decorative tiles or the timeless elegance
-                of our decorative marbels, our collections are ready to bring
+                of our decorative marbles, our collections are ready to bring
                 your vision to life.
               </p>
 

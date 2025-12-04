@@ -12,7 +12,7 @@ const faqs = [
       {
         question: "What is Discover?",
         answer:
-          "Discover is a revolutionary platform that showcases digital collections through immersive 3D experiences. We specialize in presenting marvels and tiles with stunning visual detail and interactive features.",
+          "Discover is a revolutionary platform that showcases digital collections through immersive 3D experiences. We specialize in presenting marble and tiles with stunning visual detail and interactive features.",
       },
       {
         question: "How do I navigate the 3D collections?",
