@@ -415,21 +415,7 @@ export default function HomePage() {
           <div className="mb-32">
             <StepRiserShowcase />
           </div>
-
-          {/* 3. Marble Varieties */}
-          <div className="mb-1">
-            <CategoryCarousel
-              title="Decorative Marbles"
-              subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
-              categories={categories.marvel}
-              categoryType="marvel"
-              imageAspectRatio="aspect-[16/3]"
-              isPaginated={false}
-            />
-          </div>
-        </section>
-
-        {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
+           {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
         <section className="bg-white  relative overflow-hidden mb-20">
           <div aria-hidden="true" className="absolute inset-0 -z-10">
             <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
@@ -521,6 +507,21 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
+
+          {/* 3. Marble Varieties */}
+          <div className="mb-1">
+            <CategoryCarousel
+              title="Decorative Marbles"
+              subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
+              categories={categories.marvel}
+              categoryType="marvel"
+              imageAspectRatio="aspect-[16/3]"
+              isPaginated={false}
+            />
+          </div>
+        </section>
+
+       
 
         {/* --- Inspiration Gallery (Unified) --- */}
         <section className="bg-slate-50 py-24 mb-24">
