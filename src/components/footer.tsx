@@ -16,8 +16,8 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Discover
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-800 to-emerald-400 bg-clip-text text-transparent">
+              AGRAWAL CERAMICS
             </h3>
             <p className="text-white/70 text-sm">
               Explore extraordinary collections of marvels and tiles with stunning 3D previews and interactive
@@ -59,8 +59,8 @@ export function Footer() {
             <div className="space-y-2">
               {[
                 { href: "/", label: "Home" },
-                { href: "/marvel", label: "Marvel Collection" },
-                { href: "/tiles", label: "Tiles Collection" },
+                { href: "/gallery?category=marvel", label: "Marbel Collection" },
+                { href: "/gallery?category=tiles", label: "Tiles Collection" },
                 { href: "/about", label: "About Us" },
               ].map((link) => (
                 <Link key={link.href} href={link.href}>
@@ -113,15 +113,15 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-white/70 text-sm">
                 <Mail className="w-4 h-4" />
-                <span>hello@discover.com</span>
+                <span>contact@agrawalceramics.com</span>
               </div>
               <div className="flex items-center space-x-3 text-white/70 text-sm">
                 <Phone className="w-4 h-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>+91 7091833184</span>
               </div>
               <div className="flex items-center space-x-3 text-white/70 text-sm">
                 <MapPin className="w-4 h-4" />
-                <span>123 Innovation St, Tech City</span>
+                <span>8-A, National Highway, Gujarat 363642</span>
               </div>
             </div>
           </motion.div>

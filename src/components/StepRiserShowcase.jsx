@@ -37,13 +37,6 @@ const stepRiserImages = [
   },
 ];
 
-// NEW IMAGE DATA for the horizontal slot (replacing the right panel)
-const bottomImage = {
-  src: "/images/step/71.png", // Using a new image source for the full-width banner
-  alt: "Wide shot of a beautifully tiled staircase leading up",
-  title: "A Step Above: Our Commitment to Quality",
-};
-
 const stepRiserHighlights = [
   {
     icon: <Footprints className="w-5 h-5 text-blue-700" />,
@@ -81,7 +74,8 @@ export function StepRiserShowcase() {
 
   return (
     // 🛑 WRAPPED ENTIRE CONTENT IN A MAX-WIDTH CONTAINER
-    <div className="max-w-[1400px] mx-auto px-4 font-[Inter]">
+    // ADDED MARGINS: my-12 md:my-20 for top and bottom spacing
+    <div className="max-w-[1600px] mx-auto px-4 font-[Inter] my-20 md:my-20">
       <div className="space-y-12">
         {/* Header */}
         <motion.div
@@ -92,7 +86,7 @@ export function StepRiserShowcase() {
           className="text-center"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-            Integrated <span className="text-blue-700">Step & Riser</span> Solutions
+            Integrated <span className="text-emerald-700">Step & Riser</span> Solutions
           </h2>
           <p className="mt-4 text-xl text-slate-600 font-light max-w-3xl mx-auto">
             Elevate every transition. Engineered for safety, defined by precision, and perfected for any design aesthetic.
@@ -168,7 +162,7 @@ export function StepRiserShowcase() {
 
               <Link
                 href="/step_riser"
-                className="mt-4 lg:mt-0 block text-center bg-blue-800 text-white font-bold tracking-wider px-5 py-2.5 rounded-full hover:bg-blue-900 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-blue-500/50 flex-shrink-0" // Reduced padding
+               className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg" // Reduced padding
               >
                 Explore Collection →
               </Link>

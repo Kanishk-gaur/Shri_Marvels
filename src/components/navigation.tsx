@@ -104,25 +104,11 @@ export function Navigation() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="relative w-12 h-12">
-                    <Image
-                      src="/images/home/navlogo.png"
-                      alt="Agrawal Ceramics Logo"
-                      fill
-                      className="object-contain"
-                      sizes="48px"
-                      priority
-                    />
-                  </div>
+                  
                   <div className="hidden sm:flex flex-col items-center justify-center ml-4 flex-shrink min-w-0">
                     <motion.span
-                      className="text-2xl font-extrabold text-[#A0886A] uppercase tracking-wider 
-                   drop-shadow-[0_4px_3px_rgba(0,0,0,0.4)] leading-none text-center truncate" 
-                      style={{
-                        textShadow:
-                          "0 1px 0 #5B4832, 0 2px 0 #5B4832, 0 3px 0 #5B4832, 0 4px 0 #5B4832, 0 5px 4px rgba(0,0,0,0.5)",
-                      }}
-                      whileHover={{ color: "#C0A07B" }}
+                      className="text-2xl font-extrabold text-[#A0886A] uppercase tracking-wider" 
+                      whileHover={{ color: "#c9a819ff" }}
                     >
                       AGRAWAL CERAMICS
                     </motion.span>

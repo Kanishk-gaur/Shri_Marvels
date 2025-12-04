@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Suspense } from "react"; // <-- ADDED: Import Suspense
+import { Suspense } from "react";
 import {
   Sparkles,
   Gem,
@@ -21,6 +21,33 @@ import Image from "next/image";
 import { StepRiserShowcase } from "@/components/StepRiserShowcase";
 
 // --- Data for Balanced Sections (with new premium color palette) ---
+console.log("categories:", categories.tiles);
+
+// Define the IDs of the tile categories you want to show
+const selectedTileIds = [
+  "border-tiles",
+  "high-gloss-3d-emboss-poster-tiles",
+  "gvt-wall-&-floor-border-tiles",
+  "golden-&-silver-border-tiles",
+  "gvt-rangoli",
+  "kitchen-colorfull-poster",
+];
+
+// Filter tile categories - properly typed to avoid undefined
+const filteredTileCategories = selectedTileIds
+  .map((id) => categories.tiles.find((category) => category.id === id))
+  .filter(
+    (category): category is NonNullable<typeof category> =>
+      category !== undefined
+  );
+
+// If you need exactly 6 items but only have 5 in your list, add one more or modify the logic
+// For now, let's see what categories you actually have
+console.log(
+  "Available tile categories:",
+  categories.tiles.map((c) => c.id)
+);
+console.log("Filtered categories:", filteredTileCategories);
 
 const tileAttributes = [
   {
@@ -115,11 +142,18 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white antialiased">
       {/* WRAPPED ENTIRE CONTENT IN SUSPENSE TO PREVENT CSR BAILOUT ERROR */}
-      <Suspense fallback={<div className="p-20 text-center text-xl">Loading home page...</div>}>
-        <HeroSlider />
+      <Suspense
+        fallback={
+          <div className="p-20 text-center text-xl">Loading home page...</div>
+        }
+      >
+        {/* Hero Slider */}
+        <section className="mb-24">
+          <HeroSlider />
+        </section>
 
-        {/* --- Quick Navigation Carousels --- */}
-        <section className="bg-gradient-to-br from-slate-50 to-white py-28 relative overflow-hidden">
+        {/* Our Legacy Section */}
+        <section className="bg-gradient-to-br from-slate-50 to-white py-24 relative overflow-hidden mb-24">
           {/* Background decorative elements */}
           <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -146,7 +180,7 @@ export default function HomePage() {
                 <div className="space-y-4">
                   <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
                     Crafting Spaces of{" "}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-300 ">
                       Distinction
                     </span>
                   </h2>
@@ -165,7 +199,7 @@ export default function HomePage() {
                         three decades
                       </span>
                       , we have been the premier source for the **world&apos;s**
-                      most exquisite tiles, decorative marvels, and roofing
+                      most exquisite tiles, decorative marbles, and roofing
                       solutions.
                     </p>
                   </div>
@@ -206,7 +240,9 @@ export default function HomePage() {
                 {/* Trust indicators */}
                 <div className="flex items-center gap-6 pt-6 border-t border-slate-200">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-slate-900">5000+</div>
+                    <div className="text-2xl font-bold text-slate-900">
+                      5000+
+                    </div>
                     <div className="text-sm text-slate-600">Projects</div>
                   </div>
                   <div className="w-px h-8 bg-slate-300"></div>
@@ -228,14 +264,13 @@ export default function HomePage() {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.4 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
               >
                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl max-w-md mx-auto lg:max-w-none">
                   <Image
                     src="/images/home/logo2.png"
                     alt="Architect reviewing tile samples"
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover" // Removed transition and hover
                     priority
                   />
                   {/* Enhanced overlay with gradient */}
@@ -248,36 +283,10 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-20">
-          {/* 1. Tile Collections */}
-          <CategoryCarousel
-            title="Tile Collections"
-            subtitle="Explore our curated selections of ceramic and porcelain tiles."
-            categories={categories.tiles}
-            categoryType="tiles"
-            imageAspectRatio="aspect-[16/11]" // Original aspect ratio
-            isPaginated={true}
-          />
 
-          {/* 2. NEW: Step and Riser Collection Section */}
-           <StepRiserShowcase />
-
-          {/* END NEW SECTION */}
-
-          {/* 3. Marble Varieties - Reduced height */}
-          <CategoryCarousel
-            title="Decorative Marvels"
-            subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
-            categories={categories.marvel}
-            categoryType="marvel"
-            imageAspectRatio="aspect-[16/3]" // Shorter height (16:8 instead of 16:10)
-            isPaginated={false}
-          />
-        </section>
-       
         {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
-        <section className="bg-slate-50 py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-slate-50 py-24 ">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <motion.div
               className="text-center mb-16"
@@ -324,9 +333,10 @@ export default function HomePage() {
                 <p className="text-slate-600 leading-relaxed mb-6">
                   Decorative tiles are the soul of bespoke interiors. From bold,
                   graphic patterns that make a statement to subtle, intricate
-                  designs that add a touch of elegance, our collection is curated
-                  to bring every unique vision to life. Discover the perfect
-                  harmony of imaginative design and exceptional craftsmanship.
+                  designs that add a touch of elegance, our collection is
+                  curated to bring every unique vision to life. Discover the
+                  perfect harmony of imaginative design and exceptional
+                  craftsmanship.
                 </p>
                 <Link
                   href="/gallery?category=tiles"
@@ -364,12 +374,67 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Category Collections Section */}
+        <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-24 mb-24">
+          {/* 1. Tile Collections */}
+          <div className="mb-32">
+            <CategoryCarousel
+              title="Tile Collections"
+              subtitle="Explore our curated selections of ceramic and porcelain tiles."
+              categories={filteredTileCategories}
+              categoryType="tiles"
+              imageAspectRatio="aspect-[24/13]"
+              isPaginated={false}
+              displayMode="tile-grid"
+            />
+
+            <div className="flex justify-center mt-8">
+              <Link
+                href="/gallery?category=tiles"
+                className="inline-flex items-center gap-2 bg-emerald-50 border-2 border-emerald-200 text-emerald-700 font-semibold px-6 py-3 hover:bg-emerald-100 hover:border-emerald-300 transition-all duration-300 transform hover:scale-105 shadow-sm"
+              >
+                <span>View all Tiles</span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* 2. NEW: Step and Riser Collection Section */}
+          <div className="mb-32">
+            <StepRiserShowcase />
+          </div>
+
+          {/* 3. Marble Varieties */}
+          <div className="mb-1">
+            <CategoryCarousel
+              title="Decorative Marbles"
+              subtitle="Discover the unparalleled beauty of natural stone from the world's finest quarries."
+              categories={categories.marvel}
+              categoryType="marvel"
+              imageAspectRatio="aspect-[16/3]"
+              isPaginated={false}
+            />
+          </div>
+        </section>
+
         {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
-        <section className="bg-white py-24 relative overflow-hidden">
+        <section className="bg-white  relative overflow-hidden mb-20">
           <div aria-hidden="true" className="absolute inset-0 -z-10">
             <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <motion.div
               className="text-center mb-16"
@@ -379,12 +444,12 @@ export default function HomePage() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-                The Beauty of Decorative Marvels
+                The Beauty of Decorative Marbels
               </h2>
               <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-                Each piece of our decorative marvels is a story told by the earth,
-                bringing unparalleled elegance and a sense of natural wonder into
-                your home.
+                Each piece of our decorative marbels is a story told by the
+                earth, bringing unparalleled elegance and a sense of natural
+                wonder into your home.
               </p>
             </motion.div>
 
@@ -418,14 +483,14 @@ export default function HomePage() {
                   Its unique, organic patterns ensure that no two installations
                   are ever the same, creating a truly one-of-a-kind environment.
                   As a symbol of luxury and sophistication, it not only enhances
-                  your daily life but also adds significant, lasting value to your
-                  property.
+                  your daily life but also adds significant, lasting value to
+                  your property.
                 </p>
                 <Link
                   href="/gallery?category=marvel"
                   className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
-                  Discover Decorative Marvels →
+                  Discover Decorative Marbels →
                 </Link>
               </motion.div>
             </div>
@@ -458,8 +523,8 @@ export default function HomePage() {
         </section>
 
         {/* --- Inspiration Gallery (Unified) --- */}
-        <section className="bg-slate-50 py-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="bg-slate-50 py-24 mb-24">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
                 Your Vision, Realized
@@ -516,10 +581,10 @@ export default function HomePage() {
                 Ready to Create a Timeless Space?
               </h2>
               <p className="text-lg text-emerald-100 max-w-2xl mx-auto mb-10">
-                Your design journey starts here. Whether you&apos;re drawn to the
-                artistic flair of decorative tiles or the timeless elegance of our
-                decorative marvels, our collections are ready to bring your vision
-                to life.
+                Your design journey starts here. Whether you&apos;re drawn to
+                the artistic flair of decorative tiles or the timeless elegance
+                of our decorative marbels, our collections are ready to bring
+                your vision to life.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

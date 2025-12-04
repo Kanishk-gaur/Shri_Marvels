@@ -13,13 +13,13 @@ const contactInfo = [
   {
     icon: Mail,
     title: "Email Us",
-    details: "info@shrimarvels.com",
+    details: "contact@agrawalceramics.com",
     description: "For inquiries & collaborations",
   },
   {
     icon: Phone,
     title: "Call Us",
-    details: "+91 9714422666",
+    details: "+91 7091833184",
     description: "Mon-Sat, 10am to 7pm",
   },
   {
