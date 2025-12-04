@@ -285,7 +285,7 @@ export default function HomePage() {
         </section>
 
         {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
-        <section className="bg-slate-50 py-24 ">
+       <section className="bg-slate-50 py-32 mb-24">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <motion.div
@@ -306,7 +306,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Main Content: Image + Text */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24"> 
               <motion.div
                 className="relative aspect-video rounded-2xl overflow-hidden shadow-xl"
                 initial={{ opacity: 0, x: -50 }}
@@ -538,7 +538,7 @@ export default function HomePage() {
               {inspirationLooks.map((look) => (
                 <motion.div
                   key={look.title}
-                  className={`${look.colSpan} relative rounded-2xl overflow-hidden group h-80`}
+                  className={`${look.colSpan} relative rounded-2xl overflow-hidden group h-106`}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
