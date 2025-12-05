@@ -28,7 +28,7 @@ const selectedTileIds = [
   "border-tiles",
   "high-gloss-3d-emboss-poster-tiles",
   "gvt-wall-&-floor-border-tiles",
-  "golden-&-silver-border-tiles",
+  "golden-silver-highlighter",
   "gvt-rangoli",
   "kitchen-colorfull-poster",
 ];
@@ -285,7 +285,7 @@ export default function HomePage() {
         </section>
 
         {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
-       <section className="bg-slate-50 py-32 mb-24">
+       <section className="bg-slate-50 py-32 ">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <motion.div
@@ -375,7 +375,7 @@ export default function HomePage() {
         </section>
 
         {/* Category Collections Section */}
-        <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-24 mb-24">
+        <section className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8  mb-32">
           {/* 1. Tile Collections */}
           <div className="mb-32">
             <CategoryCarousel
