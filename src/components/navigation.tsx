@@ -266,31 +266,30 @@ export function Navigation() {
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
-              {/* Mobile Header - ABSOLUTE POSITIONING */}
-             // Mobile Header - ABSOLUTE POSITIONING
-<div className="p-3 border-b border-white/10 relative">
-  <div className="flex items-center justify-between">
-    {/* 👇 MODIFIED BRAND NAME BLOCK START 👇 */}
-    <div className="flex flex-col items-start -space-y-0.5"> {/* Use flex-col and negative space-y */}
-      <h3 className="text-sm font-bold bg-gradient-to-r from-emerald-300 to-emerald-200 bg-clip-text text-transparent leading-none"> {/* Add leading-none to reduce h3 line height */}
-        AGRAWAL CERAMICS
-      </h3>
-      <span className="text-[8px] text-emerald-100/60 font-medium leading-none"> {/* Add leading-none */}
-        Decorative Tiles & Marbles
-      </span>
-    </div>
-    {/* 👆 MODIFIED BRAND NAME BLOCK END 👆 */}
-    <motion.button
-      onClick={closeMobileMenu}
-      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300 ml-2 flex-shrink-0"
-      aria-label="Close menu"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      <X className="w-4 h-4" />
-    </motion.button>
-  </div>
-</div>
+              {/* Mobile Header */}
+              <div className="p-3 border-b border-white/10 relative">
+                <div className="flex items-center justify-between">
+                  {/* Brand Name Block */}
+                  <div className="flex flex-col items-start -space-y-0.5">
+                    <h3 className="text-sm font-bold bg-gradient-to-r from-emerald-300 to-emerald-200 bg-clip-text text-transparent leading-none">
+                      AGRAWAL CERAMICS
+                    </h3>
+                    <span className="text-[8px] text-emerald-100/60 font-medium leading-none">
+                      Decorative Tiles & Marbles
+                    </span>
+                  </div>
+                  <motion.button
+                    onClick={closeMobileMenu}
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300 ml-2 flex-shrink-0"
+                    aria-label="Close menu"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <X className="w-4 h-4" />
+                  </motion.button>
+                </div>
+              </div>
+
               {/* Mobile Menu Items */}
               <div className="p-3 space-y-1">
                 {navItems.map((item) => renderNavItem(item))}
