@@ -21,7 +21,6 @@ import Image from "next/image";
 import { StepRiserShowcase } from "@/components/StepRiserShowcase";
 
 // --- Data for Balanced Sections (with new premium color palette) ---
-console.log("categories:", categories.tiles);
 
 // Define the IDs of the tile categories you want to show
 const selectedTileIds = [
@@ -40,14 +39,6 @@ const filteredTileCategories = selectedTileIds
     (category): category is NonNullable<typeof category> =>
       category !== undefined
   );
-
-// If you need exactly 6 items but only have 5 in your list, add one more or modify the logic
-// For now, let's see what categories you actually have
-console.log(
-  "Available tile categories:",
-  categories.tiles.map((c) => c.id)
-);
-console.log("Filtered categories:", filteredTileCategories);
 
 const tileAttributes = [
   {
@@ -104,13 +95,13 @@ const inspirationLooks = [
   },
   {
     title: "Modern Roofing Solutions",
-    imageSrc: "/images/home/roof1.jpg",
+    imageSrc: "/images/home/roof6.jpg",
     href: "/roof_tiles",
     colSpan: "col-span-1",
   },
   {
     title: "Durable Roof Tiles",
-    imageSrc: "/images/home/roof3.jpg",
+    imageSrc: "/images/home/roof5.jpg",
     href: "/roof_tiles",
     colSpan: "col-span-1",
   },
@@ -285,7 +276,7 @@ export default function HomePage() {
         </section>
 
         {/* === PILLAR 1: THE WORLD OF DECORATIVE TILES === */}
-       <section className="bg-slate-50 py-32 ">
+        <section className="bg-slate-50 py-32 ">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             {/* Section Header */}
             <motion.div
@@ -306,7 +297,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Main Content: Image + Text */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24"> 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24">
               <motion.div
                 className="relative aspect-video rounded-2xl overflow-hidden shadow-xl"
                 initial={{ opacity: 0, x: -50 }}
@@ -415,98 +406,98 @@ export default function HomePage() {
           <div className="mb-32">
             <StepRiserShowcase />
           </div>
-           {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
-        <section className="bg-white  relative overflow-hidden mb-20">
-          <div aria-hidden="true" className="absolute inset-0 -z-10">
-            <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
-          </div>
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
-            <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
-                The Beauty of Decorative Marbles
-              </h2>
-              <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
-                Each piece of our decorative marbles is a story told by the
-                earth, bringing unparalleled elegance and a sense of natural
-                wonder into your home.
-              </p>
-            </motion.div>
-
-            {/* Main Content: Text + Image (Reversed Layout) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+          {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
+          <section className="bg-white  relative overflow-hidden mb-20">
+            <div aria-hidden="true" className="absolute inset-0 -z-10">
+              <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
+            </div>
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Section Header */}
               <motion.div
-                className="relative aspect-video rounded-2xl overflow-hidden shadow-xl md:order-last"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
+                className="text-center mb-16"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6 }}
               >
-                <Image
-                  src="/images/home/home_marble.jpg"
-                  alt="Luxurious decorative marvel bathroom"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                <h3 className="text-2xl font-semibold text-slate-800 mb-4">
-                  An Ode to Timeless Beauty
-                </h3>
-                <p className="text-slate-600 leading-relaxed mb-6">
-                  To choose a decorative marble is to choose a piece of history.
-                  Its unique, organic patterns ensure that no two installations
-                  are ever the same, creating a truly one-of-a-kind environment.
-                  As a symbol of luxury and sophistication, it not only enhances
-                  your daily life but also adds significant, lasting value to
-                  your property.
+                <h2 className="text-4xl md:text-5xl font-bold text-slate-900">
+                  The Beauty of Decorative Marbles
+                </h2>
+                <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+                  Each piece of our decorative marbles is a story told by the
+                  earth, bringing unparalleled elegance and a sense of natural
+                  wonder into your home.
                 </p>
-                <Link
-                  href="/gallery?category=marvel"
-                  className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              </motion.div>
+
+              {/* Main Content: Text + Image (Reversed Layout) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+                <motion.div
+                  className="relative aspect-video rounded-2xl overflow-hidden shadow-xl md:order-last"
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
                 >
-                  Discover Decorative Marbles →
-                </Link>
+                  <Image
+                    src="/images/home/home_marble.jpg"
+                    alt="Luxurious decorative marvel bathroom"
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <h3 className="text-2xl font-semibold text-slate-800 mb-4">
+                    An Ode to Timeless Beauty
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed mb-6">
+                    To choose a decorative marble is to choose a piece of
+                    history. Its unique, organic patterns ensure that no two
+                    installations are ever the same, creating a truly
+                    one-of-a-kind environment. As a symbol of luxury and
+                    sophistication, it not only enhances your daily life but
+                    also adds significant, lasting value to your property.
+                  </p>
+                  <Link
+                    href="/gallery?category=marvel"
+                    className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  >
+                    Discover Decorative Marbles →
+                  </Link>
+                </motion.div>
+              </div>
+
+              {/* Attribute Grid */}
+              <motion.div
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+                variants={staggerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                {marbleAttributes.map((attr) => (
+                  <motion.div
+                    key={attr.title}
+                    className="bg-slate-50 p-6 rounded-lg shadow-sm"
+                    variants={itemVariants}
+                  >
+                    <div className="flex items-center gap-4">
+                      {attr.icon}
+                      <h4 className="font-bold text-slate-800 text-lg">
+                        {attr.title}
+                      </h4>
+                    </div>
+                    <p className="text-slate-600 text-sm mt-3">{attr.desc}</p>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
-
-            {/* Attribute Grid */}
-            <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-              variants={staggerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              {marbleAttributes.map((attr) => (
-                <motion.div
-                  key={attr.title}
-                  className="bg-slate-50 p-6 rounded-lg shadow-sm"
-                  variants={itemVariants}
-                >
-                  <div className="flex items-center gap-4">
-                    {attr.icon}
-                    <h4 className="font-bold text-slate-800 text-lg">
-                      {attr.title}
-                    </h4>
-                  </div>
-                  <p className="text-slate-600 text-sm mt-3">{attr.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
+          </section>
 
           {/* 3. Marble Varieties */}
           <div className="mb-1">
@@ -520,8 +511,6 @@ export default function HomePage() {
             />
           </div>
         </section>
-
-       
 
         {/* --- Inspiration Gallery (Unified) --- */}
         <section className="bg-slate-50 py-24 mb-24">
