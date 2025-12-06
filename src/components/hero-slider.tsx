@@ -35,7 +35,7 @@ const DOT_BASE_CLASS =
 // Slide Data (Explicitly typed)
 const slides: Slide[] = [
   {
-    imageSrc: "/images/home/god (4).png",
+    imageSrc: "/images/home/home2.jpeg",
     title: "Divine Tiles",
     subtitle: "EMANATE SERENITY & BLESSINGS",
     href: "/gallery",
