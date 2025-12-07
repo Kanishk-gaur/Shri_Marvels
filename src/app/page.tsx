@@ -20,7 +20,16 @@ import { CategoryCarousel } from "@/components/category-carousel";
 import Image from "next/image";
 import { StepRiserShowcase } from "@/components/StepRiserShowcase";
 
-// --- Data for Balanced Sections (with new premium color palette) ---
+// Bronze color palette
+const bronzeColors = {
+  primary: "#F3C77B",      // Main bronze
+  light: "#F8DAA3",        // Lighter bronze
+  dark: "#D8B168",         // Darker bronze
+  darker: "#B89655",       // Even darker for depth
+  darkest: "#8C7542",      // Deep bronze
+};
+
+// --- Data for Balanced Sections (updated with bronze color palette) ---
 
 // Define the IDs of the tile categories you want to show
 const selectedTileIds = [
@@ -42,22 +51,22 @@ const filteredTileCategories = selectedTileIds
 
 const tileAttributes = [
   {
-    icon: <ShieldCheck className="w-8 h-8 text-emerald-700" />,
+    icon: <ShieldCheck className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Exceptional Durability",
     desc: "Engineered to withstand high traffic, scratches, and stains, ensuring a pristine look for years.",
   },
   {
-    icon: <Droplets className="w-8 h-8 text-emerald-700" />,
+    icon: <Droplets className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Low Maintenance",
     desc: "Non-porous surfaces make cleaning effortless, offering a practical solution for modern living.",
   },
   {
-    icon: <Palette className="w-8 h-8 text-emerald-700" />,
+    icon: <Palette className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Design Versatility",
     desc: "With endless colors, patterns, and finishes, tiles provide limitless creative possibilities for any style.",
   },
   {
-    icon: <Leaf className="w-8 h-8 text-emerald-700" />,
+    icon: <Leaf className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Hygienic & Eco-Friendly",
     desc: "Resistant to allergens and bacteria, and crafted using sustainable manufacturing processes.",
   },
@@ -65,22 +74,22 @@ const tileAttributes = [
 
 const marbleAttributes = [
   {
-    icon: <Gem className="w-8 h-8 text-emerald-700" />,
+    icon: <Gem className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Natural Masterpiece",
     desc: "Each slab is unique, with distinct veining and character sculpted by nature over millennia.",
   },
   {
-    icon: <Layers3 className="w-8 h-8 text-emerald-700" />,
+    icon: <Layers3 className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Timeless Elegance",
     desc: "A symbol of luxury and sophistication that transcends trends and adds classic beauty.",
   },
   {
-    icon: <TrendingUp className="w-8 h-8 text-emerald-700" />,
+    icon: <TrendingUp className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Increases Property Value",
     desc: "A premium feature that is highly sought after, making it a sound investment for your home.",
   },
   {
-    icon: <Sparkles className="w-8 h-8 text-emerald-700" />,
+    icon: <Sparkles className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
     title: "Luminous Quality",
     desc: "Its inherent translucence interacts with light to create a unique and captivating glow.",
   },
@@ -146,8 +155,14 @@ export default function HomePage() {
         {/* Our Legacy Section */}
         <section className="bg-gradient-to-br from-slate-50 to-white py-24 relative overflow-hidden mb-24">
           {/* Background decorative elements */}
-          <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+          <div 
+            className="absolute top-0 right-0 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob"
+            style={{ backgroundColor: bronzeColors.light + '30' }}
+          ></div>
+          <div 
+            className="absolute bottom-0 left-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-2000"
+            style={{ backgroundColor: bronzeColors.dark + '20' }}
+          ></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -160,9 +175,18 @@ export default function HomePage() {
                 className="space-y-8 order-2 lg:order-1"
               >
                 {/* Enhanced badge */}
-                <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-4 py-2">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                  <span className="text-emerald-700 text-sm font-semibold uppercase tracking-wider">
+                <div 
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2"
+                  style={{ backgroundColor: bronzeColors.light + '20', borderColor: bronzeColors.primary + '30', borderWidth: '1px' }}
+                >
+                  <div 
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ backgroundColor: bronzeColors.primary }}
+                  ></div>
+                  <span 
+                    className="text-sm font-semibold uppercase tracking-wider"
+                    style={{ color: bronzeColors.darker }}
+                  >
                     Our Legacy
                   </span>
                 </div>
@@ -171,22 +195,38 @@ export default function HomePage() {
                 <div className="space-y-4">
                   <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
                     Crafting Spaces of{" "}
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-300 ">
+                    <span 
+                      className="text-transparent bg-clip-text"
+                      style={{
+                        background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.light} 100%)`,
+                      }}
+                    >
                       Distinction
                     </span>
                   </h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full"></div>
+                  <div 
+                    className="w-20 h-1 rounded-full"
+                    style={{ 
+                      background: `linear-gradient(to right, ${bronzeColors.dark}, ${bronzeColors.primary})` 
+                    }}
+                  ></div>
                 </div>
 
                 {/* Enhanced content with icons */}
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    <div 
+                      className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
+                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                    >
+                      <div 
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: bronzeColors.primary }}
+                      ></div>
                     </div>
                     <p className="text-lg text-slate-700 leading-relaxed">
                       For over{" "}
-                      <span className="font-semibold text-emerald-700">
+                      <span className="font-semibold" style={{ color: bronzeColors.darker }}>
                         three decades
                       </span>
                       , we have been the premier source for the **world&apos;s**
@@ -196,8 +236,14 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    <div 
+                      className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
+                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                    >
+                      <div 
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: bronzeColors.primary }}
+                      ></div>
                     </div>
                     <p className="text-lg text-slate-700 leading-relaxed">
                       Our commitment is to the fusion of{" "}
@@ -217,8 +263,14 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    <div 
+                      className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
+                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                    >
+                      <div 
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: bronzeColors.primary }}
+                      ></div>
                     </div>
                     <p className="text-lg text-slate-700 leading-relaxed">
                       We partner with architects, designers, and homeowners to
@@ -231,19 +283,19 @@ export default function HomePage() {
                 {/* Trust indicators */}
                 <div className="flex items-center gap-6 pt-6 border-t border-slate-200">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-slate-900">
+                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>
                       5000+
                     </div>
                     <div className="text-sm text-slate-600">Projects</div>
                   </div>
-                  <div className="w-px h-8 bg-slate-300"></div>
+                  <div className="w-px h-8" style={{ backgroundColor: bronzeColors.primary + '30' }}></div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-slate-900">94%</div>
+                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>94%</div>
                     <div className="text-sm text-slate-600">Satisfaction</div>
                   </div>
-                  <div className="w-px h-8 bg-slate-300"></div>
+                  <div className="w-px h-8" style={{ backgroundColor: bronzeColors.primary + '30' }}></div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-slate-900">5+</div>
+                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>5+</div>
                     <div className="text-sm text-slate-600">States</div>
                   </div>
                 </div>
@@ -264,12 +316,22 @@ export default function HomePage() {
                     className="object-cover" // Removed transition and hover
                     priority
                   />
-                  {/* Enhanced overlay with gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  {/* Enhanced overlay with bronze gradient */}
+                  <div 
+                    className="absolute inset-0"
+                    style={{
+                      background: 'linear-gradient(to top, rgba(140, 117, 66, 0.15) 0%, transparent 50%)',
+                    }}
+                  />
                 </div>
 
                 {/* Decorative element - hidden on mobile */}
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-emerald-500 rounded-2xl -z-10 rotate-12 opacity-20 hidden lg:block"></div>
+                <div 
+                  className="absolute -bottom-6 -right-6 w-24 h-24 rounded-2xl -z-10 rotate-12 opacity-20 hidden lg:block"
+                  style={{
+                    background: `linear-gradient(135deg, ${bronzeColors.dark} 0%, ${bronzeColors.primary} 100%)`,
+                  }}
+                ></div>
               </motion.div>
             </div>
           </div>
@@ -331,7 +393,17 @@ export default function HomePage() {
                 </p>
                 <Link
                   href="/gallery?category=tiles"
-                  className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="inline-block text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  style={{ 
+                    backgroundColor: bronzeColors.darker,
+                    background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+                  }}
                 >
                   Explore Decorative Tiles →
                 </Link>
@@ -382,7 +454,21 @@ export default function HomePage() {
             <div className="flex justify-center mt-8">
               <Link
                 href="/gallery?category=tiles"
-                className="inline-flex items-center gap-2 bg-emerald-50 border-2 border-emerald-200 text-emerald-700 font-semibold px-6 py-3 hover:bg-emerald-100 hover:border-emerald-300 transition-all duration-300 transform hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 font-semibold px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-sm"
+                style={{ 
+                  backgroundColor: bronzeColors.light + '20', 
+                  borderColor: bronzeColors.primary + '30',
+                  borderWidth: '2px',
+                  color: bronzeColors.darker 
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = bronzeColors.light + '40';
+                  e.currentTarget.style.borderColor = bronzeColors.primary + '50';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = bronzeColors.light + '20';
+                  e.currentTarget.style.borderColor = bronzeColors.primary + '30';
+                }}
               >
                 <span>View all Tiles</span>
                 <svg
@@ -406,10 +492,14 @@ export default function HomePage() {
           <div className="mb-32">
             <StepRiserShowcase />
           </div>
+
           {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
           <section className="bg-white  relative overflow-hidden mb-20">
             <div aria-hidden="true" className="absolute inset-0 -z-10">
-              <div className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full bg-emerald-100/20 blur-[150px]"></div>
+              <div 
+                className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full blur-[150px]"
+                style={{ backgroundColor: bronzeColors.light + '20' }}
+              ></div>
             </div>
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
               {/* Section Header */}
@@ -465,7 +555,17 @@ export default function HomePage() {
                   </p>
                   <Link
                     href="/gallery?category=marvel"
-                    className="inline-block bg-emerald-700 text-white font-semibold px-8 py-3 rounded-full hover:bg-emerald-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    className="inline-block text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    style={{ 
+                      backgroundColor: bronzeColors.darker,
+                      background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+                    }}
                   >
                     Discover Decorative Marbles →
                   </Link>
@@ -546,7 +646,10 @@ export default function HomePage() {
                       {look.title}
                     </h3>
                     <Link href={look.href}>
-                      <span className="text-emerald-300 font-semibold mt-2 inline-block hover:underline">
+                      <span 
+                        className="font-semibold mt-2 inline-block hover:underline"
+                        style={{ color: bronzeColors.light }}
+                      >
                         Explore →
                       </span>
                     </Link>
@@ -558,7 +661,12 @@ export default function HomePage() {
         </section>
 
         {/* --- Final Call to Action --- */}
-        <section className="bg-gradient-to-br from-emerald-800 to-teal-900 py-24">
+        <section 
+          className="py-24"
+          style={{ 
+            background: `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`
+          }}
+        >
           <div className="max-w-4xl mx-auto text-center px-4">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -570,7 +678,7 @@ export default function HomePage() {
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to Create a Timeless Space?
               </h2>
-              <p className="text-lg text-emerald-100 max-w-2xl mx-auto mb-10">
+              <p className="text-lg text-white/90 max-w-2xl mx-auto mb-10">
                 Your design journey starts here. Whether you&apos;re drawn to
                 the artistic flair of decorative tiles or the timeless elegance
                 of our decorative marbles, our collections are ready to bring
@@ -580,13 +688,28 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/contact"
-                  className="inline-block bg-white text-emerald-800 font-bold px-8 py-4 rounded-full hover:bg-emerald-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  className="inline-block bg-white font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                  style={{ color: bronzeColors.darker }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = bronzeColors.light;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white';
+                  }}
                 >
                   Speak with a Consultant
                 </Link>
                 <Link
                   href="/gallery"
-                  className="inline-block bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-full hover:bg-white hover:text-emerald-800 transition-all duration-300 transform hover:scale-105"
+                  className="inline-block bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.color = bronzeColors.darker;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'white';
+                  }}
                 >
                   Browse All Products
                 </Link>
