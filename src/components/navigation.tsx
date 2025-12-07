@@ -55,14 +55,44 @@ const bronzeColors = {
   darkest: "#8C7542",      // Deep bronze
 };
 
-// New attractive dark color scheme
-const darkColors = {
-  primary: "#0F172A",      // Rich navy blue (slate-900)
-  secondary: "#1E293B",    // Dark slate blue (slate-800)
-  accent: "#334155",       // Medium slate (slate-700)
-  light: "#475569",        // Light slate (slate-600)
-  bgGradient: "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
-  overlayGradient: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+// 👉 HOW TO ADJUST TRANSPARENCY YOURSELF:
+// Change these numbers (0 to 1) to control transparency:
+// 0 = completely transparent, 1 = completely opaque
+
+const TRANSPARENCY = {
+  navbar: 0.65,           // Main navigation bar (was 0.85)
+  navItem: 0.35,          // Navigation items (was 0.4-0.8)
+  navItemActive: 0.5,     // Active navigation items (was 0.75-0.8)
+  menuButton: 0.45,       // Menu button (was 0.6)
+  mobileMenu: 0.75,       // Mobile menu panel (was 0.85)
+  mobileCard: 0.4,        // Mobile contact card (was 0.6)
+  overlay: 0.7,           // Backdrop overlay (was 0.95)
+  border: 0.08,           // Border opacity (was 0.1)
+};
+
+// Pure transparent black color scheme with adjustable transparency
+const transparentBlackColors = {
+  // Main navigation
+  navbar: `rgba(0, 0, 0, ${TRANSPARENCY.navbar})`,
+  
+  // Navigation items
+  navItem: `rgba(0, 0, 0, ${TRANSPARENCY.navItem})`,
+  navItemActive: `rgba(0, 0, 0, ${TRANSPARENCY.navItemActive})`,
+  
+  // Mobile menu
+  mobileMenu: `rgba(0, 0, 0, ${TRANSPARENCY.mobileMenu})`,
+  mobileCard: `rgba(0, 0, 0, ${TRANSPARENCY.mobileCard})`,
+  
+  // Buttons and overlays
+  menuButton: `rgba(0, 0, 0, ${TRANSPARENCY.menuButton})`,
+  overlay: `rgba(0, 0, 0, ${TRANSPARENCY.overlay})`,
+  
+  // Borders
+  glassBorder: `rgba(255, 255, 255, ${TRANSPARENCY.border})`,
+  
+  // Other transparencies (for hover effects)
+  hover10: `rgba(0, 0, 0, ${TRANSPARENCY.navItem + 0.1})`,
+  hover20: `rgba(0, 0, 0, ${TRANSPARENCY.navItem + 0.2})`,
 };
 
 export function Navigation() {
@@ -107,15 +137,30 @@ export function Navigation() {
     return (
       <Link key={item.href} href={item.href} onClick={closeMobileMenu}>
         <motion.div
-          className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group
-            ${
-              isActive
-                ? "bg-gradient-to-r from-[#D8B168]/20 via-[#F3C77B]/15 to-[#D8B168]/20 text-white shadow-lg border border-[#F3C77B]/30 backdrop-blur-sm"
-                : "text-white/90 hover:text-white hover:bg-white/5"
-            }
-          `}
+          className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
+            isActive
+              ? "text-white"
+              : "text-white/90 hover:text-white"
+          }`}
+          style={{
+            backgroundColor: isActive 
+              ? transparentBlackColors.navItemActive 
+              : transparentBlackColors.navItem,
+            backdropFilter: 'blur(12px)',
+            border: `1px solid ${transparentBlackColors.glassBorder}`,
+          }}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.95 }}
+          onMouseEnter={(e) => {
+            if (!isActive) {
+              e.currentTarget.style.backgroundColor = transparentBlackColors.hover10;
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive) {
+              e.currentTarget.style.backgroundColor = transparentBlackColors.navItem;
+            }
+          }}
         >
           <div
             className={`relative z-10 flex items-center space-x-3 ${
@@ -133,9 +178,6 @@ export function Navigation() {
               layoutId="activeIndicator"
             />
           )}
-
-          {/* Hover glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/10 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </motion.div>
       </Link>
     );
@@ -145,25 +187,23 @@ export function Navigation() {
     <>
       {/* Desktop Navigation */}
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-[60] backdrop-blur-xl transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${
           isScrolled
-            ? "shadow-2xl border-b border-[#F3C77B]/10 shadow-[#0F172A]/30"
+            ? "shadow-2xl border-b border-white/5 shadow-black/30"
             : ""
         }`}
         style={{
-          background: darkColors.bgGradient,
+          backgroundColor: transparentBlackColors.navbar,
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
         }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, type: "spring" }}
       >
-        {/* Background gradient elements */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/5 via-transparent to-[#F3C77B]/5 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F3C77B]/5 via-transparent to-transparent pointer-events-none" />
-        
-        {/* Subtle texture overlay */}
-        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        {/* Subtle texture overlay - only white dots on black */}
+        <div className="absolute inset-0 opacity-[0.01] pointer-events-none" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }} />
 
         <div className="relative max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
@@ -185,7 +225,6 @@ export function Navigation() {
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
-                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                       }}
                     >
                       AGRAWAL CERAMICS
@@ -218,15 +257,30 @@ export function Navigation() {
                 return (
                   <Link key={item.href} href={item.href}>
                     <motion.div
-                      className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all duration-300 group backdrop-blur-sm
-                        ${
-                          isActive
-                            ? "bg-gradient-to-r from-[#B89655]/15 via-[#D8B168]/10 to-[#B89655]/15 text-white shadow-lg border border-[#F3C77B]/20"
-                            : "text-white/90 hover:text-white hover:bg-white/5"
-                        }
-                      `}
+                      className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all duration-300 group ${
+                        isActive
+                          ? "text-white"
+                          : "text-white/90 hover:text-white"
+                      }`}
+                      style={{
+                        backgroundColor: isActive 
+                          ? transparentBlackColors.navItemActive 
+                          : transparentBlackColors.navItem,
+                        backdropFilter: 'blur(12px)',
+                        border: `1px solid ${transparentBlackColors.glassBorder}`,
+                      }}
                       whileHover={{ y: -2, scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = transparentBlackColors.hover10;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = transparentBlackColors.navItem;
+                        }
+                      }}
                     >
                       <div
                         className={`relative z-10 flex items-center space-x-2 ${
@@ -248,9 +302,6 @@ export function Navigation() {
                           layoutId="desktopActiveIndicator"
                         />
                       )}
-
-                      {/* Hover glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/10 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </motion.div>
                   </Link>
                 );
@@ -259,7 +310,12 @@ export function Navigation() {
 
             {/* Mobile Menu Button */}
             <motion.button
-              className="lg:hidden relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/90 hover:text-white transition-all duration-300 backdrop-blur-sm"
+              className="lg:hidden relative p-2.5 rounded-xl text-white/90 hover:text-white transition-all duration-300"
+              style={{
+                backgroundColor: transparentBlackColors.menuButton,
+                backdropFilter: 'blur(12px)',
+                border: `1px solid ${transparentBlackColors.glassBorder}`,
+              }}
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               whileHover={{ scale: 1.05 }}
@@ -288,10 +344,11 @@ export function Navigation() {
           >
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 backdrop-blur-xl"
+              className="fixed inset-0"
               style={{
-                background: darkColors.overlayGradient,
-                opacity: 0.95,
+                backgroundColor: transparentBlackColors.overlay,
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
               }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -301,9 +358,12 @@ export function Navigation() {
 
             {/* Mobile Menu Panel - REDUCED WIDTH */}
             <motion.div
-              className="fixed top-0 left-0 h-full w-4/5 max-w-xs backdrop-blur-2xl shadow-2xl overflow-y-auto border-r border-[#F3C77B]/20"
+              className="fixed top-0 left-0 h-full w-4/5 max-w-xs shadow-2xl overflow-y-auto"
               style={{
-                background: darkColors.bgGradient,
+                backgroundColor: transparentBlackColors.mobileMenu,
+                backdropFilter: 'blur(25px)',
+                WebkitBackdropFilter: 'blur(25px)',
+                borderRight: `1px solid ${transparentBlackColors.glassBorder}`,
               }}
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -311,7 +371,12 @@ export function Navigation() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
               {/* Mobile Header */}
-              <div className="p-3 border-b border-[#F3C77B]/20 relative">
+              <div 
+                className="p-3 relative"
+                style={{
+                  borderBottom: `1px solid ${transparentBlackColors.glassBorder}`,
+                }}
+              >
                 <div className="flex items-center justify-between">
                   {/* Brand Name Block */}
                   <div className="flex flex-col items-start -space-y-0.5">
@@ -332,7 +397,12 @@ export function Navigation() {
                   </div>
                   <motion.button
                     onClick={closeMobileMenu}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-all duration-300 ml-2 flex-shrink-0 backdrop-blur-sm"
+                    className="p-1.5 rounded-lg text-white/80 hover:text-white transition-all duration-300 ml-2 flex-shrink-0"
+                    style={{
+                      backgroundColor: transparentBlackColors.menuButton,
+                      backdropFilter: 'blur(12px)',
+                      border: `1px solid ${transparentBlackColors.glassBorder}`,
+                    }}
                     aria-label="Close menu"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -349,15 +419,17 @@ export function Navigation() {
 
               {/* Decorative Separator */}
               <div className="px-3 py-2">
-                <div className="h-px bg-gradient-to-r from-transparent via-[#F3C77B]/40 to-transparent" />
+                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               </div>
 
               {/* Mobile Contact Info */}
               <div className="p-3">
                 <div 
-                  className="rounded-lg p-3 border border-[#F3C77B]/20 backdrop-blur-sm"
+                  className="rounded-lg p-3"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(184, 150, 85, 0.15) 0%, rgba(140, 117, 66, 0.25) 100%)',
+                    backgroundColor: transparentBlackColors.mobileCard,
+                    backdropFilter: 'blur(12px)',
+                    border: `1px solid ${transparentBlackColors.glassBorder}`,
                   }}
                 >
                   <div className="text-center space-y-2">
@@ -373,16 +445,17 @@ export function Navigation() {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300 shadow-md"
+                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300"
                         style={{
-                          background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
+                          backgroundColor: `rgba(0, 0, 0, ${TRANSPARENCY.navItemActive + 0.1})`,
+                          border: `1px solid ${transparentBlackColors.glassBorder}`,
                           color: 'white',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+                          e.currentTarget.style.backgroundColor = `rgba(0, 0, 0, ${TRANSPARENCY.navItemActive + 0.2})`;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+                          e.currentTarget.style.backgroundColor = `rgba(0, 0, 0, ${TRANSPARENCY.navItemActive + 0.1})`;
                         }}
                       >
                         Call Now
@@ -390,22 +463,24 @@ export function Navigation() {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300 border border-white/20 backdrop-blur-sm"
+                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300"
                         style={{
-                          background: 'rgba(243, 199, 123, 0.1)',
+                          backgroundColor: transparentBlackColors.mobileCard,
+                          backdropFilter: 'blur(12px)',
+                          border: `1px solid ${transparentBlackColors.glassBorder}`,
                           color: 'white',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'rgba(243, 199, 123, 0.2)';
+                          e.currentTarget.style.backgroundColor = `rgba(0, 0, 0, ${TRANSPARENCY.mobileCard + 0.1})`;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'rgba(243, 199, 123, 0.1)';
+                          e.currentTarget.style.backgroundColor = transparentBlackColors.mobileCard;
                         }}
                       >
                         WhatsApp
                       </motion.button>
                     </div>
-                    <p className="text-[10px] text-[#F3C77B]/60 pt-2">
+                    <p className="text-[10px] text-white/40 pt-2">
                       © {new Date().getFullYear()} Agrawal Ceramics
                     </p>
                   </div>

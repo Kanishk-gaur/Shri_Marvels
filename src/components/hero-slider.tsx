@@ -138,7 +138,6 @@ export function HeroSlider() {
 
   return (
     <section
-      // **KEY CHANGE**: Height reduced from h-[50vh] to h-[40vh] for smaller screens
       className="relative h-[40vh] md:h-[90vh] w-full overflow-hidden bg-gradient-to-tr from-[#EFE2C8] via-[#E9D8C0] to-[#E7DFC9]"
     >
       {/* 1. Progress Bar */}
@@ -167,23 +166,23 @@ export function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      {/* 3. Text Content */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-start md:items-end p-6 md:p-16 text-left md:text-right">
+      {/* 3. Text Content - Positioned lower with reduced text size */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end md:justify-end pb-12 md:pb-20 items-start md:items-end p-6 md:p-16 text-left md:text-right">
         <div className="max-w-md md:max-w-xl text-white drop-shadow-lg">
-          {/* Title */}
+          {/* Title - Reduced text size */}
           <motion.h1
             key={slide.title + "h1"}
-            className="text-2xl sm:text-3xl md:text-7xl font-extrabold md:font-black uppercase mb-2 md:mb-3 text-[#F3C77B] leading-snug md:leading-tight"
+            className="text-xl sm:text-2xl md:text-6xl font-extrabold md:font-black uppercase mb-2 md:mb-3 text-[#F3C77B] leading-snug md:leading-tight"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             {slide.title}
           </motion.h1>
-          {/* Subtitle */}
+          {/* Subtitle - Reduced text size */}
           <motion.p
             key={slide.subtitle + "p"}
-            className="text-base sm:text-lg md:text-3xl font-medium md:font-semibold uppercase mb-6 md:mb-8 text-[#FFF3D9]"
+            className="text-sm sm:text-base md:text-2xl font-medium md:font-semibold uppercase mb-6 md:mb-8 text-[#FFF3D9]"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -207,7 +206,7 @@ export function HeroSlider() {
                 size="lg"
                 className="
                   bg-gradient-to-r from-[#F3C77B] to-[#B79962] 
-                  text-[#5C4421] font-extrabold text-base md:text-lg 
+                  text-[#5C4421] font-extrabold text-sm md:text-base 
                   shadow-xl hover:shadow-2xl 
                   transition-all duration-300
                   border-2 border-[#FFF3D9] hover:border-[#F3C77B]

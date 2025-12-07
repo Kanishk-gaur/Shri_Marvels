@@ -1,4 +1,4 @@
-// components/StepRiserShowcase.jsx - Lightest Gray Background
+// components/StepRiserShowcase.jsx - Updated with Bronze Colors
 
 "use client";
 
@@ -18,6 +18,15 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
+
+// Bronze color palette
+const bronzeColors = {
+  primary: "#F3C77B",      // Main bronze
+  light: "#F8DAA3",        // Lighter bronze
+  dark: "#D8B168",         // Darker bronze
+  darker: "#B89655",       // Even darker for depth
+  darkest: "#8C7542",      // Deep bronze
+};
 
 // Data for desktop and mobile
 const stepRiserImages = [
@@ -101,11 +110,11 @@ export function StepRiserShowcase() {
   };
 
   return (
-    <div className="relative overflow-hidden bg-slate-50"> {/* Lightest gray background */}
+    <div className="relative overflow-hidden bg-gray-50"> {/* Light gray background */}
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         {/* Subtle Background Elements */}
-        <div className="hidden md:block absolute top-10 left-10 w-64 h-64 bg-slate-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
-        <div className="hidden md:block absolute bottom-10 right-10 w-80 h-80 bg-slate-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+        <div className="hidden md:block absolute top-10 left-10 w-64 h-64 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+        <div className="hidden md:block absolute bottom-10 right-10 w-80 h-80 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
         
         <div className="relative z-10 space-y-12 md:space-y-16">
           {/* Header */}
@@ -116,23 +125,33 @@ export function StepRiserShowcase() {
             transition={{ duration: 0.6 }}
             className="text-center space-y-4"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white rounded-full border border-slate-200 shadow-sm">
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
-              <span className="text-xs sm:text-sm font-semibold text-emerald-700 uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white rounded-full border border-gray-200 shadow-sm">
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: bronzeColors.primary }} />
+              <span 
+                className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
+                style={{ color: bronzeColors.darker }}
+              >
                 Premium Collection
               </span>
             </div>
             
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight px-2">
               Integrated{" "}
-              <span className="text-emerald-700">
+              <span 
+                style={{ 
+                  background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 100%)`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
                 Step & Riser
               </span>{" "}
               Solutions
             </h2>
             
-            <p className="mt-2 sm:mt-4 text-base sm:text-lg md:text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed px-4">
-              Where <span className="font-semibold text-emerald-700">safety meets sophistication</span>. 
+            <p className="mt-2 sm:mt-4 text-base sm:text-lg md:text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed px-4">
+              Where <span className="font-semibold" style={{ color: bronzeColors.darker }}>safety meets sophistication</span>. 
               Engineered for perfect transitions.
             </p>
           </motion.div>
@@ -162,12 +181,12 @@ export function StepRiserShowcase() {
                   </div>
                   
                   {/* Simple Title Below Image */}
-                  <div className="p-4 border-t border-slate-100">
+                  <div className="p-4 border-t border-gray-100">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-slate-900 text-lg">
+                      <h3 className="font-semibold text-gray-900 text-lg">
                         {item.title}
                       </h3>
-                      <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${expandedMobile === index ? 'rotate-90' : ''}`} />
+                      <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${expandedMobile === index ? 'rotate-90' : ''}`} />
                     </div>
                     
                     {/* Expandable Content */}
@@ -180,13 +199,16 @@ export function StepRiserShowcase() {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden mt-3"
                         >
-                          <p className="text-slate-600 mb-3">
+                          <p className="text-gray-600 mb-3">
                             {item.description}
                           </p>
                           <ul className="space-y-2">
                             {item.features.map((feature, idx) => (
-                              <li key={idx} className="flex items-center gap-2 text-sm text-slate-700">
-                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                              <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
+                                <div 
+                                  className="w-1.5 h-1.5 rounded-full"
+                                  style={{ backgroundColor: bronzeColors.primary }}
+                                />
                                 {feature}
                               </li>
                             ))}
@@ -238,24 +260,33 @@ export function StepRiserShowcase() {
                           >
                             <div className="space-y-3">
                               <div className="flex items-center gap-3">
-                                <div className="p-2 bg-emerald-100 rounded-lg">
-                                  {index === 0 ? <CheckCircle className="w-5 h-5 text-emerald-700" /> : 
-                                   index === 1 ? <TrendingUp className="w-5 h-5 text-emerald-700" /> : 
-                                   <Star className="w-5 h-5 text-emerald-700" />}
+                                <div 
+                                  className="p-2 rounded-lg"
+                                  style={{ backgroundColor: bronzeColors.light + '40' }}
+                                >
+                                  {index === 0 ? 
+                                    <CheckCircle className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
+                                   index === 1 ? 
+                                    <TrendingUp className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
+                                    <Star className="w-5 h-5" style={{ color: bronzeColors.darker }} />
+                                  }
                                 </div>
-                                <h3 className="text-lg lg:text-xl font-bold text-slate-900">
+                                <h3 className="text-lg lg:text-xl font-bold text-gray-900">
                                   {item.title}
                                 </h3>
                               </div>
                               
-                              <p className="text-sm text-slate-600">
+                              <p className="text-sm text-gray-600">
                                 {item.description}
                               </p>
                               
                               <ul className="space-y-2 mt-3">
                                 {item.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-center gap-2 text-sm text-slate-700">
-                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                                  <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
+                                    <div 
+                                      className="w-1.5 h-1.5 rounded-full"
+                                      style={{ backgroundColor: bronzeColors.primary }}
+                                    />
                                     {feature}
                                   </li>
                                 ))}
@@ -268,7 +299,7 @@ export function StepRiserShowcase() {
                       {/* Fallback Title */}
                       <div className="absolute bottom-4 left-4 right-4">
                         <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
-                          <span className="text-sm font-semibold text-slate-800">
+                          <span className="text-sm font-semibold text-gray-800">
                             {item.title}
                           </span>
                         </div>
@@ -285,7 +316,7 @@ export function StepRiserShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.6 }}
-              className="bg-white border border-slate-200 rounded-xl md:rounded-2xl shadow-sm md:shadow-lg overflow-hidden"
+              className="bg-white border border-gray-200 rounded-xl md:rounded-2xl shadow-sm md:shadow-lg overflow-hidden"
             >
               <div className="p-4 sm:p-6 md:p-8">
                 {/* Features Grid */}
@@ -293,20 +324,23 @@ export function StepRiserShowcase() {
                   {stepRiserHighlights.map((highlight, index) => (
                     <div 
                       key={index}
-                      className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border border-slate-200 bg-white hover:border-emerald-300 transition-colors duration-300"
+                      className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors duration-300"
                     >
                       <div className="flex flex-col gap-2 sm:gap-3">
                         <div className="flex items-center gap-2 sm:gap-3">
-                          <div className="p-2 sm:p-3 bg-emerald-50 rounded-lg flex-shrink-0">
-                            <div className="text-emerald-700">
+                          <div 
+                            className="p-2 sm:p-3 rounded-lg flex-shrink-0"
+                            style={{ backgroundColor: bronzeColors.light + '20' }}
+                          >
+                            <div style={{ color: bronzeColors.darker }}>
                               {highlight.icon}
                             </div>
                           </div>
                           <div>
-                            <h4 className="font-bold text-slate-900 text-sm sm:text-base md:text-lg">
+                            <h4 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg">
                               {highlight.title}
                             </h4>
-                            <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
+                            <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
                               {highlight.description}
                             </p>
                           </div>
@@ -317,7 +351,7 @@ export function StepRiserShowcase() {
                 </div>
 
                 {/* CTA Section */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 border-t border-slate-200 pt-6 sm:pt-8">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 border-t border-gray-200 pt-6 sm:pt-8">
                   {/* Additional Info - Hidden on mobile, visible on sm+ */}
                   <div className="hidden sm:grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow">
                     {[
@@ -327,10 +361,13 @@ export function StepRiserShowcase() {
                       { label: "Samples", value: "Free" },
                     ].map((item, index) => (
                       <div key={index} className="text-center">
-                        <div className="text-xl font-bold text-emerald-700 mb-1">
+                        <div 
+                          className="text-xl font-bold mb-1"
+                          style={{ color: bronzeColors.darker }}
+                        >
                           {item.value}
                         </div>
-                        <div className="text-xs text-slate-600">
+                        <div className="text-xs text-gray-600">
                           {item.label}
                         </div>
                       </div>
@@ -345,7 +382,17 @@ export function StepRiserShowcase() {
                   >
                     <Link
                       href="/step_riser"
-                      className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-emerald-700 text-white font-semibold rounded-full hover:bg-emerald-800 transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto"
+                      className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto"
+                      style={{ 
+                        backgroundColor: bronzeColors.darker,
+                        background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+                      }}
                     >
                       <span className="text-base sm:text-lg tracking-wide">
                         Explore Collection
@@ -368,11 +415,14 @@ export function StepRiserShowcase() {
                       { label: "Fast", value: "48h", full: "Install" },
                       { label: "Free", value: "✓", full: "Samples" },
                     ].map((item, index) => (
-                      <div key={index} className="text-center p-2 bg-slate-100 rounded-lg">
-                        <div className="text-lg font-bold text-emerald-700">
+                      <div key={index} className="text-center p-2 bg-gray-100 rounded-lg">
+                        <div 
+                          className="text-lg font-bold"
+                          style={{ color: bronzeColors.darker }}
+                        >
                           {item.value}
                         </div>
-                        <div className="text-xs text-slate-600">
+                        <div className="text-xs text-gray-600">
                           <span className="hidden">{item.label}</span>
                           <span>{item.full}</span>
                         </div>
