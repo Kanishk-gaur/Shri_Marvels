@@ -192,26 +192,25 @@ export default function HomePage() {
                 </div>
 
                 {/* Enhanced heading */}
-                <div className="space-y-4">
-                  <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
-                    Crafting Spaces of{" "}
-                    <span 
-                      className="text-transparent bg-clip-text"
-                      style={{
-                        background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.light} 100%)`,
-                      }}
-                    >
-                      Distinction
-                    </span>
-                  </h2>
-                  <div 
-                    className="w-20 h-1 rounded-full"
-                    style={{ 
-                      background: `linear-gradient(to right, ${bronzeColors.dark}, ${bronzeColors.primary})` 
-                    }}
-                  ></div>
-                </div>
-
+               <div className="space-y-4">
+  <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+    Crafting Spaces of{" "}
+    <span 
+      className="text-transparent bg-clip-text bg-gradient-to-r"
+      style={{
+        backgroundImage: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.light} 100%)`,
+      }}
+    >
+      Distinction
+    </span>
+  </h2>
+  <div 
+    className="w-20 h-1 rounded-full"
+    style={{ 
+      background: `linear-gradient(to right, ${bronzeColors.dark}, ${bronzeColors.primary})` 
+    }}
+  ></div>
+</div>
                 {/* Enhanced content with icons */}
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
