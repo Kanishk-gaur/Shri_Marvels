@@ -30,8 +30,8 @@ const contactInfo = [
   },
   {
     icon: MapPin,
-    title: "Delhi Office",
-    details: "Marble Market, Mangolpuri, New Delhi",
+    title: "Kishangarh Office",
+    details: "Hanumarngarh-Kishangarh Mega Highway, Rajasthan 305801",
     // description: "Regional Office",
   },
 ];

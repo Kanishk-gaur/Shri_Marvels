@@ -59,7 +59,7 @@ export function Footer() {
             <div className="space-y-2">
               {[
                 { href: "/", label: "Home" },
-                { href: "/gallery?category=marvel", label: "Marbel Collection" },
+                { href: "/gallery?category=marvel", label: "Marbles Collection" },
                 { href: "/gallery?category=tiles", label: "Tiles Collection" },
                 { href: "/about", label: "About Us" },
               ].map((link) => (
@@ -121,7 +121,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3 text-white/70 text-sm">
                 <MapPin className="w-4 h-4" />
-                <span>8-A, National Highway, Gujarat 363642</span>
+                <span>Morbi Office,8-A, National Highway, Gujarat 363642</span>
               </div>
             </div>
           </motion.div>
