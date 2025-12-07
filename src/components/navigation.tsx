@@ -53,7 +53,16 @@ const bronzeColors = {
   dark: "#D8B168",         // Darker bronze
   darker: "#B89655",       // Even darker for depth
   darkest: "#8C7542",      // Deep bronze
-  bgGradient: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)",
+};
+
+// New attractive dark color scheme
+const darkColors = {
+  primary: "#0F172A",      // Rich navy blue (slate-900)
+  secondary: "#1E293B",    // Dark slate blue (slate-800)
+  accent: "#334155",       // Medium slate (slate-700)
+  light: "#475569",        // Light slate (slate-600)
+  bgGradient: "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
+  overlayGradient: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
 };
 
 export function Navigation() {
@@ -101,8 +110,8 @@ export function Navigation() {
           className={`relative flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group
             ${
               isActive
-                ? "bg-gradient-to-r from-[#D8B168]/30 via-[#F3C77B]/25 to-[#D8B168]/30 text-white shadow-lg border border-[#F3C77B]/40"
-                : "text-white/80 hover:text-white hover:bg-white/5"
+                ? "bg-gradient-to-r from-[#D8B168]/20 via-[#F3C77B]/15 to-[#D8B168]/20 text-white shadow-lg border border-[#F3C77B]/30 backdrop-blur-sm"
+                : "text-white/90 hover:text-white hover:bg-white/5"
             }
           `}
           whileHover={{ y: -2 }}
@@ -126,7 +135,7 @@ export function Navigation() {
           )}
 
           {/* Hover glow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/5 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/10 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </motion.div>
       </Link>
     );
@@ -138,11 +147,11 @@ export function Navigation() {
       <motion.nav
         className={`fixed top-0 left-0 right-0 z-[60] backdrop-blur-xl transition-all duration-500 ${
           isScrolled
-            ? "bg-gradient-to-r from-gray-900/95 via-[#1a1a1a]/90 to-gray-900/95 shadow-2xl border-b border-[#F3C77B]/20 shadow-[#F3C77B]/5"
-            : "bg-gradient-to-r from-gray-900/90 via-[#1a1a1a]/85 to-gray-900/90"
+            ? "shadow-2xl border-b border-[#F3C77B]/10 shadow-[#0F172A]/30"
+            : ""
         }`}
         style={{
-          background: bronzeColors.bgGradient,
+          background: darkColors.bgGradient,
         }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -150,7 +159,12 @@ export function Navigation() {
       >
         {/* Background gradient elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/5 via-transparent to-[#F3C77B]/5 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F3C77B]/10 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F3C77B]/5 via-transparent to-transparent pointer-events-none" />
+        
+        {/* Subtle texture overlay */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
 
         <div className="relative max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 w-full">
@@ -171,6 +185,7 @@ export function Navigation() {
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
+                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
                       }}
                     >
                       AGRAWAL CERAMICS
@@ -179,7 +194,7 @@ export function Navigation() {
 
                   {/* Brand Subtitle - Minimal gap */}
                   <div className="mt-0">
-                    <span className="text-xs sm:text-sm text-[#F3C77B]/90 font-medium tracking-wide leading-tight">
+                    <span className="text-xs sm:text-sm text-[#F3C77B]/95 font-medium tracking-wide leading-tight">
                       Decorative Tiles & Marbles
                     </span>
                   </div>
@@ -203,11 +218,11 @@ export function Navigation() {
                 return (
                   <Link key={item.href} href={item.href}>
                     <motion.div
-                      className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all duration-300 group
+                      className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all duration-300 group backdrop-blur-sm
                         ${
                           isActive
-                            ? "bg-gradient-to-r from-[#B89655]/30 via-[#D8B168]/25 to-[#B89655]/30 text-white shadow-lg border border-[#F3C77B]/30"
-                            : "text-white/80 hover:text-white hover:bg-white/5"
+                            ? "bg-gradient-to-r from-[#B89655]/15 via-[#D8B168]/10 to-[#B89655]/15 text-white shadow-lg border border-[#F3C77B]/20"
+                            : "text-white/90 hover:text-white hover:bg-white/5"
                         }
                       `}
                       whileHover={{ y: -2, scale: 1.05 }}
@@ -235,7 +250,7 @@ export function Navigation() {
                       )}
 
                       {/* Hover glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/5 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#F3C77B]/0 via-[#F3C77B]/10 to-[#F3C77B]/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </motion.div>
                   </Link>
                 );
@@ -244,7 +259,7 @@ export function Navigation() {
 
             {/* Mobile Menu Button */}
             <motion.button
-              className="lg:hidden relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white transition-all duration-300"
+              className="lg:hidden relative p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/90 hover:text-white transition-all duration-300 backdrop-blur-sm"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               whileHover={{ scale: 1.05 }}
@@ -273,7 +288,11 @@ export function Navigation() {
           >
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 bg-gradient-to-br from-gray-900/95 via-[#1a1a1a]/95 to-gray-900/95 backdrop-blur-xl"
+              className="fixed inset-0 backdrop-blur-xl"
+              style={{
+                background: darkColors.overlayGradient,
+                opacity: 0.95,
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -282,9 +301,9 @@ export function Navigation() {
 
             {/* Mobile Menu Panel - REDUCED WIDTH */}
             <motion.div
-              className="fixed top-0 left-0 h-full w-4/5 max-w-xs backdrop-blur-2xl shadow-2xl overflow-y-auto border-r border-[#F3C77B]/30"
+              className="fixed top-0 left-0 h-full w-4/5 max-w-xs backdrop-blur-2xl shadow-2xl overflow-y-auto border-r border-[#F3C77B]/20"
               style={{
-                background: 'linear-gradient(135deg, #1a1a1a 0%, #222222 50%, #1a1a1a 100%)',
+                background: darkColors.bgGradient,
               }}
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -292,7 +311,7 @@ export function Navigation() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
               {/* Mobile Header */}
-              <div className="p-3 border-b border-[#F3C77B]/30 relative">
+              <div className="p-3 border-b border-[#F3C77B]/20 relative">
                 <div className="flex items-center justify-between">
                   {/* Brand Name Block */}
                   <div className="flex flex-col items-start -space-y-0.5">
@@ -307,13 +326,13 @@ export function Navigation() {
                     >
                       AGRAWAL CERAMICS
                     </h3>
-                    <span className="text-[8px] text-[#F3C77B]/70 font-medium leading-none">
+                    <span className="text-[8px] text-[#F3C77B]/80 font-medium leading-none">
                       Decorative Tiles & Marbles
                     </span>
                   </div>
                   <motion.button
                     onClick={closeMobileMenu}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all duration-300 ml-2 flex-shrink-0"
+                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 hover:text-white transition-all duration-300 ml-2 flex-shrink-0 backdrop-blur-sm"
                     aria-label="Close menu"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -330,20 +349,20 @@ export function Navigation() {
 
               {/* Decorative Separator */}
               <div className="px-3 py-2">
-                <div className="h-px bg-gradient-to-r from-transparent via-[#F3C77B]/50 to-transparent" />
+                <div className="h-px bg-gradient-to-r from-transparent via-[#F3C77B]/40 to-transparent" />
               </div>
 
               {/* Mobile Contact Info */}
               <div className="p-3">
                 <div 
-                  className="rounded-lg p-3 border border-[#F3C77B]/30"
+                  className="rounded-lg p-3 border border-[#F3C77B]/20 backdrop-blur-sm"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(184, 150, 85, 0.2) 0%, rgba(140, 117, 66, 0.3) 100%)',
+                    background: 'linear-gradient(135deg, rgba(184, 150, 85, 0.15) 0%, rgba(140, 117, 66, 0.25) 100%)',
                   }}
                 >
                   <div className="text-center space-y-2">
                     <div>
-                      <p className="text-[10px] text-[#F3C77B]/80 mb-1">
+                      <p className="text-[10px] text-[#F3C77B]/90 mb-1">
                         Need assistance?
                       </p>
                       <p className="text-sm font-bold text-white">
@@ -354,7 +373,7 @@ export function Navigation() {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300"
+                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300 shadow-md"
                         style={{
                           background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
                           color: 'white',
@@ -371,16 +390,22 @@ export function Navigation() {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full py-1.5 text-xs font-medium rounded hover:bg-white/20 transition-all duration-300 border border-white/20"
+                        className="w-full py-1.5 text-xs font-medium rounded transition-all duration-300 border border-white/20 backdrop-blur-sm"
                         style={{
                           background: 'rgba(243, 199, 123, 0.1)',
                           color: 'white',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'rgba(243, 199, 123, 0.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'rgba(243, 199, 123, 0.1)';
                         }}
                       >
                         WhatsApp
                       </motion.button>
                     </div>
-                    <p className="text-[10px] text-[#F3C77B]/50 pt-2">
+                    <p className="text-[10px] text-[#F3C77B]/60 pt-2">
                       © {new Date().getFullYear()} Agrawal Ceramics
                     </p>
                   </div>

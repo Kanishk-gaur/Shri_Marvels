@@ -22,11 +22,11 @@ import { StepRiserShowcase } from "@/components/StepRiserShowcase";
 
 // Bronze color palette
 const bronzeColors = {
-  primary: "#F3C77B",      // Main bronze
-  light: "#F8DAA3",        // Lighter bronze
-  dark: "#D8B168",         // Darker bronze
-  darker: "#B89655",       // Even darker for depth
-  darkest: "#8C7542",      // Deep bronze
+  primary: "#F3C77B", // Main bronze
+  light: "#F8DAA3", // Lighter bronze
+  dark: "#D8B168", // Darker bronze
+  darker: "#B89655", // Even darker for depth
+  darkest: "#8C7542", // Deep bronze
 };
 
 // --- Data for Balanced Sections (updated with bronze color palette) ---
@@ -51,17 +51,23 @@ const filteredTileCategories = selectedTileIds
 
 const tileAttributes = [
   {
-    icon: <ShieldCheck className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <ShieldCheck className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Exceptional Durability",
     desc: "Engineered to withstand high traffic, scratches, and stains, ensuring a pristine look for years.",
   },
   {
-    icon: <Droplets className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <Droplets className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Low Maintenance",
     desc: "Non-porous surfaces make cleaning effortless, offering a practical solution for modern living.",
   },
   {
-    icon: <Palette className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <Palette className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Design Versatility",
     desc: "With endless colors, patterns, and finishes, tiles provide limitless creative possibilities for any style.",
   },
@@ -79,17 +85,23 @@ const marbleAttributes = [
     desc: "Each slab is unique, with distinct veining and character sculpted by nature over millennia.",
   },
   {
-    icon: <Layers3 className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <Layers3 className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Timeless Elegance",
     desc: "A symbol of luxury and sophistication that transcends trends and adds classic beauty.",
   },
   {
-    icon: <TrendingUp className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <TrendingUp className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Increases Property Value",
     desc: "A premium feature that is highly sought after, making it a sound investment for your home.",
   },
   {
-    icon: <Sparkles className="w-8 h-8" style={{ color: bronzeColors.darker }} />,
+    icon: (
+      <Sparkles className="w-8 h-8" style={{ color: bronzeColors.darker }} />
+    ),
     title: "Luminous Quality",
     desc: "Its inherent translucence interacts with light to create a unique and captivating glow.",
   },
@@ -155,13 +167,13 @@ export default function HomePage() {
         {/* Our Legacy Section */}
         <section className="bg-gradient-to-br from-slate-50 to-white py-24 relative overflow-hidden mb-24">
           {/* Background decorative elements */}
-          <div 
+          <div
             className="absolute top-0 right-0 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob"
-            style={{ backgroundColor: bronzeColors.light + '30' }}
+            style={{ backgroundColor: bronzeColors.light + "30" }}
           ></div>
-          <div 
+          <div
             className="absolute bottom-0 left-0 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob animation-delay-2000"
-            style={{ backgroundColor: bronzeColors.dark + '20' }}
+            style={{ backgroundColor: bronzeColors.dark + "20" }}
           ></div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -175,15 +187,19 @@ export default function HomePage() {
                 className="space-y-8 order-2 lg:order-1"
               >
                 {/* Enhanced badge */}
-                <div 
+                <div
                   className="inline-flex items-center gap-2 rounded-full px-4 py-2"
-                  style={{ backgroundColor: bronzeColors.light + '20', borderColor: bronzeColors.primary + '30', borderWidth: '1px' }}
+                  style={{
+                    backgroundColor: bronzeColors.light + "20",
+                    borderColor: bronzeColors.primary + "30",
+                    borderWidth: "1px",
+                  }}
                 >
-                  <div 
+                  <div
                     className="w-2 h-2 rounded-full animate-pulse"
                     style={{ backgroundColor: bronzeColors.primary }}
                   ></div>
-                  <span 
+                  <span
                     className="text-sm font-semibold uppercase tracking-wider"
                     style={{ color: bronzeColors.darker }}
                   >
@@ -192,40 +208,43 @@ export default function HomePage() {
                 </div>
 
                 {/* Enhanced heading */}
-               <div className="space-y-4">
-  <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
-    Crafting Spaces of{" "}
-    <span 
-      className="text-transparent bg-clip-text bg-gradient-to-r"
-      style={{
-        backgroundImage: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.light} 100%)`,
-      }}
-    >
-      Distinction
-    </span>
-  </h2>
-  <div 
-    className="w-20 h-1 rounded-full"
-    style={{ 
-      background: `linear-gradient(to right, ${bronzeColors.dark}, ${bronzeColors.primary})` 
-    }}
-  ></div>
-</div>
+                <div className="space-y-4">
+                  <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+                    Crafting Spaces of{" "}
+                    <span
+                      className="text-transparent bg-clip-text bg-gradient-to-r"
+                      style={{
+                        backgroundImage: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.light} 100%)`,
+                      }}
+                    >
+                      Distinction
+                    </span>
+                  </h2>
+                  <div
+                    className="w-20 h-1 rounded-full"
+                    style={{
+                      background: `linear-gradient(to right, ${bronzeColors.dark}, ${bronzeColors.primary})`,
+                    }}
+                  ></div>
+                </div>
                 {/* Enhanced content with icons */}
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div 
+                    <div
                       className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
-                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                      style={{ backgroundColor: bronzeColors.light + "30" }}
                     >
-                      <div 
+                      <div
                         className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: bronzeColors.primary }}
                       ></div>
                     </div>
                     <p className="text-lg text-slate-700 leading-relaxed">
                       For over{" "}
-                      <span className="font-semibold" style={{ color: bronzeColors.darker }}>
+                      <span
+                        className="font-semibold"
+                        style={{ color: bronzeColors.darker }}
+                      >
                         three decades
                       </span>
                       , we have been the premier source for the **world&apos;s**
@@ -235,11 +254,11 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div 
+                    <div
                       className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
-                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                      style={{ backgroundColor: bronzeColors.light + "30" }}
                     >
-                      <div 
+                      <div
                         className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: bronzeColors.primary }}
                       ></div>
@@ -262,11 +281,11 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div 
+                    <div
                       className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-1"
-                      style={{ backgroundColor: bronzeColors.light + '30' }}
+                      style={{ backgroundColor: bronzeColors.light + "30" }}
                     >
-                      <div 
+                      <div
                         className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: bronzeColors.primary }}
                       ></div>
@@ -282,19 +301,38 @@ export default function HomePage() {
                 {/* Trust indicators */}
                 <div className="flex items-center gap-6 pt-6 border-t border-slate-200">
                   <div className="text-center">
-                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>
+                    <div
+                      className="text-2xl font-bold"
+                      style={{ color: bronzeColors.darker }}
+                    >
                       5000+
                     </div>
                     <div className="text-sm text-slate-600">Projects</div>
                   </div>
-                  <div className="w-px h-8" style={{ backgroundColor: bronzeColors.primary + '30' }}></div>
+                  <div
+                    className="w-px h-8"
+                    style={{ backgroundColor: bronzeColors.primary + "30" }}
+                  ></div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>94%</div>
+                    <div
+                      className="text-2xl font-bold"
+                      style={{ color: bronzeColors.darker }}
+                    >
+                      94%
+                    </div>
                     <div className="text-sm text-slate-600">Satisfaction</div>
                   </div>
-                  <div className="w-px h-8" style={{ backgroundColor: bronzeColors.primary + '30' }}></div>
+                  <div
+                    className="w-px h-8"
+                    style={{ backgroundColor: bronzeColors.primary + "30" }}
+                  ></div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold" style={{ color: bronzeColors.darker }}>5+</div>
+                    <div
+                      className="text-2xl font-bold"
+                      style={{ color: bronzeColors.darker }}
+                    >
+                      5+
+                    </div>
                     <div className="text-sm text-slate-600">States</div>
                   </div>
                 </div>
@@ -316,16 +354,17 @@ export default function HomePage() {
                     priority
                   />
                   {/* Enhanced overlay with bronze gradient */}
-                  <div 
+                  <div
                     className="absolute inset-0"
                     style={{
-                      background: 'linear-gradient(to top, rgba(140, 117, 66, 0.15) 0%, transparent 50%)',
+                      background:
+                        "linear-gradient(to top, rgba(140, 117, 66, 0.15) 0%, transparent 50%)",
                     }}
                   />
                 </div>
 
                 {/* Decorative element - hidden on mobile */}
-                <div 
+                <div
                   className="absolute -bottom-6 -right-6 w-24 h-24 rounded-2xl -z-10 rotate-12 opacity-20 hidden lg:block"
                   style={{
                     background: `linear-gradient(135deg, ${bronzeColors.dark} 0%, ${bronzeColors.primary} 100%)`,
@@ -393,9 +432,9 @@ export default function HomePage() {
                 <Link
                   href="/gallery?category=tiles"
                   className="inline-block text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  style={{ 
+                  style={{
                     backgroundColor: bronzeColors.darker,
-                    background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                    background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
@@ -454,19 +493,23 @@ export default function HomePage() {
               <Link
                 href="/gallery?category=tiles"
                 className="inline-flex items-center gap-2 font-semibold px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-sm"
-                style={{ 
-                  backgroundColor: bronzeColors.light + '20', 
-                  borderColor: bronzeColors.primary + '30',
-                  borderWidth: '2px',
-                  color: bronzeColors.darker 
+                style={{
+                  backgroundColor: bronzeColors.light + "20",
+                  borderColor: bronzeColors.primary + "30",
+                  borderWidth: "2px",
+                  color: bronzeColors.darker,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = bronzeColors.light + '40';
-                  e.currentTarget.style.borderColor = bronzeColors.primary + '50';
+                  e.currentTarget.style.backgroundColor =
+                    bronzeColors.light + "40";
+                  e.currentTarget.style.borderColor =
+                    bronzeColors.primary + "50";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = bronzeColors.light + '20';
-                  e.currentTarget.style.borderColor = bronzeColors.primary + '30';
+                  e.currentTarget.style.backgroundColor =
+                    bronzeColors.light + "20";
+                  e.currentTarget.style.borderColor =
+                    bronzeColors.primary + "30";
                 }}
               >
                 <span>View all Tiles</span>
@@ -495,9 +538,9 @@ export default function HomePage() {
           {/* === PILLAR 2: THE WORLD OF DECORATIVE MARVELS === */}
           <section className="bg-white  relative overflow-hidden mb-20">
             <div aria-hidden="true" className="absolute inset-0 -z-10">
-              <div 
+              <div
                 className="absolute top-0 right-0 h-[500px] w-[500px] -translate-y-1/4 translate-x-1/3 rounded-full blur-[150px]"
-                style={{ backgroundColor: bronzeColors.light + '20' }}
+                style={{ backgroundColor: bronzeColors.light + "20" }}
               ></div>
             </div>
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -555,9 +598,9 @@ export default function HomePage() {
                   <Link
                     href="/gallery?category=marvel"
                     className="inline-block text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-                    style={{ 
+                    style={{
                       backgroundColor: bronzeColors.darker,
-                      background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                      background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
@@ -645,7 +688,7 @@ export default function HomePage() {
                       {look.title}
                     </h3>
                     <Link href={look.href}>
-                      <span 
+                      <span
                         className="font-semibold mt-2 inline-block hover:underline"
                         style={{ color: bronzeColors.light }}
                       >
@@ -660,10 +703,10 @@ export default function HomePage() {
         </section>
 
         {/* --- Final Call to Action --- */}
-        <section 
+        <section
           className="py-24"
-          style={{ 
-            background: `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`
+          style={{
+            background: `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`,
           }}
         >
           <div className="max-w-4xl mx-auto text-center px-4">
@@ -693,7 +736,7 @@ export default function HomePage() {
                     e.currentTarget.style.backgroundColor = bronzeColors.light;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.backgroundColor = "white";
                   }}
                 >
                   Speak with a Consultant
@@ -702,12 +745,12 @@ export default function HomePage() {
                   href="/gallery"
                   className="inline-block bg-transparent border-2 border-white text-white font-bold px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105"
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'white';
+                    e.currentTarget.style.backgroundColor = "white";
                     e.currentTarget.style.color = bronzeColors.darker;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "white";
                   }}
                 >
                   Browse All Products
