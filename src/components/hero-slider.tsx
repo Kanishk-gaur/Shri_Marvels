@@ -88,7 +88,7 @@ const NavigationDots = ({
   currentIndex,
   setIndex,
 }: NavigationDotsProps) => (
-  <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+  <div className="absolute bottom-4 sm:bottom-5 md:bottom-6 lg:bottom-7 xl:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
     {slides.map((_, i) => (
       <button
         key={i}
@@ -96,7 +96,7 @@ const NavigationDots = ({
         aria-label={`Go to slide ${i + 1}`}
         className={`${DOT_BASE_CLASS} ${
           i === currentIndex
-            ? "w-6 bg-[#F3C77B]"
+            ? "w-5 sm:w-6 bg-[#F3C77B]"
             : "w-2 bg-[#E7DFC9]/70 hover:bg-[#F3C77B]"
         }`}
       />
@@ -137,7 +137,7 @@ export function HeroSlider() {
   const slide = useMemo(() => slides[index], [index]);
 
   return (
-    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[90vh] w-full overflow-hidden bg-gradient-to-tr from-[#EFE2C8] via-[#E9D8C0] to-[#E7DFC9]">
+    <section className="relative h-[48vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] xl:h-[85vh] w-full overflow-hidden bg-gradient-to-tr from-[#EFE2C8] via-[#E9D8C0] to-[#E7DFC9]">
       {/* 1. Progress Bar */}
       <ProgressBar index={index} duration={SLIDE_DURATION} />
 
@@ -160,27 +160,28 @@ export function HeroSlider() {
             sizes="(max-width: 768px) 100vw, 100vw"
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 md:from-black/50 md:via-black/25 to-transparent" />
+          {/* Gradient Overlay - Adjusted for 1024x600 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 md:from-black/65 md:via-black/40 lg:from-black/55 lg:via-black/25 to-transparent" />
         </motion.div>
       </AnimatePresence>
 
-      {/* 3. Text Content - Responsive for 1024x600 screens */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end pb-4 sm:pb-6 md:pb-12 lg:pb-20 items-start lg:items-end p-4 sm:p-6 md:p-8 lg:p-16 text-left lg:text-right">
-        <div className="max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] md:max-w-sm lg:max-w-xl text-white drop-shadow-lg">
-          {/* Title - Responsive sizing */}
+      {/* 3. Text Content - Adjusted height for 1024x600 */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end pb-3 sm:pb-4 md:pb-6 lg:pb-12 xl:pb-16 items-start lg:items-end p-4 sm:p-5 md:p-6 lg:p-10 xl:p-14 text-left lg:text-right">
+        <div className="max-w-[88%] xs:max-w-[85%] sm:max-w-[80%] md:max-w-[75%] lg:max-w-sm xl:max-w-lg text-white drop-shadow-lg">
+          {/* Title - Slightly larger for increased height */}
           <motion.h1
             key={slide.title + "h1"}
-            className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-5xl xl:text-6xl font-bold md:font-extrabold lg:font-black uppercase mb-1 sm:mb-2 md:mb-3 text-[#F3C77B] leading-tight sm:leading-snug lg:leading-tight"
+            className="text-sm xs:text-base sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-semibold md:font-bold lg:font-extrabold xl:font-black uppercase mb-1 sm:mb-1.5 md:mb-2.5 text-[#F3C77B] leading-tight sm:leading-tight lg:leading-tight"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             {slide.title}
           </motion.h1>
-          {/* Subtitle - Responsive sizing */}
+          {/* Subtitle - Balanced for increased height */}
           <motion.p
             key={slide.subtitle + "p"}
-            className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-2xl font-medium md:font-semibold uppercase mb-2 sm:mb-4 md:mb-6 lg:mb-8 text-[#FFF3D9] leading-relaxed"
+            className="text-[11px] xs:text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-normal md:font-medium lg:font-semibold uppercase mb-2 sm:mb-2.5 md:mb-3.5 lg:mb-4 xl:mb-6 text-[#FFF3D9] leading-snug"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -192,22 +193,23 @@ export function HeroSlider() {
           >
             {slide.subtitle}
           </motion.p>
-          {/* Button - Responsive sizing */}
+          {/* Button - Slightly larger for increased height */}
           <motion.div
             key={slide.href + "btn"}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-1.5 sm:mt-2.5"
           >
             <Link href={slide.href} passHref>
               <Button
                 size="lg"
                 className="
                   bg-gradient-to-r from-[#F3C77B] to-[#B79962] 
-                  text-[#5C4421] font-bold lg:font-extrabold 
+                  text-[#5C4421] font-semibold lg:font-bold 
                   text-xs sm:text-sm md:text-base 
-                  px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-4 lg:px-8 lg:py-6
-                  shadow-md sm:shadow-lg lg:shadow-xl hover:shadow-2xl 
+                  px-3 py-1.5 sm:px-3.5 sm:py-2 md:px-5 md:py-3 lg:px-6 lg:py-4 xl:px-7 xl:py-5
+                  shadow-sm sm:shadow-md md:shadow-lg lg:shadow-lg hover:shadow-xl 
                   transition-all duration-300
                   border border-[#FFF3D9] hover:border-[#F3C77B]
                   hover:scale-[1.02] sm:hover:scale-[1.03]
@@ -220,7 +222,7 @@ export function HeroSlider() {
         </div>
       </div>
 
-      {/* 4. Navigation Dots */}
+      {/* 4. Navigation Dots - Adjusted position */}
       <NavigationDots
         slides={slides}
         currentIndex={index}

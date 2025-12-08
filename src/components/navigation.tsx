@@ -203,23 +203,23 @@ export function Navigation() {
       >
         {/* Subtle texture overlay - only white dots on black */}
         <div className="absolute inset-0 opacity-[0.01] pointer-events-none" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }} />
 
-        <div className="relative max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
+        <div className="relative max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 w-full">
-            {/* Brand Name - Minimal gap */}
+            {/* Brand Name - FIXED RESPONSIVE BEHAVIOR */}
             <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <Link href="/" className="group">
-                <div className="flex flex-col items-center text-center">
-                  {/* Brand Main Title */}
-                  <motion.div whileHover={{ x: 5 }}>
-                    <span 
-                      className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight"
+                <div className="flex flex-col items-start">
+                  {/* Brand Main Title - Now single line with responsive text */}
+                  <div className="flex items-center">
+                    <motion.span 
+                      className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight whitespace-nowrap leading-none"
                       style={{
                         background: `linear-gradient(135deg, ${bronzeColors.light} 0%, ${bronzeColors.primary} 50%, ${bronzeColors.dark} 100%)`,
                         WebkitBackgroundClip: 'text',
@@ -228,12 +228,12 @@ export function Navigation() {
                       }}
                     >
                       AGRAWAL CERAMICS
-                    </span>
-                  </motion.div>
+                    </motion.span>
+                  </div>
 
-                  {/* Brand Subtitle - Minimal gap */}
-                  <div className="mt-0">
-                    <span className="text-xs sm:text-sm text-[#F3C77B]/95 font-medium tracking-wide leading-tight">
+                  {/* Brand Subtitle - Single line below with smaller responsive text */}
+                  <div className="mt-0.5 leading-none">
+                    <span className="text-[10px] xs:text-xs sm:text-sm text-[#F3C77B]/95 font-medium tracking-wide whitespace-nowrap">
                       Decorative Tiles & Marbles
                     </span>
                   </div>
@@ -290,7 +290,7 @@ export function Navigation() {
                         }`}
                       >
                         <Icon className="w-4 h-4" />
-                        <span className="font-medium text-sm">
+                        <span className="font-medium text-sm whitespace-nowrap">
                           {item.label}
                         </span>
                       </div>
@@ -378,10 +378,10 @@ export function Navigation() {
                 }}
               >
                 <div className="flex items-center justify-between">
-                  {/* Brand Name Block */}
-                  <div className="flex flex-col items-start -space-y-0.5">
+                  {/* Brand Name Block - Fixed for mobile */}
+                  <div className="flex flex-col items-start leading-none">
                     <h3 
-                      className="text-sm font-bold leading-none"
+                      className="text-sm font-bold whitespace-nowrap"
                       style={{
                         background: `linear-gradient(135deg, ${bronzeColors.light} 0%, ${bronzeColors.primary} 100%)`,
                         WebkitBackgroundClip: 'text',
@@ -391,7 +391,7 @@ export function Navigation() {
                     >
                       AGRAWAL CERAMICS
                     </h3>
-                    <span className="text-[8px] text-[#F3C77B]/80 font-medium leading-none">
+                    <span className="text-[8px] text-[#F3C77B]/80 font-medium whitespace-nowrap mt-0.5">
                       Decorative Tiles & Marbles
                     </span>
                   </div>

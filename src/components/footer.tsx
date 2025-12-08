@@ -18,7 +18,7 @@ export function Footer() {
           >
             <h3 className="text-2xl font-bold text-white">AGRAWAL CERAMICS</h3>
             <p className="text-white/70 text-sm">
-              Explore extraordinary collections of marvels and tiles with
+              Explore extraordinary collections of marbles and tiles with
               stunning 3D previews and interactive experiences.
             </p>
             <div className="flex space-x-4">
