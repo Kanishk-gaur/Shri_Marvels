@@ -492,24 +492,18 @@ export default function HomePage() {
             <div className="flex justify-center mt-8">
               <Link
                 href="/gallery?category=tiles"
-                className="inline-flex items-center gap-2 font-semibold px-6 py-3 transition-all duration-300 transform hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 font-semibold px-8 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
                 style={{
-                  backgroundColor: bronzeColors.light + "20",
-                  borderColor: bronzeColors.primary + "30",
-                  borderWidth: "2px",
-                  color: bronzeColors.darker,
+                  // Updated to use the primary dark style for a bolder look
+                  backgroundColor: bronzeColors.darker,
+                  background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
+                  color: "white", // Ensure text is white for contrast
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    bronzeColors.light + "40";
-                  e.currentTarget.style.borderColor =
-                    bronzeColors.primary + "50";
+                  e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor =
-                    bronzeColors.light + "20";
-                  e.currentTarget.style.borderColor =
-                    bronzeColors.primary + "30";
+                  e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
                 }}
               >
                 <span>View all Tiles</span>

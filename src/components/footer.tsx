@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { Mail, Phone, MapPin, Github, Twitter, Linkedin } from "lucide-react"
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { Mail, Phone, MapPin, Github, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -16,12 +16,10 @@ export function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-800 to-emerald-400 bg-clip-text text-transparent">
-              AGRAWAL CERAMICS
-            </h3>
+            <h3 className="text-2xl font-bold text-white">AGRAWAL CERAMICS</h3>
             <p className="text-white/70 text-sm">
-              Explore extraordinary collections of marvels and tiles with stunning 3D previews and interactive
-              experiences.
+              Explore extraordinary collections of marvels and tiles with
+              stunning 3D previews and interactive experiences.
             </p>
             <div className="flex space-x-4">
               <motion.a
@@ -59,7 +57,10 @@ export function Footer() {
             <div className="space-y-2">
               {[
                 { href: "/", label: "Home" },
-                { href: "/gallery?category=marvel", label: "Marbles Collection" },
+                {
+                  href: "/gallery?category=marvel",
+                  label: "Marbles Collection",
+                },
                 { href: "/gallery?category=tiles", label: "Tiles Collection" },
                 { href: "/about", label: "About Us" },
               ].map((link) => (
@@ -135,10 +136,11 @@ export function Footer() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <p className="text-white/50 text-sm">
-            © 2024 Discover. All rights reserved. Built with Next.js and Tailwind CSS.
+            © 2024 Discover. All rights reserved. Built with Next.js and
+            Tailwind CSS.
           </p>
         </motion.div>
       </div>
     </footer>
-  )
+  );
 }

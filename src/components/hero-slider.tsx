@@ -88,7 +88,7 @@ const NavigationDots = ({
   currentIndex,
   setIndex,
 }: NavigationDotsProps) => (
-  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+  <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
     {slides.map((_, i) => (
       <button
         key={i}
@@ -137,9 +137,7 @@ export function HeroSlider() {
   const slide = useMemo(() => slides[index], [index]);
 
   return (
-    <section
-      className="relative h-[40vh] md:h-[90vh] w-full overflow-hidden bg-gradient-to-tr from-[#EFE2C8] via-[#E9D8C0] to-[#E7DFC9]"
-    >
+    <section className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[90vh] w-full overflow-hidden bg-gradient-to-tr from-[#EFE2C8] via-[#E9D8C0] to-[#E7DFC9]">
       {/* 1. Progress Bar */}
       <ProgressBar index={index} duration={SLIDE_DURATION} />
 
@@ -166,23 +164,23 @@ export function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      {/* 3. Text Content - Positioned lower with reduced text size */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end md:justify-end pb-12 md:pb-20 items-start md:items-end p-6 md:p-16 text-left md:text-right">
-        <div className="max-w-md md:max-w-xl text-white drop-shadow-lg">
-          {/* Title - Reduced text size */}
+      {/* 3. Text Content - Responsive for 1024x600 screens */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end pb-4 sm:pb-6 md:pb-12 lg:pb-20 items-start lg:items-end p-4 sm:p-6 md:p-8 lg:p-16 text-left lg:text-right">
+        <div className="max-w-[85%] xs:max-w-[80%] sm:max-w-[75%] md:max-w-sm lg:max-w-xl text-white drop-shadow-lg">
+          {/* Title - Responsive sizing */}
           <motion.h1
             key={slide.title + "h1"}
-            className="text-xl sm:text-2xl md:text-6xl font-extrabold md:font-black uppercase mb-2 md:mb-3 text-[#F3C77B] leading-snug md:leading-tight"
+            className="text-sm xs:text-base sm:text-xl md:text-2xl lg:text-5xl xl:text-6xl font-bold md:font-extrabold lg:font-black uppercase mb-1 sm:mb-2 md:mb-3 text-[#F3C77B] leading-tight sm:leading-snug lg:leading-tight"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             {slide.title}
           </motion.h1>
-          {/* Subtitle - Reduced text size */}
+          {/* Subtitle - Responsive sizing */}
           <motion.p
             key={slide.subtitle + "p"}
-            className="text-sm sm:text-base md:text-2xl font-medium md:font-semibold uppercase mb-6 md:mb-8 text-[#FFF3D9]"
+            className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-2xl font-medium md:font-semibold uppercase mb-2 sm:mb-4 md:mb-6 lg:mb-8 text-[#FFF3D9] leading-relaxed"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -194,7 +192,7 @@ export function HeroSlider() {
           >
             {slide.subtitle}
           </motion.p>
-          {/* Button */}
+          {/* Button - Responsive sizing */}
           <motion.div
             key={slide.href + "btn"}
             initial={{ opacity: 0, y: 20 }}
@@ -206,11 +204,13 @@ export function HeroSlider() {
                 size="lg"
                 className="
                   bg-gradient-to-r from-[#F3C77B] to-[#B79962] 
-                  text-[#5C4421] font-extrabold text-sm md:text-base 
-                  shadow-xl hover:shadow-2xl 
+                  text-[#5C4421] font-bold lg:font-extrabold 
+                  text-xs sm:text-sm md:text-base 
+                  px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-4 lg:px-8 lg:py-6
+                  shadow-md sm:shadow-lg lg:shadow-xl hover:shadow-2xl 
                   transition-all duration-300
-                  border-2 border-[#FFF3D9] hover:border-[#F3C77B]
-                  hover:scale-[1.03]
+                  border border-[#FFF3D9] hover:border-[#F3C77B]
+                  hover:scale-[1.02] sm:hover:scale-[1.03]
                 "
               >
                 Explore Collection ✨

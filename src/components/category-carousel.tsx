@@ -156,7 +156,7 @@ export function CategoryCarousel({
   const bronzeColors = {
     primary: "#F3C77B", // Main bronze
     light: "#F8DAA3",   // Lighter bronze
-    dark: "#D8B168",    // Darker bronze - Used for Explore Collection button
+    dark: "#D8B168",    // Darker bronze
     darker: "#B89655",  // Even darker for depth
     darkest: "#8C7542", // Deep bronze
     glow: "rgba(243, 199, 123, 0.3)",
@@ -395,50 +395,27 @@ export function CategoryCarousel({
                         </motion.div>
                       </div>
                       
-                      {/* Action Button - UPDATED: Using dark bronze (#D8B168) for Explore Collection button */}
-                      <motion.div
-                        className="mt-auto"
-                        animate={{
-                          y: hoveredCard === category.id ? 0 : 10,
-                          opacity: hoveredCard === category.id ? 1 : isTileSection ? 0.8 : 1
-                        }}
-                      >
-                        <div 
-                          className={`inline-flex items-center justify-center w-full py-3 rounded-lg font-medium transition-all duration-300 relative overflow-hidden ${
-                            isTileSection
-                              ? 'text-white hover:shadow-lg'
-                              : 'text-emerald-600 hover:text-emerald-700 border border-emerald-200 hover:border-emerald-300'
-                          }`}
+                      {/* Action Button - UPDATED with your gradient approach */}
+                      <div className="mt-auto">
+                        <Link
+                          href={`/gallery?category=${categoryType}&subcategory=${category.id}`}
+                          className="inline-flex items-center justify-center w-full py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
+                          style={{
+                            backgroundColor: bronzeColors.darker,
+                            background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+                            e.currentTarget.style.transform = 'scale(1.02)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
                         >
-                          {isTileSection && (
-                            <>
-                              <motion.div 
-                                className="absolute inset-0"
-                                style={{
-                                  // Using dark bronze (#D8B168) as the main color
-                                  backgroundColor: bronzeColors.dark
-                                }}
-                                animate={{
-                                  backgroundColor: hoveredCard === category.id 
-                                    ? bronzeColors.darker // Slightly darker on hover
-                                    : bronzeColors.dark
-                                }}
-                                transition={{ duration: 0.3 }}
-                              />
-                              <motion.div
-                                className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
-                                style={{
-                                  background: `linear-gradient(135deg, ${bronzeColors.darker}, ${bronzeColors.darkest})`
-                                }}
-                              />
-                            </>
-                          )}
-                          <span className="relative z-10 flex items-center justify-center gap-2">
+                          <span className="relative z-10 flex items-center justify-center gap-2 text-white">
                             Explore Collection
-                            {!isTileSection && (
-                              <ArrowRight className="w-3 h-3 ml-2" />
-                            )}
-                            {isTileSection && hoveredCard === category.id && (
+                            {hoveredCard === category.id && (
                               <motion.div
                                 initial={{ x: -5, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
@@ -448,8 +425,8 @@ export function CategoryCarousel({
                               </motion.div>
                             )}
                           </span>
-                        </div>
-                      </motion.div>
+                        </Link>
+                      </div>
                     </div>
                     
                     {/* Bronze Decorative Border */}
@@ -529,7 +506,7 @@ export function CategoryCarousel({
           </motion.div>
         </AnimatePresence>
 
-        {/* Pagination Dots for Tiles - Updated with your bronze colors */}
+        {/* Pagination Dots for Tiles - Updated with bronze colors */}
         {isTileSection && totalPages > 1 && (
           <div className="flex justify-center items-center gap-3 mt-10">
             <button
@@ -557,10 +534,10 @@ export function CategoryCarousel({
                     style={{
                       width: currentPage === index ? '32px' : '8px',
                       height: '8px',
-                      backgroundColor: currentPage === index ? bronzeColors.dark : `${bronzeColors.dark}30` // Using dark bronze here too
+                      backgroundColor: currentPage === index ? bronzeColors.darker : `${bronzeColors.darker}30`
                     }}
                     whileHover={{
-                      backgroundColor: currentPage === index ? bronzeColors.darker : `${bronzeColors.dark}60`,
+                      backgroundColor: currentPage === index ? bronzeColors.dark : `${bronzeColors.dark}60`,
                       scale: 1.2
                     }}
                   />
