@@ -378,7 +378,7 @@ export default function GalleryPage() {
                         : "text-zinc-600 hover:bg-white/70"
                     }`}
                   >
-                    Marvel
+                    Marble
                   </Button>
                   <Button
                     onClick={() => handleMainCategorySelect("tiles")}

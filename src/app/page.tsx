@@ -32,12 +32,13 @@ const bronzeColors = {
 // --- Data for Balanced Sections (updated with bronze color palette) ---
 
 // Define the IDs of the tile categories you want to show
+
 const selectedTileIds = [
   "border-tiles",
-  "high-gloss-3d-emboss-poster-tiles",
+  "high-gloss-posters",
   "gvt-wall-&-floor-border-tiles",
   "golden-silver-highlighter",
-  "gvt-rangoli",
+  "golden-rangoli-decorative-tiles",
   "kitchen-colorfull-poster",
 ];
 
@@ -247,7 +248,7 @@ export default function HomePage() {
                       >
                         three decades
                       </span>
-                      , we have been the premier source for the **world&apos;s**
+                      , we have been the premier source for the world&apos;s
                       most exquisite tiles, decorative marbles, and roofing
                       solutions.
                     </p>
@@ -331,7 +332,7 @@ export default function HomePage() {
                       className="text-2xl font-bold"
                       style={{ color: bronzeColors.darker }}
                     >
-                      5+
+                      22+
                     </div>
                     <div className="text-sm text-slate-600">States</div>
                   </div>
@@ -646,6 +647,40 @@ export default function HomePage() {
               isPaginated={false}
             />
           </div>
+
+          <div className="flex justify-center mt-4">
+            <Link
+              href="/gallery?category=tiles"
+              className="inline-flex items-center gap-2 font-semibold px-8 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
+              style={{
+                // Updated to use the primary dark style for a bolder look
+                backgroundColor: bronzeColors.darker,
+                background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
+                color: "white", // Ensure text is white for contrast
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
+              }}
+            >
+              <span>View all Marbles</span>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </Link>
+          </div>
         </section>
 
         {/* --- Inspiration Gallery (Unified) --- */}
@@ -684,7 +719,7 @@ export default function HomePage() {
                     <Link href={look.href}>
                       <span
                         className="font-semibold mt-2 inline-block hover:underline"
-                        style={{ color: bronzeColors.light }}
+                        style={{ color: bronzeColors.dark }}
                       >
                         Explore →
                       </span>

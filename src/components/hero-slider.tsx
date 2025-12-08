@@ -42,8 +42,8 @@ const slides: Slide[] = [
   },
   {
     imageSrc: "/images/home/home_5.png",
-    title: "Highlither Tiles",
-    subtitle: "BRING HOME THE DIVINITY",
+    title: "Highlighter Tiles",
+    subtitle: "Brilliant Finishes. Bold Impact",
     href: "/gallery",
   },
   {

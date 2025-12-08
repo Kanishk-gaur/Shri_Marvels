@@ -1,4 +1,4 @@
-// components/StepRiserShowcase.jsx - Updated with Bronze Colors
+// components/StepRiserShowcase.jsx - Updated transparency levels
 
 "use client";
 
@@ -110,22 +110,22 @@ export function StepRiserShowcase() {
   };
 
   return (
-    <div className="relative overflow-hidden bg-gray-50"> {/* Light gray background */}
+    <div className="relative overflow-hidden bg-gray-50">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         {/* Subtle Background Elements */}
         <div className="hidden md:block absolute top-10 left-10 w-64 h-64 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
         <div className="hidden md:block absolute bottom-10 right-10 w-80 h-80 bg-gray-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
         
-        <div className="relative z-10 space-y-12 md:space-y-16">
-          {/* Header */}
+        <div className="relative z-10">
+          {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            className="text-center space-y-4"
+            className="text-center mb-12 md:mb-20"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white rounded-full border border-gray-200 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white rounded-full border border-gray-200 shadow-sm mb-6">
               <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: bronzeColors.primary }} />
               <span 
                 className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
@@ -135,7 +135,7 @@ export function StepRiserShowcase() {
               </span>
             </div>
             
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight px-2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 px-2">
               Integrated{" "}
               <span 
                 style={{ 
@@ -150,16 +150,16 @@ export function StepRiserShowcase() {
               Solutions
             </h2>
             
-            <p className="mt-2 sm:mt-4 text-base sm:text-lg md:text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed px-4">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed px-4">
               Where <span className="font-semibold" style={{ color: bronzeColors.darker }}>safety meets sophistication</span>. 
               Engineered for perfect transitions.
             </p>
           </motion.div>
 
           {/* Main Content */}
-          <div className="space-y-12">
+          <div className="space-y-20">
             {/* Mobile: Vertical Stack of Images */}
-            <div className="block md:hidden space-y-4">
+            <div className="block md:hidden space-y-8">
               {stepRiserImages.map((item, index) => (
                 <motion.div
                   key={item.title}
@@ -169,7 +169,6 @@ export function StepRiserShowcase() {
                   className="relative rounded-xl overflow-hidden shadow-lg bg-white"
                   onClick={() => setExpandedMobile(expandedMobile === index ? null : index)}
                 >
-                  {/* Clean Image - No overlays on mobile */}
                   <div className="relative aspect-[4/3]">
                     <Image
                       src={item.src}
@@ -180,16 +179,14 @@ export function StepRiserShowcase() {
                     />
                   </div>
                   
-                  {/* Simple Title Below Image */}
                   <div className="p-4 border-t border-gray-100">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
                       <h3 className="font-semibold text-gray-900 text-lg">
                         {item.title}
                       </h3>
                       <ChevronRight className={`w-5 h-5 text-gray-400 transition-transform ${expandedMobile === index ? 'rotate-90' : ''}`} />
                     </div>
                     
-                    {/* Expandable Content */}
                     <AnimatePresence>
                       {expandedMobile === index && (
                         <motion.div
@@ -197,7 +194,7 @@ export function StepRiserShowcase() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="overflow-hidden mt-3"
+                          className="overflow-hidden"
                         >
                           <p className="text-gray-600 mb-3">
                             {item.description}
@@ -223,7 +220,7 @@ export function StepRiserShowcase() {
 
             {/* Desktop: Asymmetrical Grid */}
             <motion.div
-              className="hidden md:block h-[500px] lg:h-[600px] xl:h-[700px] w-full"
+              className="hidden md:block h-[500px] lg:h-[600px] xl:h-[700px] w-full mb-20"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
@@ -248,7 +245,7 @@ export function StepRiserShowcase() {
                         sizes="(max-width: 1200px) 50vw, 33vw"
                       />
                       
-                      {/* Desktop Hover Overlay */}
+                      {/* Desktop Hover Overlay - UPDATED TRANSPARENCY */}
                       <AnimatePresence>
                         {hoveredImage === index && (
                           <motion.div
@@ -256,182 +253,220 @@ export function StepRiserShowcase() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="absolute inset-0 bg-white/95 p-6 flex flex-col justify-end"
+                            className="absolute inset-0"
                           >
-                            <div className="space-y-3">
-                              <div className="flex items-center gap-3">
-                                <div 
-                                  className="p-2 rounded-lg"
-                                  style={{ backgroundColor: bronzeColors.light + '40' }}
-                                >
-                                  {index === 0 ? 
-                                    <CheckCircle className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
-                                   index === 1 ? 
-                                    <TrendingUp className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
-                                    <Star className="w-5 h-5" style={{ color: bronzeColors.darker }} />
-                                  }
-                                </div>
-                                <h3 className="text-lg lg:text-xl font-bold text-gray-900">
-                                  {item.title}
-                                </h3>
-                              </div>
-                              
-                              <p className="text-sm text-gray-600">
-                                {item.description}
-                              </p>
-                              
-                              <ul className="space-y-2 mt-3">
-                                {item.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
+                            {/* 90% transparent background overlay */}
+                            <div className="absolute inset-0 bg-black/10"></div>
+                            
+                            {/* Content container */}
+                            <div className="relative h-full p-6 flex flex-col justify-end">
+                              <div className="relative">
+                                {/* Feature box - 30% transparent (less transparent than background) */}
+                                <div className="absolute -top-4 -left-4 -right-4 -bottom-4 bg-gradient-to-br from-white/30 via-white/20 to-white/30 backdrop-blur-sm rounded-2xl border border-white/30"></div>
+                                
+                                <div className="relative space-y-3 z-10">
+                                  <div className="flex items-center gap-3">
                                     <div 
-                                      className="w-1.5 h-1.5 rounded-full"
-                                      style={{ backgroundColor: bronzeColors.primary }}
-                                    />
-                                    {feature}
-                                  </li>
-                                ))}
-                              </ul>
+                                      className="p-2 rounded-lg backdrop-blur-md border border-white/40"
+                                      style={{ 
+                                        background: 'linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2))',
+                                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+                                      }}
+                                    >
+                                      {index === 0 ? 
+                                        <CheckCircle className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
+                                       index === 1 ? 
+                                        <TrendingUp className="w-5 h-5" style={{ color: bronzeColors.darker }} /> : 
+                                        <Star className="w-5 h-5" style={{ color: bronzeColors.darker }} />
+                                      }
+                                    </div>
+                                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 drop-shadow-md">
+                                      {item.title}
+                                    </h3>
+                                  </div>
+                                  
+                                  <p className="text-sm text-gray-800 font-medium drop-shadow-sm">
+                                    {item.description}
+                                  </p>
+                                  
+                                  <ul className="space-y-2 mt-3">
+                                    {item.features.map((feature, idx) => (
+                                      <li key={idx} className="flex items-center gap-2 text-sm text-gray-900 font-medium drop-shadow-sm">
+                                        <div 
+                                          className="w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse"
+                                          style={{ 
+                                            backgroundColor: bronzeColors.primary,
+                                            boxShadow: `0 0 6px ${bronzeColors.primary}`
+                                          }}
+                                        />
+                                        <span>{feature}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </div>
                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
 
-                      {/* Fallback Title */}
-                      <div className="absolute bottom-4 left-4 right-4">
-                        <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
-                          <span className="text-sm font-semibold text-gray-800">
-                            {item.title}
-                          </span>
-                        </div>
-                      </div>
+                      {/* Fallback Title - Only shows when NOT hovering */}
+                      <AnimatePresence>
+                        {hoveredImage !== index && (
+                          <motion.div
+                            initial={{ opacity: 1 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute bottom-4 left-4 right-4"
+                          >
+                            <div 
+                              className="px-4 py-2 rounded-lg backdrop-blur-md border border-white/30"
+                              style={{
+                                background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.5))',
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                              }}
+                            >
+                              <span className="text-sm font-semibold text-gray-900 drop-shadow-md">
+                                {item.title}
+                              </span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Features Section - Responsive */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.6 }}
-              className="bg-white border border-gray-200 rounded-xl md:rounded-2xl shadow-sm md:shadow-lg overflow-hidden"
-            >
-              <div className="p-4 sm:p-6 md:p-8">
-                {/* Features Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
-                  {stepRiserHighlights.map((highlight, index) => (
-                    <div 
-                      key={index}
-                      className="p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors duration-300"
-                    >
-                      <div className="flex flex-col gap-2 sm:gap-3">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <div 
-                            className="p-2 sm:p-3 rounded-lg flex-shrink-0"
-                            style={{ backgroundColor: bronzeColors.light + '20' }}
-                          >
-                            <div style={{ color: bronzeColors.darker }}>
-                              {highlight.icon}
+            {/* Features Section */}
+            <div className="relative -mt-4 md:-mt-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.6 }}
+                className="bg-white border border-gray-200 rounded-xl md:rounded-2xl shadow-sm md:shadow-lg overflow-hidden"
+              >
+                <div className="pt-8 md:pt-12 px-4 sm:px-6 md:px-8">
+                  <div className="text-center mb-8 md:mb-12">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                      <span style={{ color: bronzeColors.darker }}>Key</span> Features
+                    </h3>
+                    <p className="text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">
+                      Discover why our integrated step and riser solutions stand out from the rest
+                    </p>
+                  </div>
+                </div>
+
+                <div className="px-4 sm:px-6 md:px-8 pb-8 md:pb-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                    {stepRiserHighlights.map((highlight, index) => (
+                      <div 
+                        key={index}
+                        className="p-4 sm:p-5 md:p-6 rounded-lg sm:rounded-xl border border-gray-200 transition-all duration-300 hover:shadow-md group/feature"
+                        style={{ 
+                          minHeight: '140px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          // Feature box - less transparent (20% transparent = 80% opaque)
+                          background: 'rgba(255, 255, 255, 0.8)',
+                          backdropFilter: 'blur(10px)',
+                        }}
+                      >
+                        <div className="flex flex-col gap-3 sm:gap-4 flex-1">
+                          <div className="flex items-start gap-3 sm:gap-4">
+                            <div 
+                              className="p-3 sm:p-4 rounded-lg flex-shrink-0 group-hover/feature:scale-110 transition-transform duration-300 mt-1"
+                              style={{ 
+                                backgroundColor: bronzeColors.light + '20',
+                                boxShadow: '0 4px 12px rgba(184, 150, 85, 0.1)'
+                              }}
+                            >
+                              <div style={{ color: bronzeColors.darker }}>
+                                {highlight.icon}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-bold text-gray-900 text-base sm:text-lg md:text-xl mb-1 sm:mb-2 leading-tight">
+                                {highlight.title}
+                              </h4>
+                              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                                {highlight.description}
+                              </p>
                             </div>
                           </div>
-                          <div>
-                            <h4 className="font-bold text-gray-900 text-sm sm:text-base md:text-lg">
-                              {highlight.title}
-                            </h4>
-                            <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
-                              {highlight.description}
-                            </p>
-                          </div>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-200 pt-6 sm:pt-8 px-4 sm:px-6 md:px-8 pb-8 md:pb-12">
+                  <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
+                    <div className="w-full lg:w-auto">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+                        {[
+                          { label: "Free Consultation", value: "✓" },
+                          { label: "Custom Designs", value: "✓" },
+                          { label: "Fast Installation", value: "48h" },
+                          { label: "Samples", value: "Free" },
+                        ].map((item, index) => (
+                          <div 
+                            key={index} 
+                            className="text-center group/info p-3 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+                            style={{ 
+                              // Info boxes - 90% transparent (10% opaque)
+                              background: 'rgba(249, 250, 251, 0.1)',
+                              backdropFilter: 'blur(8px)',
+                            }}
+                          >
+                            <div 
+                              className="text-xl md:text-2xl font-bold mb-1 group-hover/info:scale-110 transition-transform duration-300"
+                              style={{ color: bronzeColors.darker }}
+                            >
+                              {item.value}
+                            </div>
+                            <div className="text-xs sm:text-sm text-gray-600 group-hover/info:text-gray-800 transition-colors duration-300">
+                              {item.label}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                {/* CTA Section */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 border-t border-gray-200 pt-6 sm:pt-8">
-                  {/* Additional Info - Hidden on mobile, visible on sm+ */}
-                  <div className="hidden sm:grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow">
-                    {[
-                      { label: "Free Consultation", value: "✓" },
-                      { label: "Custom Designs", value: "✓" },
-                      { label: "Fast Installation", value: "48h" },
-                      { label: "Samples", value: "Free" },
-                    ].map((item, index) => (
-                      <div key={index} className="text-center">
-                        <div 
-                          className="text-xl font-bold mb-1"
-                          style={{ color: bronzeColors.darker }}
-                        >
-                          {item.value}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          {item.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA Button */}
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full sm:w-auto"
-                  >
-                    <Link
-                      href="/step_riser"
-                      className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto"
-                      style={{ 
-                        backgroundColor: bronzeColors.darker,
-                        background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
-                      }}
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full lg:w-auto"
                     >
-                      <span className="text-base sm:text-lg tracking-wide">
-                        Explore Collection
-                      </span>
-                      <motion.div
-                        animate={{ x: [0, 3, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="ml-2 sm:ml-3"
+                      <Link
+                        href="/step_riser"
+                        className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-white font-semibold rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl w-full lg:w-auto relative overflow-hidden"
+                        style={{ 
+                          backgroundColor: bronzeColors.darker,
+                          background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`
+                        }}
                       >
-                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </motion.div>
-                    </Link>
-                  </motion.div>
-
-                  {/* Mobile Additional Info */}
-                  <div className="sm:hidden grid grid-cols-4 gap-2 w-full mt-4">
-                    {[
-                      { label: "Free", value: "✓", full: "Consult" },
-                      { label: "Custom", value: "✓", full: "Designs" },
-                      { label: "Fast", value: "48h", full: "Install" },
-                      { label: "Free", value: "✓", full: "Samples" },
-                    ].map((item, index) => (
-                      <div key={index} className="text-center p-2 bg-gray-100 rounded-lg">
-                        <div 
-                          className="text-lg font-bold"
-                          style={{ color: bronzeColors.darker }}
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <span className="text-base sm:text-lg md:text-xl tracking-wide relative z-10 drop-shadow-lg">
+                          Explore Collection
+                        </span>
+                        <motion.div
+                          animate={{ x: [0, 3, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                          className="ml-2 sm:ml-3 relative z-10"
                         >
-                          {item.value}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          <span className="hidden">{item.label}</span>
-                          <span>{item.full}</span>
-                        </div>
-                      </div>
-                    ))}
+                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                        </motion.div>
+                      </Link>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

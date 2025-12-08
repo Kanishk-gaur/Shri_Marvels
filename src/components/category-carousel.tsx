@@ -4,7 +4,16 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Sparkles, Zap, TrendingUp, Star, Palette, Layout, Gem } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Star,
+  Palette,
+  Layout,
+  Gem,
+} from "lucide-react";
 
 type Category = {
   id: string;
@@ -28,14 +37,14 @@ const DEFAULT_ITEMS_PER_PAGE = 3;
 const TILE_GRID_ITEMS_PER_PAGE = 6;
 const SHOW_ALL_ITEMS_PER_PAGE = 999;
 
-export function CategoryCarousel({ 
-  title, 
-  subtitle, 
-  categories, 
-  categoryType, 
+export function CategoryCarousel({
+  title,
+  subtitle,
+  categories,
+  categoryType,
   imageAspectRatio = "aspect-[16/10]",
   isPaginated = false,
-  displayMode = "default"
+  displayMode = "default",
 }: CategoryCarouselProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -64,30 +73,30 @@ export function CategoryCarousel({
 
   const carouselVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { 
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
         duration: 0.5,
-        staggerChildren: 0.1
-      } 
+        staggerChildren: 0.1,
+      },
     },
     exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
   };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { 
+      transition: {
         duration: 0.6,
         type: "spring" as const,
         stiffness: 100,
-        damping: 12
-      }
-    }
+        damping: 12,
+      },
+    },
   };
 
   const getGridColumns = () => {
@@ -127,15 +136,24 @@ export function CategoryCarousel({
 
   const getCategoryDescription = (categoryId: string): string => {
     const descriptions: Record<string, string> = {
-      "border-tiles": "Kitchen is the area where staining is the common problem, we recommend to use stain free & scratch free floor tiles and easy to clean wall or dado tiles. Generally, people extend their living room floor tiles to get a seamless look.",
-      "high-gloss-3d-emboss-poster-tiles": "High gloss 3D emboss tiles add depth and dimension to your walls with reflective surfaces that enhance light and create visual interest.",
-      "gvt-wall-&-floor-border-tiles": "GVT border tiles offer durable and stylish solutions for both walls and floors with high-resolution digital printing and protective layers.",
-      "golden-silver-highlighter": "Golden and silver highlighters add luxury accents to your space with metallic finishes that catch and reflect light beautifully.",
-      "gvt-rangoli": "Rangoli patterned tiles bring traditional Indian art to modern interiors with vibrant colors and intricate geometric designs.",
-      "kitchen-colorfull-poster": "Colorful kitchen poster tiles transform your cooking space with artistic designs that are both functional and visually striking."
+      "border-tiles":
+        "Kitchen is the area where staining is the common problem, we recommend to use stain free & scratch free floor tiles and easy to clean wall or dado tiles. Generally, people extend their living room floor tiles to get a seamless look.",
+      "high-gloss-3d-emboss-poster-tiles":
+        "High gloss 3D emboss tiles add depth and dimension to your walls with reflective surfaces that enhance light and create visual interest.",
+      "gvt-wall-&-floor-border-tiles":
+        "GVT border tiles offer durable and stylish solutions for both walls and floors with high-resolution digital printing and protective layers.",
+      "golden-silver-highlighter":
+        "Golden and silver highlighters add luxury accents to your space with metallic finishes that catch and reflect light beautifully.",
+      "gvt-rangoli":
+        "Rangoli patterned tiles bring traditional Indian art to modern interiors with vibrant colors and intricate geometric designs.",
+      "kitchen-colorfull-poster":
+        "Colorful kitchen poster tiles transform your cooking space with artistic designs that are both functional and visually striking.",
     };
-    
-    return descriptions[categoryId] || "Discover our premium collection of tiles that combine functionality with aesthetic appeal.";
+
+    return (
+      descriptions[categoryId] ||
+      "Discover our premium collection of tiles that combine functionality with aesthetic appeal."
+    );
   };
 
   const getCategoryIcon = (categoryId: string) => {
@@ -145,7 +163,7 @@ export function CategoryCarousel({
       "gvt-wall-&-floor-border-tiles": <Gem className="w-4 h-4" />,
       "golden-silver-highlighter": <Star className="w-4 h-4" />,
       "gvt-rangoli": <Palette className="w-4 h-4" />,
-      "kitchen-colorfull-poster": <Zap className="w-4 h-4" />
+      "kitchen-colorfull-poster": <Zap className="w-4 h-4" />,
     };
     return icons[categoryId] || <Star className="w-4 h-4" />;
   };
@@ -155,13 +173,13 @@ export function CategoryCarousel({
   // Your specified bronze color palette
   const bronzeColors = {
     primary: "#F3C77B", // Main bronze
-    light: "#F8DAA3",   // Lighter bronze
-    dark: "#D8B168",    // Darker bronze
-    darker: "#B89655",  // Even darker for depth
+    light: "#F8DAA3", // Lighter bronze
+    dark: "#D8B168", // Darker bronze
+    darker: "#B89655", // Even darker for depth
     darkest: "#8C7542", // Deep bronze
     glow: "rgba(243, 199, 123, 0.3)",
     lightGlow: "rgba(243, 199, 123, 0.1)",
-    background: "rgba(243, 199, 123, 0.05)"
+    background: "rgba(243, 199, 123, 0.05)",
   };
 
   return (
@@ -174,9 +192,7 @@ export function CategoryCarousel({
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-            >
-              
-            </motion.div>
+            ></motion.div>
           </div>
         )}
 
@@ -190,8 +206,8 @@ export function CategoryCarousel({
             exit="exit"
           >
             {currentCategories.map((category, index) => (
-              <motion.div 
-                key={category.id} 
+              <motion.div
+                key={category.id}
                 className={`${getCardWidthClass()} group relative`}
                 variants={cardVariants}
                 onMouseEnter={() => setHoveredCard(category.id)}
@@ -202,62 +218,79 @@ export function CategoryCarousel({
                   <motion.div
                     className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10"
                     style={{
-                      background: `radial-gradient(circle at 30% 20%, ${bronzeColors.glow}, transparent 70%)`
+                      background: `radial-gradient(circle at 30% 20%, ${bronzeColors.glow}, transparent 70%)`,
                     }}
                     initial={false}
                     animate={{
                       scale: hoveredCard === category.id ? 1.05 : 1,
-                      opacity: hoveredCard === category.id ? 1 : 0
+                      opacity: hoveredCard === category.id ? 1 : 0,
                     }}
                     transition={{ duration: 0.5 }}
                   />
                 )}
 
                 {/* Card Container */}
-                <Link 
-                  href={`/gallery?category=${categoryType}&subcategory=${category.id}`} 
+                <Link
+                  href={`/gallery?category=${categoryType}&subcategory=${category.id}`}
                   className="block relative"
                 >
-                  <motion.div 
+                  <motion.div
                     className={`relative bg-white overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col border-2 ${
-                      isTileSection 
-                        ? 'border-white rounded-2xl bg-gradient-to-b from-white to-bronze-50/30' 
-                        : 'border-slate-100 hover:border-emerald-300 rounded-2xl'
+                      isTileSection
+                        ? "border-white rounded-2xl bg-gradient-to-b from-white to-bronze-50/30"
+                        : "border-slate-100 hover:border-emerald-300 rounded-2xl"
                     }`}
-                    style={isTileSection ? {
-                      borderColor: hoveredCard === category.id ? `${bronzeColors.light}40` : 'white'
-                    } : {}}
-                    whileHover={{ 
+                    style={
+                      isTileSection
+                        ? {
+                            borderColor:
+                              hoveredCard === category.id
+                                ? `${bronzeColors.light}40`
+                                : "white",
+                          }
+                        : {}
+                    }
+                    whileHover={{
                       y: isTileSection ? -6 : -4,
-                      transition: { 
-                        type: "spring", 
-                        stiffness: 300, 
-                        damping: 15 
-                      }
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 15,
+                      },
                     }}
                   >
                     {/* Image Container with Floating Effects */}
-                    <div className={`relative ${getAspectRatioClass()} overflow-hidden ${getImageBorderRadius()}`}>
+                    <div
+                      className={`relative ${getAspectRatioClass()} overflow-hidden ${getImageBorderRadius()}`}
+                    >
                       {/* Background Pattern for Tiles - Updated with your bronze colors */}
                       {isTileSection && (
-                        <motion.div 
+                        <motion.div
                           className="absolute inset-0 opacity-10"
                           animate={{
-                            backgroundPosition: hoveredCard === category.id ? "100% 100%" : "0% 0%"
+                            backgroundPosition:
+                              hoveredCard === category.id
+                                ? "100% 100%"
+                                : "0% 0%",
                           }}
                           transition={{ duration: 10 }}
                           style={{
                             backgroundImage: `radial-gradient(circle at 25% 25%, ${bronzeColors.primary} 2px, transparent 2px)`,
-                            backgroundSize: '40px 40px'
+                            backgroundSize: "40px 40px",
                           }}
                         />
                       )}
-                      
+
                       {/* Main Image */}
-                      <motion.div 
+                      <motion.div
                         className="relative w-full h-full"
                         animate={{
-                          scale: hoveredCard === category.id ? (isTileSection ? 1.1 : 1.05) : 1
+                          scale:
+                            hoveredCard === category.id
+                              ? isTileSection
+                                ? 1.1
+                                : 1.05
+                              : 1,
                         }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                       >
@@ -268,53 +301,62 @@ export function CategoryCarousel({
                           className="object-cover"
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
-                        
+
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                        
+
                         {/* Bronze Accent Overlay */}
                         {isTileSection && (
-                          <motion.div 
+                          <motion.div
                             className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
                             style={{
-                              background: `linear-gradient(45deg, transparent 30%, ${bronzeColors.glow} 70%, transparent 100%)`
+                              background: `linear-gradient(45deg, transparent 30%, ${bronzeColors.glow} 70%, transparent 100%)`,
                             }}
                             animate={{
-                              backgroundPosition: hoveredCard === category.id ? '200% 200%' : '0% 0%'
+                              backgroundPosition:
+                                hoveredCard === category.id
+                                  ? "200% 200%"
+                                  : "0% 0%",
                             }}
                             transition={{ duration: 2 }}
                           />
                         )}
                       </motion.div>
-                      
+
                       {/* Quick View Overlay for Tiles */}
                       {isTileSection && (
-                        <motion.div 
+                        <motion.div
                           className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-center justify-center cursor-pointer"
                           initial={{ opacity: 0 }}
-                          animate={{ opacity: hoveredCard === category.id ? 1 : 0 }}
+                          animate={{
+                            opacity: hoveredCard === category.id ? 1 : 0,
+                          }}
                           transition={{ duration: 0.3 }}
                         >
                           <motion.div
                             className="text-white text-center p-6"
                             initial={{ y: 20, opacity: 0 }}
-                            animate={{ 
-                              y: hoveredCard === category.id ? 0 : 20, 
-                              opacity: hoveredCard === category.id ? 1 : 0 
+                            animate={{
+                              y: hoveredCard === category.id ? 0 : 20,
+                              opacity: hoveredCard === category.id ? 1 : 0,
                             }}
                             transition={{ duration: 0.3 }}
                           >
                             <div className="mb-4">
                               <motion.div
-                                animate={{ rotate: hoveredCard === category.id ? 360 : 0 }}
+                                animate={{
+                                  rotate: hoveredCard === category.id ? 360 : 0,
+                                }}
                                 transition={{ duration: 0.8 }}
                               >
-                                <Sparkles 
-                                  className="w-8 h-8 mx-auto mb-2" 
-                                  style={{ color: bronzeColors.primary }} 
+                                <Sparkles
+                                  className="w-8 h-8 mx-auto mb-2"
+                                  style={{ color: bronzeColors.primary }}
                                 />
                               </motion.div>
-                              <h3 className="text-xl font-bold mb-2">Quick Preview</h3>
+                              <h3 className="text-xl font-bold mb-2">
+                                Quick Preview
+                              </h3>
                               <p className="text-sm text-gray-200">
                                 Click to explore full collection
                               </p>
@@ -323,98 +365,117 @@ export function CategoryCarousel({
                         </motion.div>
                       )}
                     </div>
-                    
+
                     {/* Content Section - Enhanced for Tiles */}
-                    <div className={`flex-grow flex flex-col ${isTileSection ? 'p-5' : 'p-5'}`}>
-                      {/* Category Header */}
-                      <div className="flex items-start justify-between mb-3">
+                    {/* Content Section - Enhanced for Tiles */}
+                    <div
+                      className={`flex-grow flex flex-col ${
+                        isTileSection ? "p-4" : "p-5"
+                      }`}
+                    >
+                      {/* Category Header - REMOVED THE CATEGORY NAME FROM HERE */}
+                      <div className="flex items-start justify-between mb-2">
+                        {" "}
+                        {/* Changed mb-3 to mb-2 */}
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 ">
+                            {" "}
+                            {/* Changed mb-2 to mb-1 */}
                             {isTileSection && (
                               <motion.div
                                 className="p-2 rounded-lg"
                                 style={{
                                   background: `linear-gradient(135deg, ${bronzeColors.background}, white)`,
-                                  border: `1px solid ${bronzeColors.primary}20`
+                                  border: `1px solid ${bronzeColors.primary}20`,
                                 }}
                                 animate={{
                                   rotate: hoveredCard === category.id ? 360 : 0,
-                                  scale: hoveredCard === category.id ? 1.1 : 1
+                                  scale: hoveredCard === category.id ? 1.1 : 1,
                                 }}
                                 transition={{ duration: 0.5 }}
                               >
                                 {getCategoryIcon(category.id)}
                               </motion.div>
                             )}
-                            <h3 
-                              className={`font-bold ${
-                                isTileSection 
-                                  ? 'text-lg md:text-xl' 
-                                  : 'text-lg text-slate-800'
-                              }`}
-                              style={isTileSection ? { color: bronzeColors.darker } : {}}
-                            >
-                              {category.name}
-                            </h3>
+                            {/* REMOVED THE <h3> WITH CATEGORY NAME HERE */}
                           </div>
-                          
+
                           {/* Description Preview for Tiles */}
                           {isTileSection && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ 
-                                height: hoveredCard === category.id ? 'auto' : 0,
-                                opacity: hoveredCard === category.id ? 1 : 0
+                              animate={{
+                                height:
+                                  hoveredCard === category.id ? "auto" : 0,
+                                opacity: hoveredCard === category.id ? 1 : 0,
                               }}
                               transition={{ duration: 0.3 }}
                               className="overflow-hidden"
                             >
-                              <p className="text-sm text-gray-600 line-clamp-2 mt-2">
+                              <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+                                {" "}
+                                {/* Changed mt-2 to mt-1 */}
                                 {getCategoryDescription(category.id)}
                               </p>
                             </motion.div>
                           )}
                         </div>
-                        
                         {/* Arrow Icon - Updated with your bronze colors */}
                         <motion.div
                           animate={{
                             x: hoveredCard === category.id ? 5 : 0,
-                            scale: hoveredCard === category.id ? 1.2 : 1
+                            scale: hoveredCard === category.id ? 1.2 : 1,
                           }}
                           transition={{ duration: 0.3 }}
                         >
-                          <ArrowRight 
+                          <ArrowRight
                             className={`w-4 h-4 ${
-                              isTileSection 
-                                ? '' 
-                                : 'text-slate-400 group-hover:text-emerald-500'
-                            }`} 
-                            style={isTileSection ? { color: bronzeColors.darker } : {}}
+                              isTileSection
+                                ? ""
+                                : "text-slate-400 group-hover:text-emerald-500"
+                            }`}
+                            style={
+                              isTileSection
+                                ? { color: bronzeColors.darker }
+                                : {}
+                            }
                           />
                         </motion.div>
                       </div>
-                      
-                      {/* Action Button - UPDATED with your gradient approach */}
-                      <div className="mt-auto">
+
+                      {/* Action Button - WITH CATEGORY NAME - Reduced gap from above */}
+                      <div className="mt-0">
+                        {" "}
+                        {/* Changed from mt-auto to mt-3 for less space */}
                         <Link
                           href={`/gallery?category=${categoryType}&subcategory=${category.id}`}
-                          className="inline-flex items-center justify-center w-full py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
+                          className="inline-flex items-center justify-center w-full py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-xl border"
                           style={{
-                            backgroundColor: bronzeColors.darker,
-                            background: `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`,
+                            backgroundColor: "#ffffff",
+                            color: "#000000",
+                            borderColor: "rgba(0, 0, 0, 0.1)",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darkest} 0%, ${bronzeColors.darker} 100%)`;
-                            e.currentTarget.style.transform = 'scale(1.02)';
+                            e.currentTarget.style.backgroundColor = "#000000";
+                            e.currentTarget.style.color = "#ffffff";
+                            e.currentTarget.style.boxShadow =
+                              "0 8px 25px rgba(0, 0, 0, 0.15)";
+                            e.currentTarget.style.borderColor =
+                              "rgba(255, 255, 255, 0.1)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.background = `linear-gradient(135deg, ${bronzeColors.darker} 0%, ${bronzeColors.dark} 100%)`;
-                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.backgroundColor = "#ffffff";
+                            e.currentTarget.style.color = "#000000";
+                            e.currentTarget.style.boxShadow =
+                              "0 4px 12px rgba(0, 0, 0, 0.05)";
+                            e.currentTarget.style.borderColor =
+                              "rgba(0, 0, 0, 0.1)";
                           }}
                         >
-                          <span className="relative z-10 flex items-center justify-center gap-2 text-white">
-                            Explore Collection
+                          <span className="relative z-10 flex items-center justify-center gap-2 transition-colors duration-300">
+                            {/* CHANGED FROM "Explore Collection" TO CATEGORY NAME */}
+                            {category.name}
                             {hoveredCard === category.id && (
                               <motion.div
                                 initial={{ x: -5, opacity: 0 }}
@@ -428,22 +489,23 @@ export function CategoryCarousel({
                         </Link>
                       </div>
                     </div>
-                    
+
                     {/* Bronze Decorative Border */}
                     {isTileSection && (
-                      <motion.div 
+                      <motion.div
                         className="absolute inset-0 rounded-2xl pointer-events-none"
                         style={{
-                          boxShadow: hoveredCard === category.id 
-                            ? `0 0 0 1px ${bronzeColors.primary}40 inset`
-                            : 'none'
+                          boxShadow:
+                            hoveredCard === category.id
+                              ? `0 0 0 1px ${bronzeColors.primary}40 inset`
+                              : "none",
                         }}
                         transition={{ duration: 0.3 }}
                       />
                     )}
                   </motion.div>
                 </Link>
-                
+
                 {/* Bronze Corner Accents - Updated with your colors */}
                 {isTileSection && (
                   <>
@@ -451,53 +513,41 @@ export function CategoryCarousel({
                     <motion.div
                       className="absolute top-0 left-0 w-12 h-12 -mt-3 -ml-3"
                       animate={{
-                        rotate: hoveredCard === category.id ? 180 : 0
+                        rotate: hoveredCard === category.id ? 180 : 0,
                       }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div 
+                      <div
                         className="w-full h-full border-t-2 border-l-2 rounded-tl-lg"
                         style={{ borderColor: bronzeColors.light }}
                       />
                     </motion.div>
-                    
+
                     {/* Bottom Right Corner */}
                     <motion.div
                       className="absolute bottom-0 right-0 w-12 h-12 -mb-3 -mr-3"
                       animate={{
-                        rotate: hoveredCard === category.id ? 180 : 0
+                        rotate: hoveredCard === category.id ? 180 : 0,
                       }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div 
+                      <div
                         className="w-full h-full border-b-2 border-r-2 rounded-br-lg"
                         style={{ borderColor: bronzeColors.darker }}
                       />
                     </motion.div>
-                    
+
                     {/* Bronze Badge */}
                     <motion.div
                       className="absolute -top-2 -right-2 z-20"
                       animate={{
                         scale: hoveredCard === category.id ? 1.1 : 1,
-                        rotate: hoveredCard === category.id ? [0, 15, -15, 0] : 0
+                        rotate:
+                          hoveredCard === category.id ? [0, 15, -15, 0] : 0,
                       }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div className="relative">
-                        <div 
-                          className="w-8 h-8 rounded-full flex items-center justify-center"
-                          style={{
-                            background: `linear-gradient(135deg, ${bronzeColors.primary}, ${bronzeColors.darker})`
-                          }}
-                        >
-                          <Star className="w-4 h-4 text-white" />
-                        </div>
-                        <div 
-                          className="absolute inset-0 rounded-full animate-ping opacity-20"
-                          style={{ backgroundColor: bronzeColors.primary }}
-                        />
-                      </div>
+                      
                     </motion.div>
                   </>
                 )}
@@ -510,17 +560,19 @@ export function CategoryCarousel({
         {isTileSection && totalPages > 1 && (
           <div className="flex justify-center items-center gap-3 mt-10">
             <button
-              onClick={() => setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages)}
+              onClick={() =>
+                setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages)
+              }
               className="p-2 rounded-full hover:bg-bronze-50 transition-colors duration-300"
-              style={{ '--tw-bg-opacity': 0.1 } as React.CSSProperties}
+              style={{ "--tw-bg-opacity": 0.1 } as React.CSSProperties}
               aria-label="Previous page"
             >
-              <ArrowLeft 
-                className="w-5 h-5" 
-                style={{ color: bronzeColors.darker }} 
+              <ArrowLeft
+                className="w-5 h-5"
+                style={{ color: bronzeColors.darker }}
               />
             </button>
-            
+
             <div className="flex items-center gap-2">
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
@@ -532,28 +584,34 @@ export function CategoryCarousel({
                   <motion.div
                     className="rounded-full transition-all duration-300"
                     style={{
-                      width: currentPage === index ? '32px' : '8px',
-                      height: '8px',
-                      backgroundColor: currentPage === index ? bronzeColors.darker : `${bronzeColors.darker}30`
+                      width: currentPage === index ? "32px" : "8px",
+                      height: "8px",
+                      backgroundColor:
+                        currentPage === index
+                          ? bronzeColors.darker
+                          : `${bronzeColors.darker}30`,
                     }}
                     whileHover={{
-                      backgroundColor: currentPage === index ? bronzeColors.dark : `${bronzeColors.dark}60`,
-                      scale: 1.2
+                      backgroundColor:
+                        currentPage === index
+                          ? bronzeColors.dark
+                          : `${bronzeColors.dark}60`,
+                      scale: 1.2,
                     }}
                   />
                 </button>
               ))}
             </div>
-            
+
             <button
               onClick={() => setCurrentPage((prev) => (prev + 1) % totalPages)}
               className="p-2 rounded-full hover:bg-bronze-50 transition-colors duration-300"
-              style={{ '--tw-bg-opacity': 0.1 } as React.CSSProperties}
+              style={{ "--tw-bg-opacity": 0.1 } as React.CSSProperties}
               aria-label="Next page"
             >
-              <ArrowRight 
-                className="w-5 h-5" 
-                style={{ color: bronzeColors.darker }} 
+              <ArrowRight
+                className="w-5 h-5"
+                style={{ color: bronzeColors.darker }}
               />
             </button>
           </div>

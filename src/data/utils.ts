@@ -159,8 +159,8 @@ const customCategoryImages: Record<string, string> = {
   "Kitchen Colorfull Poster": "/images/home/hi_gloss.jpeg",
   "Daimond Collection Posters": "/images/Daimond.png",
 
-  "High Gloss Posters": "/images/home/diamond.jpeg",
-  "High Gloss 3D Emboss Poster Tiles": "/images/home/wooden.jpeg",
+  "High Gloss Posters": "/images/home/ganesh4.jpeg",
+  "High Gloss 3D Emboss Poster Tiles": "/images/home/ganesh4.jpeg",
   "High Gloss Plain & Glitter Poster": "/images/your-uploaded-glitter.jpg",
   "Glitter Emboss": "/images/home/high_gloss.jpeg",
 
@@ -168,8 +168,8 @@ const customCategoryImages: Record<string, string> = {
   "GOD picture": "/images/home/plain.jpg",
   "VITROSA GOD picture": "/images/home/vistora.jpeg",
   Rangoli: "/images/your-uploaded-rangoli.jpg",
-  "GVT rangoli": "/images/home/gvt_ran.jpeg",
-  "Golden Rangoli Decorative Tiles": "/images/home/golden_r.jpeg",
+  "GVT rangoli": "/images/home/rangoli4.jpeg",
+  "Golden Rangoli Decorative Tiles": "/images/home/rangoli4.jpeg",
   "Digital Posters": "/images/home/2506.png",
 
   "GOLDEN SILVER HIGHLIGHTER": "/images/home/golven_silver.jpeg",
