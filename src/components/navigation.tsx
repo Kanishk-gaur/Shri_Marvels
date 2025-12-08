@@ -208,16 +208,16 @@ export function Navigation() {
 
         <div className="relative max-w-[1920px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 w-full">
-            {/* Brand Name - FIXED RESPONSIVE BEHAVIOR */}
+            {/* Brand Name - FIXED: Center aligned text */}
             <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <Link href="/" className="group">
-                <div className="flex flex-col items-start">
-                  {/* Brand Main Title - Now single line with responsive text */}
-                  <div className="flex items-center">
+                <div className="flex flex-col items-center text-center">
+                  {/* Brand Main Title - Centered */}
+                  <div className="flex items-center justify-center">
                     <motion.span 
                       className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-tight whitespace-nowrap leading-none"
                       style={{
@@ -231,9 +231,9 @@ export function Navigation() {
                     </motion.span>
                   </div>
 
-                  {/* Brand Subtitle - Single line below with smaller responsive text */}
-                  <div className="mt-0.5 leading-none">
-                    <span className="text-[10px] xs:text-xs sm:text-sm text-[#F3C77B]/95 font-medium tracking-wide whitespace-nowrap">
+                  {/* Brand Subtitle - Centered below main title */}
+                  <div className="mt-0.5 leading-none w-full">
+                    <span className="text-[10px] xs:text-xs sm:text-sm text-[#F3C77B]/95 font-medium tracking-wide whitespace-nowrap block text-center">
                       Decorative Tiles & Marbles
                     </span>
                   </div>
@@ -370,16 +370,16 @@ export function Navigation() {
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
             >
-              {/* Mobile Header */}
+              {/* Mobile Header - Centered text */}
               <div 
                 className="p-3 relative"
                 style={{
                   borderBottom: `1px solid ${transparentBlackColors.glassBorder}`,
                 }}
               >
-                <div className="flex items-center justify-between">
-                  {/* Brand Name Block - Fixed for mobile */}
-                  <div className="flex flex-col items-start leading-none">
+                <div className="flex flex-col items-center justify-center text-center w-full">
+                  {/* Brand Name Block - Centered */}
+                  <div className="flex flex-col items-center w-full">
                     <h3 
                       className="text-sm font-bold whitespace-nowrap"
                       style={{
@@ -391,13 +391,14 @@ export function Navigation() {
                     >
                       AGRAWAL CERAMICS
                     </h3>
-                    <span className="text-[8px] text-[#F3C77B]/80 font-medium whitespace-nowrap mt-0.5">
+                    <span className="text-[8px] text-[#F3C77B]/80 font-medium whitespace-nowrap mt-0.5 text-center">
                       Decorative Tiles & Marbles
                     </span>
                   </div>
+                  {/* Close Button - Positioned at top right */}
                   <motion.button
                     onClick={closeMobileMenu}
-                    className="p-1.5 rounded-lg text-white/80 hover:text-white transition-all duration-300 ml-2 flex-shrink-0"
+                    className="absolute top-2 right-2 p-1.5 rounded-lg text-white/80 hover:text-white transition-all duration-300"
                     style={{
                       backgroundColor: transparentBlackColors.menuButton,
                       backdropFilter: 'blur(12px)',
