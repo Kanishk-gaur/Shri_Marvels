@@ -38,8 +38,7 @@ const TILE_GRID_ITEMS_PER_PAGE = 6;
 const SHOW_ALL_ITEMS_PER_PAGE = 999;
 
 export function CategoryCarousel({
-  title,
-  subtitle,
+ 
   categories,
   categoryType,
   imageAspectRatio = "aspect-[16/10]",
