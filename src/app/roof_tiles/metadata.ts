@@ -2,7 +2,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Durable Roof Tiles and Roofing Solutions | Agrawal Ceramics",
-  description: "Explore our collection of high-quality, durable, and weather-resistant roof tiles for modern and traditional roofing projects. Find the perfect solution for your home.",
-  keywords: ["roof tiles", "roofing solutions", "durable tiles", "weather resistant roof tiles", "ceramic roof tiles"],
+  title: "Premium Roofing Tiles & Solutions | Agrawal Ceramics",
+  description: "High-quality, weather-resistant roof tiles designed for durability and aesthetic appeal. Explore our range of ceramic and concrete roofing solutions for modern homes.",
+  keywords: ["roof tiles", "ceramic roof tiles", "concrete roof tiles", "durable roofing", "weather resistant tiles"],
 }

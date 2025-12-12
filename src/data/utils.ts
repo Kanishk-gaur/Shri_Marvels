@@ -1,3 +1,4 @@
+// src/data/utils.ts
 import { Product } from "../types";
 
 interface SubCategoryData {

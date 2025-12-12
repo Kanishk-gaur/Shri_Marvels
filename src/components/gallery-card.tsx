@@ -1,9 +1,11 @@
+// src/components/gallery-card.tsx
 "use client";
 
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Product } from "@/data";
 import { useState } from "react";
+import { subCategoryDisplayNames } from "@/data/utils"; // Import for rich alt text
 
 interface GalleryCardProps {
   product: Product;
@@ -18,6 +20,9 @@ export default function GalleryCard({
 }: GalleryCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const sizeString = product.sizes[0] || "1x1";
+  
+  // Create rich alt text: Name, Subcategory, Material, and Size
+  const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
   // Grid classes structure: mobile (default) -> tablet (md:) -> desktop (lg:)
   // Default is now col-span-12 (half of 24) instead of col-span-6 (half of 12)
@@ -62,7 +67,7 @@ export default function GalleryCard({
       break;
     case "300x63 mm (12x2.5 inch)":
       gridClass =
-        "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-8";
+        "col-span-24 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-8";
       break;
     case "Polishing Series 300x600 mm (12x24 inch)":
       gridClass =
@@ -448,7 +453,8 @@ export default function GalleryCard({
           {product.image ? (
             <Image
               src={product.image}
-              alt={product.name}
+              // UPDATED: More descriptive alt text for SEO
+              alt={altText}
               fill
               priority={priority}
               onLoad={() => setIsLoaded(true)}

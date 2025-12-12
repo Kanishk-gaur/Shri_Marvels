@@ -1,3 +1,4 @@
+// src/app/gallery/page.tsx
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from "react"; 
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
-import { getOriginalSizeFilterValues } from "@/data/utils"; 
+import { getOriginalSizeFilterValues, subCategoryDisplayNames } from "@/data/utils"; // Import display name map for schema
 
 // --- START: Lookup Map based on processed data (KEEP) ---
 const subcategoryNameMap = new Map<string, string>();
@@ -108,6 +109,60 @@ const getSizeDisplayName = (rawSize: string): string => {
 
 // --- END: Size Mapping ---
 // ---------------------------------------------------------------------
+
+
+// --- NEW: SCHEMA GENERATION LOGIC ---
+const generateGallerySchema = (groupedProducts: { [key: string]: Product[] }) => {
+    // Collect all products from all visible groups (up to 20 for ItemList limit)
+    const allProductsInGroups = Object.values(groupedProducts).flat();
+    
+    if (allProductsInGroups.length === 0) return null;
+
+    const itemListElements = allProductsInGroups.slice(0, 20).map((p, index) => { 
+        const subcategoryDisplayName = subCategoryDisplayNames[p.subcategory] || p.subcategory;
+        
+        return {
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+                "@type": "Product",
+                "name": `${p.name} - ${p.sizes[0]}`, // Use first size for simpler name
+                "image": `https://yourwebsite.com${p.image}`, // IMPORTANT: Use absolute URL
+                "url": `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`, // Placeholder detail page URL
+                "description": `${subcategoryDisplayName} tile in size ${p.sizes[0]} made of ${p.material}.`,
+                "sku": `AG-C-${p.id}`,
+                "brand": {
+                    "@type": "Brand",
+                    "name": "Agrawal Ceramics"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "url": `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`,
+                    "priceCurrency": "INR",
+                    "price": "0.00", // Placeholder: REPLACE WITH ACTUAL PRICE
+                    "itemCondition": "https://schema.org/NewCondition",
+                    "availability": "https://schema.org/InStock",
+                },
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": p.rating,
+                    "reviewCount": 10 // Placeholder: REPLACE WITH ACTUAL COUNT
+                }
+            }
+        }
+    });
+
+    return JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage", 
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": itemListElements
+        }
+    }, null, 2);
+};
+// --- END: SCHEMA GENERATION LOGIC ---
+
 
 export default function GalleryPage() {
   const router = useRouter();
@@ -319,8 +374,18 @@ export default function GalleryPage() {
 
   const hasProducts = Object.keys(groupedProducts).length > 0;
 
+  // Generate the schema JSON-LD
+  const gallerySchema = useMemo(() => generateGallerySchema(groupedProducts), [groupedProducts]);
+
   return (
     <div className="min-h-screen bg-orange-50 pt-16">
+      {/* NEW: Product List Schema Markup */}
+      {gallerySchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: gallerySchema }}
+        />
+      )}
       {/* WRAPPED CONTENT IN SUSPENSE TO PREVENT CSR BAILOUT ERROR */}
       <Suspense fallback={<div className="p-20 text-center text-xl text-zinc-800">Loading Gallery...</div>}>
         <motion.div
