@@ -1,3 +1,4 @@
+// src/app/marbel/page.tsx
 "use client"
 
 import { motion } from "framer-motion"
@@ -5,7 +6,10 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { MarvelCarousel } from "@/components/marvel-carousel"
 import { SubcategoryCard } from "@/components/subcategory-card"
-import { categories } from "@/data" // We don't need 'sizes' here anymore for this logic
+import { categories } from "@/data" 
+// Removed: import type { Metadata } from "next"
+
+// Removed: export const metadata...
 
 // FIX: Update the type to include the 'sizes' array
 type SubCategoryInfo = {

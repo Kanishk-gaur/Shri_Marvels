@@ -1,0 +1,11 @@
+# public/robots.txt
+
+User-agent: *
+Allow: /
+
+# Directives for Google Bot
+User-agent: Googlebot
+Allow: /
+
+# Point to your sitemap file
+Sitemap: https://yourwebsite.com/sitemap.xml

@@ -1,12 +1,43 @@
+// src/components/footer.tsx
 "use client";
 
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Github, Twitter, Linkedin } from "lucide-react";
 
+// LocalBusiness Schema Data (for SEO)
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Agrawal Ceramics",
+  "url": "https://agrawalceramics.com", // Replace with your actual domain
+  "logo": "https://agrawalceramics.com/images/logo.png", // Assuming a logo path
+  "image": "https://agrawalceramics.com/images/home/logo3.png", // Assuming a relevant image
+  "description": "Premium decorative tiles, marbles, and ceramics for your home. High-quality materials with exquisite designs for modern interiors.",
+  "priceRange": "$$",
+  "telephone": "+91 7091833184",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "8-A, National Highway",
+    "addressLocality": "Morbi",
+    "addressRegion": "Gujarat",
+    "postalCode": "363642",
+    "addressCountry": "IN"
+  },
+  "openingHours": "Mo-Sa 10:00-19:00", // Example hours
+  // This map link is from your contact page and helps verify the address
+  "hasMap": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.824810398717!2d70.8282363154287!3d22.82008798500736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39598cd43806a8f1%3A0x3a2325c52e4d026!2sShri%20Marvels!5e0!3m2!1sen!2sin!4v1678886400000!5m2!1sen!2sin" 
+};
+
 export function Footer() {
   return (
     <footer className="bg-black/40 backdrop-blur-md border-t border-white/10 mt-20">
+      {/* JSON-LD Structured Data (LocalBusiness Schema) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Significantly increased gap from gap-8 to gap-16 (4rem = 64px) */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-38">
@@ -24,23 +55,30 @@ export function Footer() {
                 stunning 3D previews and interactive experiences.
               </p>
             </div>
+            {/* UPDATED: Social Media Links (E-E-A-T) */}
             <div className="flex space-x-4 mt-2">
               <motion.a
-                href="#"
+                href="https://github.com/AgrawalCeramics" // Placeholder: Use actual Github profile
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white/70 hover:text-white transition-colors"
                 whileHover={{ scale: 1.2 }}
               >
                 <Github className="w-5 h-5" />
               </motion.a>
               <motion.a
-                href="#"
+                href="https://twitter.com/AgrawalCeramics" // Placeholder: Use actual Twitter profile
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white/70 hover:text-white transition-colors"
                 whileHover={{ scale: 1.2 }}
               >
                 <Twitter className="w-5 h-5" />
               </motion.a>
               <motion.a
-                href="#"
+                href="https://www.linkedin.com/company/agrawal-ceramics" // Placeholder: Use actual LinkedIn profile
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white/70 hover:text-white transition-colors"
                 whileHover={{ scale: 1.2 }}
               >

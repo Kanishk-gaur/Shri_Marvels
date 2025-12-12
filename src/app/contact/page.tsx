@@ -1,3 +1,4 @@
+// src/app/contact/page.tsx
 "use client";
 
 import type React from "react";
@@ -7,6 +8,7 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link"; // FIX: Added missing import for Link
 
 // Contact info with updated details
 const contactInfo = [
@@ -241,6 +243,15 @@ export default function ContactPage() {
                   loading="lazy"
                 ></iframe>
               </div>
+              {/* Added: Direct Map Link for UX */}
+              <Link
+                href="https://maps.app.goo.gl/MorbiOfficeAddress" // Placeholder: Replace with actual Google Maps link
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-4 text-center text-sm font-medium text-blue-600 hover:underline"
+              >
+                View Morbi Office on Map →
+              </Link>
             </motion.div>
             <motion.div
               className="bg-white/60 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50"
@@ -263,6 +274,15 @@ export default function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
+              {/* Added: Direct Map Link for UX */}
+              <Link
+                href="https://maps.app.goo.gl/KishangarhOfficeAddress" // Placeholder: Replace with actual Google Maps link
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-4 text-center text-sm font-medium text-blue-600 hover:underline"
+              >
+                View Kishangarh Office on Map →
+              </Link>
             </motion.div>
           </div>
         </div>

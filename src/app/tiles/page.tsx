@@ -1,3 +1,4 @@
+// src/app/tiles/page.tsx
 "use client"
 
 import { motion } from "framer-motion"
@@ -6,6 +7,8 @@ import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { TilesCarousel } from "@/components/tiles-carousel"
 import { categories } from "@/data"
+
+// The 'metadata' export and its import have been removed from this client component.
 
 type SubCategoryInfo = {
   id: string
@@ -129,7 +132,7 @@ export default function TilesPage() {
                   className="inline-block mt-4 px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-[#5c4421] to-[#84632e] text-white hover:from-[#84632e] hover:to-[#5c4421] transition-all duration-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-[#a69058]"
                   aria-label={`View collection of ${subcategory.name} tiles`}
                 >
-                  View Collection &rarr;
+                  View Collection →
                 </Link>
               </div>
             </motion.div>

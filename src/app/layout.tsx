@@ -10,10 +10,28 @@ import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
+// Organization Schema JSON-LD Data
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Agrawal Ceramics",
+  "url": "https://agrawalceramics.com", // Replace with your actual domain
+  "logo": "https://agrawalceramics.com/images/logo.png", // Replace with your actual logo URL
+  "description": "Premium decorative tiles, marbles, and ceramics for your home. High-quality materials with exquisite designs for modern interiors.",
+  // Use actual social media links here
+  "sameAs": [
+    "https://www.facebook.com/AgrawalCeramics", 
+    "https://www.instagram.com/AgrawalCeramics",
+    "https://twitter.com/AgrawalCeramics",
+    "https://www.linkedin.com/company/AgrawalCeramics"
+  ]
+};
+
 export const metadata: Metadata = {
   title: "Agrawal Ceramics | Decorative Tiles & Marbles",
   description: "Premium decorative tiles, marbles, and ceramics for your home. High-quality materials with exquisite designs for modern interiors.",
-  keywords: ["ceramic tiles", "decorative tiles", "marbles", "wall tiles", "floor tiles", "bathroom tiles", "kitchen tiles", "home decor"],
+  // 👇 UPDATED KEYWORDS for SEO and typo capture
+  keywords: ["Agrawal Ceramics", "Agrawal Cermaics", "ceramic tiles", "decorative tiles", "marbles", "wall tiles", "floor tiles", "bathroom tiles", "kitchen tiles", "home decor", "premium tiles", "natural stone"],
   authors: [{ name: "Agrawal Ceramics" }],
   
   // 👇 ADDED COMPLETE ICONS CONFIGURATION
@@ -87,6 +105,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* NEW: Organization Schema Markup */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+      </head>
       <body className={inter.className}>
         <Suspense fallback={<div className="h-16 w-full bg-white shadow-md flex items-center px-4">Loading Navigation...</div>}>
           <Navigation />

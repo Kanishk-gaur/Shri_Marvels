@@ -1,3 +1,4 @@
+// src/app/page.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -208,9 +209,9 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* Enhanced heading */}
+                {/* Enhanced heading - CHANGED H2 TO H1 for better SEO structure */}
                 <div className="space-y-4">
-                  <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+                  <h1 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
                     Crafting Spaces of{" "}
                     <span
                       className="text-transparent bg-clip-text bg-gradient-to-r"
@@ -220,7 +221,7 @@ export default function HomePage() {
                     >
                       Distinction
                     </span>
-                  </h2>
+                  </h1>
                   <div
                     className="w-20 h-1 rounded-full"
                     style={{
@@ -650,7 +651,7 @@ export default function HomePage() {
 
           <div className="flex justify-center mt-4">
             <Link
-              href="/gallery?category=tiles"
+              href="/gallery?category=marvel" // FIXED: Changed to 'marvel'
               className="inline-flex items-center gap-2 font-semibold px-8 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
               style={{
                 // Updated to use the primary dark style for a bolder look
