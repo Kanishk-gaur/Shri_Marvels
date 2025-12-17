@@ -13,8 +13,13 @@ import {
   Layers3,
   SlidersHorizontal,
   LucideIcon,
+  BookMarked, // New Icon for Catalog
 } from "lucide-react";
 import { ProductFilter } from "@/components/product-filter";
+// START: New imports for Catalog feature
+import { useCatalog } from "@/context/CatalogContext";
+// END: New imports for Catalog feature
+
 
 type NavLinkItem = {
   href: string;
@@ -34,6 +39,7 @@ type NavItem = NavLinkItem | FilterItem;
 
 const navItems: NavItem[] = [
   { href: "/", label: "Home", icon: Home, type: "link" },
+  { href: "/catalog", label: "Catalog", icon: BookMarked, type: "link" }, // New Catalog Link
   {
     type: "filter",
     label: "Filter",
@@ -99,6 +105,11 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  // START: Use Catalog Hook
+  const { catalogItems } = useCatalog();
+  const catalogCount = catalogItems.length;
+  // END: Use Catalog Hook
+
 
   const closeMobileMenu = () => setIsOpen(false);
 
@@ -133,6 +144,7 @@ export function Navigation() {
 
     const Icon = item.icon;
     const isActive = pathname === item.href;
+    const isCatalogLink = item.href === "/catalog";
 
     return (
       <Link key={item.href} href={item.href} onClick={closeMobileMenu}>
@@ -169,6 +181,13 @@ export function Navigation() {
           >
             <Icon className="w-5 h-5" />
             <span className="font-medium whitespace-nowrap">{item.label}</span>
+            {/* START: Catalog Count Badge (Mobile) */}
+            {isCatalogLink && catalogCount > 0 && (
+              <span className="ml-1 bg-red-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {catalogCount > 99 ? '99+' : catalogCount}
+              </span>
+            )}
+            {/* END: Catalog Count Badge (Mobile) */}
           </div>
 
           {/* Active indicator */}
@@ -247,6 +266,8 @@ export function Navigation() {
 
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
+                const isCatalogLink = item.href === "/catalog";
+                
                 return (
                   <Link key={item.href} href={item.href}>
                     <motion.div
@@ -288,6 +309,13 @@ export function Navigation() {
                         <span className="font-medium text-sm whitespace-nowrap">
                           {item.label}
                         </span>
+                        {/* START: Catalog Count Badge (Desktop) */}
+                        {isCatalogLink && catalogCount > 0 && (
+                          <span className="ml-1 bg-red-600 text-white text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full animate-bounce">
+                            {catalogCount > 99 ? '99+' : catalogCount}
+                          </span>
+                        )}
+                        {/* END: Catalog Count Badge (Desktop) */}
                       </div>
 
                       {/* Active indicator */}
@@ -322,6 +350,13 @@ export function Navigation() {
                 ) : (
                   <Menu className="w-6 h-6" />
                 )}
+                {/* START: Catalog count indicator on Menu button */}
+                {!isOpen && catalogCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full ring-1 ring-white">
+                        {catalogCount > 9 ? '9+' : catalogCount}
+                    </span>
+                )}
+                {/* END: Catalog count indicator on Menu button */}
               </div>
             </motion.button>
           </div>

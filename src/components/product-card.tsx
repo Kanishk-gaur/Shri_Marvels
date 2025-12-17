@@ -3,10 +3,16 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Eye, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star, Eye, Heart, ListPlus, ListMinus } from "lucide-react"; 
 // FIX: Corrected the import path
 import type { Product } from "@/data";
+// START: New imports for Catalog feature
+import {
+  useCatalog,
+  productToCatalogItem,
+} from "@/context/CatalogContext";
+import { Button } from "./ui/button";
+// END: New imports for Catalog feature
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +20,26 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  // START: Catalog Hook
+  const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } =
+    useCatalog();
+  
+  // FIX 1: Convert product.id to string for comparison
+  const isInCatalog = isItemInCatalog(String(product.id)); 
+
+  const handleCatalogToggle = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent Link navigation
+    e.preventDefault(); // Prevent default action
+    
+    if (isInCatalog) {
+      // FIX 2: Convert product.id to string before removing
+      removeItemFromCatalog(String(product.id)); 
+    } else {
+      addItemToCatalog(productToCatalogItem(product));
+    }
+  };
+  // END: Catalog Hook
+
   return (
     <motion.div
       className="group cursor-pointer"
@@ -43,6 +69,26 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
           {/* Quick Actions */}
           <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {/* START: Catalog Toggle Button */}
+            <motion.button
+              className={`w-8 h-8 backdrop-blur-sm rounded-full flex items-center justify-center transition-colors duration-200 ${
+                isInCatalog
+                  ? "bg-red-500/80 text-white hover:bg-red-600/90"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              onClick={handleCatalogToggle}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label={isInCatalog ? "Remove from Catalog" : "Add to Catalog"}
+            >
+              {isInCatalog ? (
+                <ListMinus className="w-4 h-4" />
+              ) : (
+                <ListPlus className="w-4 h-4" />
+              )}
+            </motion.button>
+            {/* END: Catalog Toggle Button */}
+            
             <motion.button
               className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30"
               whileHover={{ scale: 1.1 }}

@@ -7,6 +7,9 @@ import "./globals.css"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Suspense } from "react"
+// START: New imports for Catalog feature
+import { CatalogProvider } from "@/context/CatalogContext"
+// END: New imports for Catalog feature
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -113,10 +116,14 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <Suspense fallback={<div className="h-16 w-full bg-white shadow-md flex items-center px-4">Loading Navigation...</div>}>
-          <Navigation />
-          {children}
-        </Suspense>
+        {/* START: Wrap the application with the CatalogProvider */}
+        <CatalogProvider>
+          <Suspense fallback={<div className="h-16 w-full bg-white shadow-md flex items-center px-4">Loading Navigation...</div>}>
+            <Navigation />
+            {children}
+          </Suspense>
+        </CatalogProvider>
+        {/* END: CatalogProvider Wrap */}
         <Footer />
       </body>
     </html>
