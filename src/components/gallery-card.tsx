@@ -5,16 +5,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Product } from "@/data";
 import { useState } from "react";
-import { subCategoryDisplayNames } from "@/data/utils"; // Import for rich alt text
-import { Button } from "@/components/ui/button"; // Import Button component
-import { ListPlus, ListMinus } from "lucide-react"; // Import Icons
-
-// START: New imports for Catalog feature
-import {
-  useCatalog,
-  productToCatalogItem,
-} from "@/context/CatalogContext";
-// END: New imports for Catalog feature
+import { subCategoryDisplayNames } from "@/data/utils";
+import { Button } from "@/components/ui/button";
+import { ListPlus } from "lucide-react";
+import { useCatalog, productToCatalogItem } from "@/context/CatalogContext";
+import { SizeSelectionDialog } from "./size-selection-dialog";
 
 interface GalleryCardProps {
   product: Product;
@@ -22,36 +17,24 @@ interface GalleryCardProps {
   priority?: boolean;
 }
 
-export default function GalleryCard({
-  product,
-  index = 0,
-  priority = false,
-}: GalleryCardProps) {
+export default function GalleryCard({ product, index = 0, priority = false }: GalleryCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const sizeString = product.sizes[0] || "1x1";
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { addItemToCatalog } = useCatalog();
   
-  // START: Catalog Logic
-  const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } =
-    useCatalog();
-  // Ensure ID is converted to string for comparison
-  const isInCatalog = isItemInCatalog(String(product.id)); 
+  const sizeString = product.sizes[0] || "1x1";
+
+  const handleSelectSize = (size: string) => {
+    addItemToCatalog(productToCatalogItem(product, size));
+  };
 
   const handleCatalogToggle = (e: React.MouseEvent) => {
     e.stopPropagation(); 
     e.preventDefault(); 
-    
-    if (isInCatalog) {
-      // Ensure ID is converted to string before removing
-      removeItemFromCatalog(String(product.id)); 
-    } else {
-      addItemToCatalog(productToCatalogItem(product));
-    }
+    setIsDialogOpen(true); // Triggers the popup
   };
-  // END: Catalog Logic
-  
-  // Create rich alt text: Name, Subcategory, Material, and Size
-  const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
+  const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
   // Grid classes structure: mobile (default) -> tablet (md:) -> desktop (lg:)
   // Default is now col-span-12 (half of 24) instead of col-span-6 (half of 12)
   let gridClass =
@@ -466,65 +449,62 @@ export default function GalleryCard({
   }
 
   return (
-    <motion.div
-      className={`group ${gridClass}`}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.6 }}
-      layout
-    >
-      <div className="flex flex-col h-full bg-white overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg">
-        <div className="relative w-full flex-grow overflow-hidden">
-          
-          {/* START: Catalog Button */}
-          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-             <Button
-                variant={isInCatalog ? "destructive" : "default"}
-                size="sm"
-                onClick={handleCatalogToggle}
-                className={`flex items-center space-x-1 h-8 ${
-                    isInCatalog 
-                        ? 'bg-red-500/90 hover:bg-red-600' 
-                        : 'bg-black/40 text-white hover:bg-black/60'
-                } backdrop-blur-sm border-none`}
-            >
-                {isInCatalog ? (
-                    <ListMinus className="w-4 h-4" />
-                ) : (
-                    <ListPlus className="w-4 h-4" />
-                )}
-            </Button>
-          </div>
-          {/* END: Catalog Button */}
+    <>
+      <motion.div
+        className={`group ${gridClass}`}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.05, duration: 0.6 }}
+        layout
+      >
+        <div className="flex flex-col h-full bg-white overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg">
+          <div className="relative w-full flex-grow overflow-hidden">
+            
+            {/* Catalog Button: Triggers Size Selection Popup */}
+            <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+               <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleCatalogToggle}
+                  className="bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm border-none h-8"
+              >
+                  <ListPlus className="w-4 h-4 mr-1" />
+                  Add
+              </Button>
+            </div>
 
-          {!isLoaded && product.image && (
-            <div className="absolute inset-0 bg-zinc-200 animate-pulse"></div>
-          )}
-          {product.image ? (
-            <Image
-              src={product.image}
-              // UPDATED: More descriptive alt text for SEO
-              alt={altText}
-              fill
-              priority={priority}
-              onLoad={() => setIsLoaded(true)}
-              className={`object-cover transition-all duration-300 group-hover:scale-105 ${
-                isLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gray-300"></div>
-          )}
+            {!isLoaded && product.image && (
+              <div className="absolute inset-0 bg-zinc-200 animate-pulse"></div>
+            )}
+            {product.image ? (
+              <Image
+                src={product.image}
+                alt={altText}
+                fill
+                priority={priority}
+                onLoad={() => setIsLoaded(true)}
+                className={`object-cover transition-all duration-300 group-hover:scale-105 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gray-300"></div>
+            )}
+          </div>
+          <div className="p-1 h-6 flex items-center">
+            <h3 className="text-zinc-800 font-semibold text-[9px] md:text-[12px] truncate w-full" title={product.name}>
+              {product.name}
+            </h3>
+          </div>
         </div>
-        <div className="p-1 h-6 flex items-center">
-          <h3
-            className="text-zinc-800 font-semibold text-[9px] md:text-[12px] truncate w-full"
-            title={product.name}
-          >
-            {product.name}
-          </h3>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Pop-up for size selection */}
+      <SizeSelectionDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        subcategory={product.subcategory}
+        availableSizes={product.sizes}
+        onSelect={handleSelectSize}
+      />
+    </>
   );
 }

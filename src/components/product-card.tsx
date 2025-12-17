@@ -1,161 +1,62 @@
+// src/components/product-card.tsx
+
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { Star, Eye, Heart, ListPlus, ListMinus } from "lucide-react"; 
-// FIX: Corrected the import path
+import { ListPlus, Eye, Heart } from "lucide-react";
+import { useCatalog } from "@/context/CatalogContext";
+import { SizeSelectionDialog } from "./size-selection-dialog";
 import type { Product } from "@/data";
-// START: New imports for Catalog feature
-import {
-  useCatalog,
-  productToCatalogItem,
-} from "@/context/CatalogContext";
-import { Button } from "./ui/button";
-// END: New imports for Catalog feature
 
-interface ProductCardProps {
-  product: Product;
-  index?: number;
-}
+export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { addItemToCatalog, isItemInCatalog } = useCatalog();
 
-export function ProductCard({ product, index = 0 }: ProductCardProps) {
-  // START: Catalog Hook
-  const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } =
-    useCatalog();
-  
-  // FIX 1: Convert product.id to string for comparison
-  const isInCatalog = isItemInCatalog(String(product.id)); 
-
-  const handleCatalogToggle = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent Link navigation
-    e.preventDefault(); // Prevent default action
-    
-    if (isInCatalog) {
-      // FIX 2: Convert product.id to string before removing
-      removeItemFromCatalog(String(product.id)); 
-    } else {
-      addItemToCatalog(productToCatalogItem(product));
-    }
+  const handleAddToCatalog = (size: string) => {
+    addItemToCatalog({
+      id: String(product.id),
+      name: product.name,
+      imageUrl: product.image || "/placeholder.svg",
+      selectedSize: size,
+      category: product.category,
+    });
   };
-  // END: Catalog Hook
 
   return (
-    <motion.div
-      className="group cursor-pointer"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.6 }}
-      whileHover={{
-        scale: 1.02,
-        rotateY: 2,
-        z: 50,
-      }}
-      style={{
-        transformStyle: "preserve-3d",
-        perspective: 1000,
-      }}
-    >
-      <div className="relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl group-hover:shadow-2xl transition-all duration-300">
-        {/* Product Image */}
-        <div className="aspect-square relative overflow-hidden">
-          <Image
-            src={product.image || "/placeholder.svg"}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-          {/* Quick Actions */}
-          <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {/* START: Catalog Toggle Button */}
-            <motion.button
-              className={`w-8 h-8 backdrop-blur-sm rounded-full flex items-center justify-center transition-colors duration-200 ${
-                isInCatalog
-                  ? "bg-red-500/80 text-white hover:bg-red-600/90"
-                  : "bg-white/20 text-white hover:bg-white/30"
-              }`}
-              onClick={handleCatalogToggle}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              aria-label={isInCatalog ? "Remove from Catalog" : "Add to Catalog"}
-            >
-              {isInCatalog ? (
-                <ListMinus className="w-4 h-4" />
-              ) : (
-                <ListPlus className="w-4 h-4" />
-              )}
-            </motion.button>
-            {/* END: Catalog Toggle Button */}
-            
-            <motion.button
-              className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <Heart className="w-4 h-4" />
-            </motion.button>
-            <Link href={`/${product.category}/${product.id}`}>
-              <motion.button
-                className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Eye className="w-4 h-4" />
-              </motion.button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Product Info */}
-        <div className="p-6">
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-1 line-clamp-2">
-                {product.name}
-              </h3>
-              {/* FIX: Changed product.size to display the sizes array */}
-              <p className="text-white/70 text-sm">
-                {product.subcategory} • {product.sizes.join(" | ")}&quot;
-              </p>
-            </div>
-          </div>
-
-          {/* Rating */}
-          <div className="flex items-center space-x-2 mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating)
-                      ? "text-yellow-400 fill-current"
-                      : "text-gray-400"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Material & Finish */}
+    <>
+      <motion.div className="group relative bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+        <div className="aspect-square relative">
+          <Image src={product.image} alt={product.name} fill className="object-cover" />
           
-
-          <Link href={`/${product.category}/${product.id}`}>
-            <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">
-              View Details
-            </Button>
-          </Link>
+          {/* Action Overlay */}
+          <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsDialogOpen(true);
+              }}
+              className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-cyan-500 transition-colors"
+            >
+              <ListPlus className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
-        {/* 3D Hover Effect */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-          style={{
-            transform: "translateZ(10px)",
-          }}
-        />
-      </div>
-    </motion.div>
+        <div className="p-4">
+          <h3 className="text-white font-bold">{product.name}</h3>
+          <p className="text-white/60 text-sm">{product.subcategory}</p>
+        </div>
+      </motion.div>
+
+      <SizeSelectionDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        subcategory={product.subcategory}
+        availableSizes={product.sizes}
+        onSelect={handleAddToCatalog}
+      />
+    </>
   );
 }

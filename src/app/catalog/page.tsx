@@ -1,24 +1,24 @@
 // src/app/catalog/page.tsx
-
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/context/CatalogContext";
 import Image from "next/image";
 import Link from "next/link";
-// FIX: Corrected import from BookMarked to Bookmark
 import { Trash2, FileText, Loader2, ArrowLeft, Bookmark } from "lucide-react"; 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-
-// ❌ Removed static metadata export to resolve "default export is not a React Component" error.
-//    Metadata should be in src/app/catalog/metadata.ts
-
 
 export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleCreateCatalog = async () => {
     if (catalogItems.length === 0) {
@@ -30,49 +30,46 @@ export default function CatalogPage() {
     setError(null);
 
     try {
-      // ⬇️ API CALL TO GENERATE PDF (Ensure you create this Next.js API route below)
       const response = await fetch("/api/generate-catalog-pdf", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // Send only the necessary data to the server
-        body: JSON.stringify({ items: catalogItems.map(item => ({
+        body: JSON.stringify({ 
+          items: catalogItems.map(item => ({
             id: item.id,
             name: item.name,
             imageUrl: item.imageUrl,
-            sizes: item.sizes,
+            selectedSize: item.selectedSize, // Updated to use single size
             category: item.category
-        })) }),
+          })) 
+        }),
       });
 
       if (!response.ok) {
-        // Attempt to read error message from body if available
         const errorText = await response.text();
-        let errorMessage = errorText || `PDF generation failed with status: ${response.status}`;
-        throw new Error(errorMessage);
+        throw new Error(errorText || "PDF generation failed");
       }
 
-      // 1. Download the PDF for the user
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "agrawal_ceramics_catalog.pdf";
+      a.download = "shri_marvels_catalog.pdf";
       document.body.appendChild(a);
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
 
-      // The backend API should handle the email to the owner automatically.
-      alert("Catalog PDF created and downloaded! A copy has been sent to the owner.");
+      alert("Catalog PDF created and downloaded!");
     } catch (err: any) {
-      console.error("Catalog generation error:", err.message);
-      setError(`Error creating catalog. Please ensure the backend is running and configured correctly. Details: ${err.message}`);
+      setError(`Error: ${err.message}`);
     } finally {
       setIsGenerating(false);
     }
   };
+
+  if (!isMounted) return null;
 
   return (
     <div className="py-8 min-h-[calc(100vh-100px)]">
@@ -84,12 +81,11 @@ export default function CatalogPage() {
             Selected products for PDF generation ({catalogItems.length} items)
         </p>
         
-        {/* Action Button and Error Message */}
         <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-start mb-6 w-full">
-            <Link href="/" className="order-2 sm:order-1 mt-4 sm:mt-0">
+            <Link href="/gallery" className="order-2 sm:order-1 mt-4 sm:mt-0">
                 <Button variant="outline" className="text-white bg-white/10 hover:bg-white/20 border-white/20">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to Products
+                    Back to Gallery
                 </Button>
             </Link>
 
@@ -98,7 +94,7 @@ export default function CatalogPage() {
               disabled={isGenerating || catalogItems.length === 0}
               className={cn("px-8 py-3 order-1 sm:order-2", {
                 "opacity-50 cursor-not-allowed": catalogItems.length === 0,
-                "bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600": !isGenerating
+                "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600": !isGenerating
               })}
             >
               {isGenerating ? (
@@ -111,28 +107,22 @@ export default function CatalogPage() {
         </div>
 
         {error && (
-            <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded relative mb-6" role="alert">
+            <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded relative mb-6">
                 <p className="font-bold">Error:</p>
                 <p className="text-sm">{error}</p>
             </div>
         )}
 
-        {/* Catalog Items Grid */}
         {catalogItems.length === 0 ? (
           <div className="text-center py-20 border border-white/10 rounded-xl bg-white/5 mt-10">
             <Bookmark className="w-16 h-16 text-white/30 mx-auto mb-4" /> 
-            <p className="text-xl text-white/70">
-              Your catalog is empty. Add some products from the gallery or product pages.
-            </p>
+            <p className="text-xl text-white/70">Your catalog is empty.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
             {catalogItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex flex-col border border-white/10 rounded-lg overflow-hidden shadow-xl bg-white/5 backdrop-blur-sm transition-all duration-300 hover:shadow-2xl"
-              >
-                <div className="relative w-full aspect-square flex-shrink-0">
+              <div key={`${item.id}-${item.selectedSize}`} className="flex flex-col border border-white/10 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm">
+                <div className="relative w-full aspect-square">
                   <Image
                     src={item.imageUrl}
                     alt={item.name}
@@ -140,28 +130,22 @@ export default function CatalogPage() {
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-black/20" />
                 </div>
                 <div className="p-4 flex flex-col justify-between flex-grow text-white">
                   <div>
-                    <h2 className="text-lg font-semibold line-clamp-2 mb-1">
-                      {item.name}
-                    </h2>
-                    <p className="text-sm text-[#F3C77B] mb-2">
-                        Category: {item.category}
-                    </p>
-                    <p className="text-sm text-white/70">
-                        Sizes: {item.sizes.join(' | ')}&quot;
-                    </p>
+                    <h2 className="text-lg font-semibold line-clamp-2 mb-1">{item.name}</h2>
+                    <p className="text-sm text-cyan-400 mb-2">Category: {item.category}</p>
+                    {/* FIXED: No more .join(), using selectedSize directly */}
+                    <p className="text-sm text-white/70">Selected Size: {item.selectedSize}</p>
                   </div>
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => removeItemFromCatalog(item.id)}
-                    className="mt-4 w-full bg-red-600/80 hover:bg-red-700"
+                    onClick={() => removeItemFromCatalog(item.id, item.selectedSize)}
+                    className="mt-4 w-full"
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
-                    Remove from Catalog
+                    Remove
                   </Button>
                 </div>
               </div>

@@ -1,99 +1,76 @@
 // src/context/CatalogContext.tsx
-
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
-// Assuming Product type is correctly exported from "@/data"
-import type { Product } from "@/data"; 
-// The problematic import has been removed to resolve the conflict.
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import type { Product } from "@/data";
 
-// Type for the product data stored in the catalog
 export interface CatalogItem {
-  id: string; 
+  id: string;
   name: string;
   imageUrl: string;
-  sizes: string[]; // Stores the product's sizes
+  selectedSize: string; 
   category: string;
 }
 
-// Define the shape of the context state
 interface CatalogContextType {
   catalogItems: CatalogItem[];
   addItemToCatalog: (item: CatalogItem) => void;
-  removeItemFromCatalog: (itemId: string) => void;
-  isItemInCatalog: (itemId: string) => boolean;
+  removeItemFromCatalog: (itemId: string, size: string) => void;
+  isItemInCatalog: (itemId: string, size: string) => boolean;
 }
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
 
-// Helper function to convert a Product type to a storable CatalogItem
-// Maps data from the ProductCard structure
-export const productToCatalogItem = (product: Product): CatalogItem => ({
-  // FIX: Explicitly convert ID to string to match CatalogItem interface
-  id: String(product.id), 
+// Properly exported helper to fix "productToCatalogItem is not a function"
+export const productToCatalogItem = (product: Product, size: string): CatalogItem => ({
+  id: String(product.id),
   name: product.name,
-  // ProductCard uses `product.image`, which we map to `imageUrl`
-  imageUrl: product.image || "/placeholder.svg", 
-  sizes: product.sizes || [],
+  imageUrl: product.image || "/placeholder.svg",
+  selectedSize: size,
   category: product.category,
 });
 
 export const CatalogProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize state from localStorage or an empty array
-  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>(() => {
-    if (typeof window !== "undefined") {
+  const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Load from localStorage only AFTER mount to fix Hydration Error
+  useEffect(() => {
+    const stored = localStorage.getItem("shri-marvels-catalog");
+    if (stored) {
       try {
-        const storedItems = localStorage.getItem("agrawal-ceramics-catalog");
-        return storedItems ? JSON.parse(storedItems) : [];
+        setCatalogItems(JSON.parse(stored));
       } catch (e) {
-        console.error("Could not parse catalog from localStorage", e);
-        return [];
+        console.error("Parse error", e);
       }
     }
-    return [];
-  });
+    setIsMounted(true);
+  }, []);
 
-  // Effect to save state to localStorage whenever it changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "agrawal-ceramics-catalog",
-        JSON.stringify(catalogItems)
-      );
+    if (isMounted) {
+      localStorage.setItem("shri-marvels-catalog", JSON.stringify(catalogItems));
     }
-  }, [catalogItems]);
+  }, [catalogItems, isMounted]);
 
-  const isItemInCatalog = (itemId: string) => {
-    return catalogItems.some((item) => item.id === itemId);
+  const isItemInCatalog = (itemId: string, size: string) => {
+    return catalogItems.some((item) => item.id === itemId && item.selectedSize === size);
   };
 
   const addItemToCatalog = (item: CatalogItem) => {
-    if (!isItemInCatalog(item.id)) {
-      setCatalogItems((prevItems) => [...prevItems, item]);
+    if (!isItemInCatalog(item.id, item.selectedSize)) {
+      setCatalogItems((prev) => [...prev, item]);
     }
   };
 
-  const removeItemFromCatalog = (itemId: string) => {
-    setCatalogItems((prevItems) =>
-      prevItems.filter((item) => item.id !== itemId)
+  const removeItemFromCatalog = (itemId: string, size: string) => {
+    setCatalogItems((prev) => 
+      prev.filter((item) => !(item.id === itemId && item.selectedSize === size))
     );
   };
 
   return (
-    <CatalogContext.Provider
-      value={{
-        catalogItems,
-        addItemToCatalog,
-        removeItemFromCatalog,
-        isItemInCatalog,
-      }}
-    >
+    <CatalogContext.Provider value={{ catalogItems, addItemToCatalog, removeItemFromCatalog, isItemInCatalog }}>
       {children}
     </CatalogContext.Provider>
   );
@@ -101,8 +78,6 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCatalog = () => {
   const context = useContext(CatalogContext);
-  if (context === undefined) {
-    throw new Error("useCatalog must be used within a CatalogProvider");
-  }
+  if (!context) throw new Error("useCatalog must be used within CatalogProvider");
   return context;
 };
