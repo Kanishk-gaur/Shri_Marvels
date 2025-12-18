@@ -1,62 +1,78 @@
-// src/components/product-card.tsx
-
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ListPlus, Eye, Heart } from "lucide-react";
-import { useCatalog } from "@/context/CatalogContext";
-import { SizeSelectionDialog } from "./size-selection-dialog";
+import Link from "next/link";
+import { Star, Eye, Heart, ListPlus, ListMinus } from "lucide-react"; 
 import type { Product } from "@/data";
+import {
+  useCatalog,
+  productToCatalogItem,
+  transformProductSizes,
+} from "@/context/CatalogContext";
+import { Button } from "./ui/button";
 
-export function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { addItemToCatalog, isItemInCatalog } = useCatalog();
+interface ProductCardProps {
+  product: Product;
+  index?: number;
+}
 
-  const handleAddToCatalog = (size: string) => {
-    addItemToCatalog({
-      id: String(product.id),
-      name: product.name,
-      imageUrl: product.image || "/placeholder.svg",
-      selectedSize: size,
-      category: product.category,
-    });
+export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
+  const isInCatalog = isItemInCatalog(String(product.id)); 
+  
+  // Transform sizes for display on the gallery card
+  const displaySizes = transformProductSizes(product.sizes || []);
+
+  const handleCatalogToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (isInCatalog) {
+      removeItemFromCatalog(String(product.id)); 
+    } else {
+      addItemToCatalog(productToCatalogItem(product));
+    }
   };
 
   return (
-    <>
-      <motion.div className="group relative bg-white/5 rounded-2xl overflow-hidden border border-white/10">
-        <div className="aspect-square relative">
-          <Image src={product.image} alt={product.name} fill className="object-cover" />
-          
-          {/* Action Overlay */}
-          <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsDialogOpen(true);
-              }}
-              className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-cyan-500 transition-colors"
+    <motion.div
+      className="group cursor-pointer"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.6 }}
+    >
+      <div className="relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl group-hover:shadow-2xl transition-all duration-300">
+        <div className="aspect-square relative overflow-hidden">
+          <Image
+            src={product.image || "/placeholder.svg"}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <motion.button
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                isInCatalog ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              onClick={handleCatalogToggle}
             >
-              <ListPlus className="w-5 h-5" />
-            </button>
+              {isInCatalog ? <ListMinus className="w-4 h-4" /> : <ListPlus className="w-4 h-4" />}
+            </motion.button>
           </div>
         </div>
 
-        <div className="p-4">
-          <h3 className="text-white font-bold">{product.name}</h3>
-          <p className="text-white/60 text-sm">{product.subcategory}</p>
+        <div className="p-6 text-white">
+          <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+          <p className="text-white/70 text-sm">
+            {product.subcategory} • {displaySizes.join(" | ")}
+          </p>
+          <Link href={`/${product.category}/${product.id}`}>
+            <Button className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-purple-500">
+              View Details
+            </Button>
+          </Link>
         </div>
-      </motion.div>
-
-      <SizeSelectionDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        subcategory={product.subcategory}
-        availableSizes={product.sizes}
-        onSelect={handleAddToCatalog}
-      />
-    </>
+      </div>
+    </motion.div>
   );
 }
