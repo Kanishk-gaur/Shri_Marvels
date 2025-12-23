@@ -155,7 +155,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
           <div className="relative w-full flex-grow overflow-hidden">
             
             {/* Catalog Button Toggle */}
-            <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute top-2 right-2 z-10 opacity-100">
                <Button
                   variant="default"
                   size="sm"

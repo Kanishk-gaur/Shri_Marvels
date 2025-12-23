@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { useState } from "react"
 import { SizeSelectionDialog } from "./size-selection-dialog"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ListPlus } from "lucide-react" 
 import { useCatalog } from "@/context/CatalogContext"
 
 interface SubcategoryCardProps {
@@ -20,11 +20,9 @@ interface SubcategoryCardProps {
 
 export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: SubcategoryCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  // FIX: Destructure addItemToCatalog to match CatalogContextType
   const { addItemToCatalog } = useCatalog()
 
   const handleConfirm = (selectedSizes: string[]) => {
-    // FIX: Map local subcategory data to the CatalogItem interface
     addItemToCatalog({
       id: subcategory.id,
       name: subcategory.name,
@@ -43,7 +41,13 @@ export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: S
         transition={{ type: "spring", stiffness: 300 }}
         onClick={() => setIsDialogOpen(true)}
       >
-        {/* Image Container */}
+        {/* FIX: Added a persistent z-50 button indicator */}
+        <div className="absolute top-4 right-4 z-50">
+          <div className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl transition-colors hover:bg-black/80">
+            <ListPlus className="w-5 h-5" />
+          </div>
+        </div>
+
         <div className="relative aspect-square w-full h-full">
           <Image
             src={subcategory.exampleImage || "/placeholder.svg"}
@@ -52,12 +56,11 @@ export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: S
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          {/* Gradient Overlay for Text */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+          {/* Ensure the gradient is below the button (z-10) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
         </div>
 
-        {/* Content Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+        <div className="absolute bottom-0 left-0 right-0 p-5 text-white z-20">
           <h3 className="text-lg font-semibold truncate" title={subcategory.name}>
             {subcategory.name}
           </h3>

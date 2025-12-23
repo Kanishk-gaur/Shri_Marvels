@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import {  ListPlus, ListMinus } from "lucide-react"; 
+import { ListPlus, ListMinus } from "lucide-react"; 
 import type { Product } from "@/data";
 import {
   useCatalog,
@@ -49,7 +49,8 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
           />
-          <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* MODIFIED: Removed 'opacity-0 group-hover:opacity-100' to keep buttons visible at all times */}
+          <div className="absolute top-4 right-4 flex flex-col space-y-2 transition-opacity duration-300">
             <motion.button
               className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                 isInCatalog ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/30"

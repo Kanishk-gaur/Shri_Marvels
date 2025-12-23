@@ -46,7 +46,6 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
               } else {
                 addItemToCatalog({
                   id: tileId,
-                  // FIX: Providing fallback strings to satisfy TypeScript
                   name: tile.label || "Unnamed Tile",
                   imageUrl: tile.image || "/placeholder.svg",
                   category: "Roof Tiles",
@@ -89,12 +88,11 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
                   </div>
                 </div>
 
+                {/* Updated Button: Always visible */}
                 <Button
                   size="icon"
                   variant={isInCatalog ? "destructive" : "outline"}
-                  className={`sm:absolute sm:top-2 sm:right-2 h-8 w-8 rounded-full transition-all ${
-                    !isInCatalog ? "opacity-0 group-hover:opacity-100" : "opacity-100"
-                  }`}
+                  className="sm:absolute sm:top-2 sm:right-2 h-8 w-8 rounded-full transition-all opacity-100 shadow-sm"
                   onClick={handleToggle}
                 >
                   {isInCatalog ? <ListMinus className="h-4 w-4" /> : <ListPlus className="h-4 w-4" />}
