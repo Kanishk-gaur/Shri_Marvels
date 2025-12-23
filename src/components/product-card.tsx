@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Eye, Heart, ListPlus, ListMinus } from "lucide-react"; 
+import {  ListPlus, ListMinus } from "lucide-react"; 
 import type { Product } from "@/data";
 import {
   useCatalog,

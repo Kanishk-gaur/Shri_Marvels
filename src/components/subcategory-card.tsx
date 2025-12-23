@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useState } from "react"
 import { SizeSelectionDialog } from "./size-selection-dialog"
 import { ArrowRight } from "lucide-react"
+import { useCatalog } from "@/context/CatalogContext"
 
 interface SubcategoryCardProps {
   mainCategory: "marvel" | "tiles"
@@ -19,6 +20,20 @@ interface SubcategoryCardProps {
 
 export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: SubcategoryCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  // FIX: Destructure addItemToCatalog to match CatalogContextType
+  const { addItemToCatalog } = useCatalog()
+
+  const handleConfirm = (selectedSizes: string[]) => {
+    // FIX: Map local subcategory data to the CatalogItem interface
+    addItemToCatalog({
+      id: subcategory.id,
+      name: subcategory.name,
+      category: mainCategory,
+      imageUrl: subcategory.exampleImage || "/placeholder.svg",
+      sizes: availableSizes,
+      selectedSizes: selectedSizes,
+    })
+  }
 
   return (
     <>
@@ -62,6 +77,7 @@ export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: S
         mainCategory={mainCategory}
         subcategory={subcategory.id}
         availableSizes={availableSizes}
+        onConfirm={handleConfirm}
       />
     </>
   )

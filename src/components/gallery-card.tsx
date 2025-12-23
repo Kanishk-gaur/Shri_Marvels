@@ -197,12 +197,13 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       </motion.div>
 
       {/* Pop-up for size selection with mapped values */}
-      <SizeSelectionDialog
+     <SizeSelectionDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         subcategory={product.subcategory}
         availableSizes={displaySizes} 
         onConfirm={handleConfirmSizes}
+        mainCategory={product.category as "marvel" | "tiles"} // ADD THIS LINE
       />
     </>
   );

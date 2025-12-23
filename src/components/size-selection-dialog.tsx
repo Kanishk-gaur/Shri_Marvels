@@ -1,20 +1,18 @@
 "use client"
 
-// FIX: Added useState to the React import
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-// Import the mapping to translate internal names to display names
 import { subCategoryDisplayNames } from "@/data/utils"
 
 interface SizeSelectionDialogProps {
   isOpen: boolean
   onClose: () => void
-  subcategory: string // This is the internal name like "Border Tiles"
+  subcategory: string
   availableSizes: string[]
   onConfirm: (sizes: string[]) => void
+  mainCategory: "marvel" | "tiles" // Added to match subcategory-card.tsx
 }
 
 export function SizeSelectionDialog({
@@ -23,17 +21,12 @@ export function SizeSelectionDialog({
   subcategory,
   availableSizes,
   onConfirm,
+  mainCategory, // Destructured here
 }: SizeSelectionDialogProps) {
-  // FIX: Explicitly defined the state as a string array
   const [selected, setSelected] = useState<string[]>([]);
 
-  /**
-   * Toggles a size in or out of the selection array
-   */
   const toggleSize = (size: string) => {
-    // FIX: Added explicit string[] type to the 'prev' parameter
     setSelected((prev: string[]) => 
-      // FIX: Added explicit string type to 's'
       prev.includes(size) ? prev.filter((s: string) => s !== size) : [...prev, size]
     );
   }
@@ -41,12 +34,11 @@ export function SizeSelectionDialog({
   const handleConfirm = () => {
     if (selected.length > 0) {
       onConfirm(selected);
-      setSelected([]); // Reset local state
+      setSelected([]); 
       onClose();
     }
   }
 
-  // Get the display-friendly name from the mapping, or fallback to the original
   const displayName = subCategoryDisplayNames[subcategory] || subcategory;
 
   return (

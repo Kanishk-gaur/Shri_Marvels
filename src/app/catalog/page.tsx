@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Trash2, FileText, Loader2, ArrowLeft, Bookmark } from "lucide-react"; 
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog } = useCatalog();
@@ -16,6 +15,7 @@ export default function CatalogPage() {
   const handleCreateCatalog = async () => {
     if (catalogItems.length === 0) return;
     setIsGenerating(true);
+    setError(null);
     try {
       const response = await fetch("/api/generate-catalog-pdf", {
         method: "POST",
@@ -25,7 +25,7 @@ export default function CatalogPage() {
                 id: item.id,
                 name: item.name,
                 imageUrl: item.imageUrl,
-                selectedSizes: item.selectedSizes, // These are already the transformed strings
+                selectedSizes: item.selectedSizes,
                 category: item.category
             })) 
         }),
@@ -37,8 +37,9 @@ export default function CatalogPage() {
       a.href = url;
       a.download = "shri_marvels_catalog.pdf";
       a.click();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An error occurred";
+      setError(message);
     } finally {
       setIsGenerating(false);
     }
@@ -47,6 +48,8 @@ export default function CatalogPage() {
   return (
     <div className="py-8 min-h-screen container mx-auto px-4 text-white">
       <h1 className="text-4xl font-extrabold text-center mb-10">My Catalog</h1>
+      
+      {error && <div className="bg-red-500/20 border border-red-500 text-red-200 p-4 rounded-lg mb-6">{error}</div>}
       
       <div className="flex justify-between items-center mb-10">
           <Link href="/gallery">
@@ -74,29 +77,16 @@ export default function CatalogPage() {
           {catalogItems.map((item) => (
             <div key={item.id} className="flex flex-col border border-white/10 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm shadow-lg">
               <div className="relative aspect-square">
-                <Image 
-                  src={item.imageUrl} 
-                  alt={item.name} 
-                  fill 
-                  className="object-cover" 
-                />
+                <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
               </div>
               <div className="p-4 flex-grow">
                 <h2 className="text-lg font-semibold truncate text-white">{item.name}</h2>
                 <p className="text-sm text-cyan-400 mb-4">{item.category}</p>
-                
                 <div className="mt-4">
                   <p className="text-xs text-white/50 mb-2 font-bold uppercase tracking-wider">Selected Sizes:</p>
                   <div className="flex flex-wrap gap-1">
-                    {/* These sizes are already stored as transformed strings 
-                        (e.g., "2x3") because they were processed when 
-                        added from the Gallery Card.
-                    */}
                     {item.selectedSizes.map((size) => (
-                      <span 
-                        key={size} 
-                        className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] rounded border border-cyan-500/30 font-medium"
-                      >
+                      <span key={size} className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] rounded border border-cyan-500/30 font-medium">
                         {size}
                       </span>
                     ))}
@@ -104,11 +94,7 @@ export default function CatalogPage() {
                 </div>
               </div>
               <div className="p-4 pt-0">
-                <Button 
-                  variant="destructive" 
-                  className="w-full bg-red-600/80 hover:bg-red-700" 
-                  onClick={() => removeItemFromCatalog(item.id)}
-                >
+                <Button variant="destructive" className="w-full bg-red-600/80 hover:bg-red-700" onClick={() => removeItemFromCatalog(item.id)}>
                   <Trash2 className="w-4 h-4 mr-2" /> Remove
                 </Button>
               </div>
