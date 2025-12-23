@@ -1,24 +1,44 @@
+"use client";
+
 import Image from "next/image";
 import { BrickShowcaseSection } from "./types";
+import { useCatalog } from "@/context/CatalogContext";
+import { Button } from "../ui/button";
+import { ListPlus, ListMinus } from "lucide-react";
 
 interface BrickShowcaseProps {
   section: BrickShowcaseSection;
 }
 
 export default function BrickShowcase({ section }: BrickShowcaseProps) {
+  const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
+  
+  const itemId = section.id;
+  const isInCatalog = isItemInCatalog(itemId);
+
+  const handleToggle = () => {
+    if (isInCatalog) {
+      removeItemFromCatalog(itemId);
+    } else {
+      // Mapping BrickShowcase data to CatalogItem interface
+      addItemToCatalog({
+        id: itemId,
+        name: section.product.name,
+        imageUrl: section.product.image,
+        category: "Roof Tiles",
+        sizes: [section.product.size],
+        selectedSizes: [section.product.size]
+      });
+    }
+  };
+
   return (
-    // Adjusted padding for different screen sizes
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 md:p-6 lg:p-8 hover:shadow-xl transition-shadow duration-300">
-      {/* CHANGE 1: Removed `items-center`. 
-        This allows the child elements to stretch to the same height on large screens (the default behavior for flexbox).
-      */}
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-        {/* Product specifications card - full width on small, fixed width on large */}
         <div className="w-full lg:w-80 lg:flex-shrink-0">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">{section.product.name}</h3>
 
-            {/* Product image */}
             <div className="mb-6 flex justify-center">
               <div className="relative overflow-hidden rounded-lg border-2 border-gray-200 shadow-md w-48 h-48">
                 <Image
@@ -30,41 +50,45 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
               </div>
             </div>
 
-            {/* Specifications */}
             <div className="space-y-4">
               <div className="text-center">
                 <span className="text-lg font-semibold text-gray-700">Size : </span>
                 <span className="text-lg text-gray-900 font-medium">{section.product.size}</span>
               </div>
-
               <div className="text-center">
                 <span className="text-lg font-semibold text-gray-700">Weight : </span>
                 <span className="text-lg text-gray-900 font-medium">{section.product.weight}</span>
               </div>
-
               <div className="text-center">
                 <span className="text-lg font-semibold text-gray-700">Require : </span>
                 <span className="text-lg text-gray-900 font-medium">{section.product.require}</span>
               </div>
-
               <div className="text-center">
                 <span className="text-lg font-semibold text-gray-700">Colour : </span>
                 <span className="text-lg text-gray-900 font-medium">{section.product.colour}</span>
               </div>
             </div>
+
+            {/* Catalog Toggle Button */}
+            <Button 
+              onClick={handleToggle}
+              variant={isInCatalog ? "destructive" : "default"}
+              className="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white"
+            >
+              {isInCatalog ? (
+                <><ListMinus className="mr-2 h-4 w-4" /> Remove from Catalog</>
+              ) : (
+                <><ListPlus className="mr-2 h-4 w-4" /> Add to Catalog</>
+              )}
+            </Button>
           </div>
         </div>
 
-        {/* Lifestyle image - takes remaining space on large screens */}
         <div className="flex-1 w-full">
-          {/* CHANGE 2: Added `h-full` to the image's direct wrapper.
-            This makes the wrapper expand to fill the vertical space provided by the parent flex container.
-          */}
           <div className="relative overflow-hidden rounded-xl border border-gray-200 shadow-lg h-full">
             <Image
               src={section.lifestyle || "/placeholder.svg"}
               alt={`${section.product.name} lifestyle application`}
-              // Adjusted height for different screen sizes - lg:h-full now works correctly
               fill
               className="w-full h-[250px] sm:h-[400px] lg:h-full object-cover"
             />
@@ -75,6 +99,5 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
         </div>
       </div>
     </div> 
-    
   );
 }
