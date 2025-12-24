@@ -2,14 +2,42 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, CheckCircle2, Layers, ShieldCheck, ListPlus, ListMinus } from "lucide-react";
+import { CheckCircle2, Layers, ShieldCheck, ListPlus, ListMinus } from "lucide-react";
 import Image from "next/image";
 import { useCatalog } from "@/context/CatalogContext";
 import { Button } from "@/components/ui/button";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
+// Type definitions
+interface TextureItem {
+  code: string;
+  image: string;
+}
+
+interface TileVariation {
+  imageUrl: string;
+  width: number;
+  height: number;
+}
+
+interface ProductData {
+  title: string;
+  image: string;
+  sizesArray: string[];
+}
+
+interface ProductShowcaseProps {
+  title: string;
+  sizes: string;
+  finish: string;
+  image: string;
+  isReversed: boolean;
+  onAdd: () => void;
+  tiles?: TileVariation[];
+}
+
 // Data for the Texture/Design Collection Grid
-const textureCollection = [
+const textureCollection: TextureItem[] = [
   { "code": "01", "image": "/images/step_riser_tiles/01.png" },
   { "code": "02", "image": "/images/step_riser_tiles/02.png" },
   { "code": "04", "image": "/images/step_riser_tiles/04.png" },
@@ -111,8 +139,8 @@ const textureCollection = [
 ];
 
 export default function StepRiserPage() {
-  const [activeProduct, setActiveProduct] = useState<any>(null);
-  const { addItemToCatalog } = useCatalog();
+  const [activeProduct, setActiveProduct] = useState<ProductData | null>(null);
+  const { addItemToCatalog, isItemInCatalog, removeItemFromCatalog } = useCatalog();
 
   const handleConfirm = (selectedSizes: string[], quantity: number) => {
     if (activeProduct) {
@@ -121,7 +149,7 @@ export default function StepRiserPage() {
         name: activeProduct.title,
         imageUrl: activeProduct.image,
         category: "Step & Riser",
-        sizes: activeProduct.sizesArray, // Save the actual individual sizes
+        sizes: activeProduct.sizesArray,
         selectedSizes: selectedSizes,
         quantity: quantity
       });
@@ -174,7 +202,13 @@ export default function StepRiserPage() {
               >
                 <div className="absolute top-10 right-10 w-3/4 h-3/4 bg-stone-200 rounded-3xl -z-10" />
                 <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl group">
-                  <Image src="/images/step/kp1.png" alt="KP Ceramic Steps" fill className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <Image 
+                    src="/images/step/kp1.png" 
+                    alt="KP Ceramic Steps" 
+                    fill 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    priority
+                  />
                 </div>
               </motion.div>
             </div>
@@ -218,7 +252,7 @@ export default function StepRiserPage() {
             onAdd={() => setActiveProduct({ 
                 title: "FULL BODY SANDY BLACK", 
                 image: "/images/step/1.png", 
-                sizesArray: ["300X1200", "200X1200MM"] // Fixed: Individual sizes here
+                sizesArray: ["300X1200", "200X1200MM"]
             })}
             tiles={[{ imageUrl: "/images/step/3.png", width: 300, height: 100 }, { imageUrl: "/images/step/2.png", width: 280, height: 80 }]}
           />
@@ -231,11 +265,10 @@ export default function StepRiserPage() {
             onAdd={() => setActiveProduct({ 
                 title: "FULL BODY SANDY CHOCO", 
                 image: "/images/step/4.png", 
-                sizesArray: ["300X1200", "200X1200MM"] // Fixed: Individual sizes here
+                sizesArray: ["300X1200", "200X1200MM"]
             })}
             tiles={[{ imageUrl: "/images/step/6.png", width: 300, height: 100 }, { imageUrl: "/images/step/5.png", width: 280, height: 80 }]}
           />
-          {/* Repeat for other showcases, ensuring you split the 'sizes' string into sizesArray: ["Size1", "Size2"] */}
           <ProductShowcase
             title="FULL BODY SANDY NERO"
             sizes="300X1200 / 200X1200MM"
@@ -741,14 +774,46 @@ export default function StepRiserPage() {
             <p className="text-neutral-500 tracking-widest text-sm uppercase">Premium Textures & Finishes</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {textureCollection.map((item) => (
-              <motion.div key={item.code} className="group cursor-pointer">
-                <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden border border-neutral-200 group-hover:shadow-md transition-all">
-                  <Image src={item.image} alt={item.code} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                </div>
-                <p className="mt-3 text-sm font-semibold text-neutral-700 group-hover:text-black">{item.code}</p>
-              </motion.div>
-            ))}
+            {textureCollection.map((item) => {
+              const productId = `design-${item.code.toLowerCase()}`;
+              const isInCatalog = isItemInCatalog(productId);
+
+              return (
+                <motion.div key={item.code} className="group relative">
+                  <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden border border-neutral-200 group-hover:shadow-md transition-all">
+                    <Image 
+                      src={item.image} 
+                      alt={item.code} 
+                      fill 
+                      className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                    />
+                    
+                    {/* Catalog Button Overlay */}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button
+                        size="icon"
+                        variant={isInCatalog ? "destructive" : "secondary"}
+                        className="h-8 w-8 rounded-full shadow-lg"
+                        onClick={() => isInCatalog 
+                          ? removeItemFromCatalog(productId) 
+                          : setActiveProduct({ 
+                              title: `Design ${item.code}`, 
+                              image: item.image, 
+                              sizesArray: ["300X1200", "200X1200MM"] 
+                            })
+                        }
+                      >
+                        {isInCatalog ? <ListMinus className="w-4 h-4" /> : <ListPlus className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center mt-3">
+                    <p className="text-sm font-semibold text-neutral-700">{item.code}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -759,7 +824,7 @@ export default function StepRiserPage() {
           isOpen={!!activeProduct}
           onClose={() => setActiveProduct(null)}
           subcategory={activeProduct.title}
-          availableSizes={activeProduct.sizesArray} // Fixed: Passing array of sizes
+          availableSizes={activeProduct.sizesArray}
           onConfirm={handleConfirm}
           mainCategory="tiles"
         />
@@ -768,7 +833,15 @@ export default function StepRiserPage() {
   );
 }
 
-function ProductShowcase({ title, sizes, finish, image, isReversed, onAdd, tiles = [] }: any) {
+function ProductShowcase({ 
+  title, 
+  sizes, 
+  finish, 
+  image, 
+  isReversed, 
+  onAdd, 
+  tiles = [] 
+}: ProductShowcaseProps) {
   const { isItemInCatalog, removeItemFromCatalog } = useCatalog();
   const productId = title.replace(/\s+/g, '-').toLowerCase();
   const isInCatalog = isItemInCatalog(productId);
@@ -783,7 +856,13 @@ function ProductShowcase({ title, sizes, finish, image, isReversed, onAdd, tiles
     >
       <div className={isReversed ? "order-1 md:order-2" : "order-1"}>
         <div className="relative w-full h-[610px] rounded-2xl overflow-hidden shadow-2xl group">
-          <Image src={image} alt={title} fill className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <Image 
+            src={image} 
+            alt={title} 
+            fill 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
         </div>
       </div>
@@ -813,10 +892,16 @@ function ProductShowcase({ title, sizes, finish, image, isReversed, onAdd, tiles
         <div className="space-y-4">
           <p className="text-xs font-bold text-neutral-900 uppercase tracking-wide border-b border-neutral-200 pb-2 mb-4">Visual Reference</p>
           <div className="flex flex-col gap-6 items-start">
-            {tiles.map((tile: any, idx: number) => (
+            {tiles.map((tile, idx) => (
               <div key={idx} className="group flex flex-col items-start">
                 <div style={{ width: `${tile.width}px`, height: `${tile.height}px` }} className="rounded-lg shadow-md overflow-hidden border border-neutral-200 relative">
-                  <Image src={tile.imageUrl} alt="variation" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <Image 
+                    src={tile.imageUrl} 
+                    alt="variation" 
+                    fill 
+                    className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                    sizes="300px"
+                  />
                 </div>
               </div>
             ))}

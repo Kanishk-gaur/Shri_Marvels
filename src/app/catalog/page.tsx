@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/context/CatalogContext";
+import { Input } from "@/components/ui/input"; // Import Input component
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, FileText, Loader2, ArrowLeft, Bookmark } from "lucide-react"; 
+import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Plus, Minus } from "lucide-react"; 
 import { useState } from "react";
 
 export default function CatalogPage() {
-  const { catalogItems, removeItemFromCatalog } = useCatalog();
+  const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog(); //
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +27,8 @@ export default function CatalogPage() {
                 name: item.name,
                 imageUrl: item.imageUrl,
                 selectedSizes: item.selectedSizes,
-                category: item.category
+                category: item.category,
+                quantity: item.quantity || 1
             })) 
         }),
       });
@@ -43,6 +45,12 @@ export default function CatalogPage() {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  // Helper to update quantity via buttons or manual input
+  const handleUpdateQuantity = (itemId: string, currentSizes: string[], value: number) => {
+    const newQty = Math.max(1, value); 
+    updateItemSizes(itemId, currentSizes, newQty);
   };
 
   return (
@@ -82,6 +90,34 @@ export default function CatalogPage() {
               <div className="p-4 flex-grow">
                 <h2 className="text-lg font-semibold truncate text-white">{item.name}</h2>
                 <p className="text-sm text-cyan-400 mb-4">{item.category}</p>
+                
+                {/* Quantity Controls with Manual Input */}
+                <div className="flex items-center justify-between bg-white/10 p-2 rounded-md mb-4 border border-white/5">
+                  <span className="text-xs text-white/70 uppercase font-bold tracking-tighter">Quantity</span>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => handleUpdateQuantity(item.id, item.selectedSizes, (item.quantity || 1) - 1)}
+                      className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    
+                    <Input
+                      type="number"
+                      value={item.quantity || 1}
+                      onChange={(e) => handleUpdateQuantity(item.id, item.selectedSizes, parseInt(e.target.value) || 1)}
+                      className="w-14 h-8 bg-transparent border-white/20 text-center font-bold text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+
+                    <button 
+                      onClick={() => handleUpdateQuantity(item.id, item.selectedSizes, (item.quantity || 1) + 1)}
+                      className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+
                 <div className="mt-4">
                   <p className="text-xs text-white/50 mb-2 font-bold uppercase tracking-wider">Selected Sizes:</p>
                   <div className="flex flex-wrap gap-1">
