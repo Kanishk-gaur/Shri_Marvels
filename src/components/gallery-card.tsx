@@ -27,11 +27,12 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
   const sizeString = product.sizes[0] || "1x1";
 
   /**
-   * Called when sizes are confirmed in the dialog
+   * Called when sizes and quantity are confirmed in the dialog
    */
-  const handleConfirmSizes = (selectedSizes: string[]) => {
+  const handleConfirmSizes = (selectedSizes: string[], quantity: number) => {
     const item = productToCatalogItem(product);
     item.selectedSizes = selectedSizes;
+    item.quantity = quantity; // Save the quantity to the item
     addItemToCatalog(item);
     setIsDialogOpen(false);
   };
@@ -45,7 +46,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       setIsDialogOpen(true);
     }
   };
-
+  
   const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
   // MASONRY GRID LOGIC (Original unchanged)

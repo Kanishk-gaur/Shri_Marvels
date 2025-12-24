@@ -4,6 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input" // Import the Input component
 import { subCategoryDisplayNames } from "@/data/utils"
 
 interface SizeSelectionDialogProps {
@@ -11,8 +12,8 @@ interface SizeSelectionDialogProps {
   onClose: () => void
   subcategory: string
   availableSizes: string[]
-  onConfirm: (sizes: string[]) => void
-  mainCategory: "marvel" | "tiles" // Added to match subcategory-card.tsx
+  onConfirm: (sizes: string[], quantity: number) => void // Updated signature
+  mainCategory: "marvel" | "tiles"
 }
 
 export function SizeSelectionDialog({
@@ -21,9 +22,10 @@ export function SizeSelectionDialog({
   subcategory,
   availableSizes,
   onConfirm,
-  mainCategory, // Destructured here
+  mainCategory,
 }: SizeSelectionDialogProps) {
   const [selected, setSelected] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState<string>("1"); // State for quantity input
 
   const toggleSize = (size: string) => {
     setSelected((prev: string[]) => 
@@ -33,8 +35,9 @@ export function SizeSelectionDialog({
 
   const handleConfirm = () => {
     if (selected.length > 0) {
-      onConfirm(selected);
+      onConfirm(selected, parseInt(quantity) || 1); // Pass selected sizes and quantity
       setSelected([]); 
+      setQuantity("1");
       onClose();
     }
   }
@@ -65,7 +68,7 @@ export function SizeSelectionDialog({
               Select Sizes for {displayName}
             </h2>
             
-            <div className="grid grid-cols-2 gap-3 mb-8">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               {availableSizes.map((size) => {
                 const isSelected = selected.includes(size);
                 return (
@@ -83,6 +86,19 @@ export function SizeSelectionDialog({
                   </Button>
                 );
               })}
+            </div>
+
+            {/* Quantity Input Field */}
+            <div className="mb-8">
+              <label className="block text-white/80 text-sm mb-2 ml-1">Number of Pieces</label>
+              <Input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-cyan-500"
+                placeholder="Enter quantity..."
+              />
             </div>
 
             <Button 

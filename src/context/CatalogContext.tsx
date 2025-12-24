@@ -85,7 +85,8 @@ export interface CatalogItem {
   imageUrl: string;
   sizes: string[]; 
   category: string;
-  selectedSizes: string[]; // Store multiple selections
+  selectedSizes: string[];
+  quantity?: number; // Added quantity property
 }
 
 interface CatalogContextType {
@@ -93,7 +94,7 @@ interface CatalogContextType {
   addItemToCatalog: (item: CatalogItem) => void;
   removeItemFromCatalog: (itemId: string) => void;
   isItemInCatalog: (itemId: string) => boolean;
-  updateItemSizes: (itemId: string, sizes: string[]) => void;
+  updateItemSizes: (itemId: string, sizes: string[], quantity?: number) => void; // Updated signature
 }
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
@@ -141,9 +142,9 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
     setCatalogItems((prev) => prev.filter((i) => i.id !== itemId));
   };
 
-  const updateItemSizes = (itemId: string, sizes: string[]) => {
+  const updateItemSizes = (itemId: string, sizes: string[], quantity?: number) => {
     setCatalogItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, selectedSizes: sizes } : item))
+      prev.map((item) => (item.id === itemId ? { ...item, selectedSizes: sizes, quantity } : item))
     );
   };
 

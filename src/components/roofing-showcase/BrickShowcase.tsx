@@ -5,6 +5,8 @@ import { BrickShowcaseSection } from "./types";
 import { useCatalog } from "@/context/CatalogContext";
 import { Button } from "../ui/button";
 import { ListPlus, ListMinus } from "lucide-react";
+import { useState } from "react";
+import { SizeSelectionDialog } from "../size-selection-dialog";
 
 interface BrickShowcaseProps {
   section: BrickShowcaseSection;
@@ -12,6 +14,7 @@ interface BrickShowcaseProps {
 
 export default function BrickShowcase({ section }: BrickShowcaseProps) {
   const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   const itemId = section.id;
   const isInCatalog = isItemInCatalog(itemId);
@@ -20,16 +23,21 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
     if (isInCatalog) {
       removeItemFromCatalog(itemId);
     } else {
-      // Mapping BrickShowcase data to CatalogItem interface
-      addItemToCatalog({
-        id: itemId,
-        name: section.product.name,
-        imageUrl: section.product.image,
-        category: "Roof Tiles",
-        sizes: [section.product.size],
-        selectedSizes: [section.product.size]
-      });
+      setIsDialogOpen(true);
     }
+  };
+
+  const handleConfirm = (selectedSizes: string[], quantity: number) => {
+    addItemToCatalog({
+      id: itemId,
+      name: section.product.name,
+      imageUrl: section.product.image,
+      category: "Roof Tiles",
+      sizes: [section.product.size],
+      selectedSizes: selectedSizes,
+      quantity: quantity
+    });
+    setIsDialogOpen(false);
   };
 
   return (
@@ -69,7 +77,6 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
               </div>
             </div>
 
-            {/* Catalog Toggle Button */}
             <Button 
               onClick={handleToggle}
               variant={isInCatalog ? "destructive" : "default"}
@@ -98,6 +105,15 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
           </div>
         </div>
       </div>
+
+      <SizeSelectionDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        subcategory="Roof Tile"
+        availableSizes={[section.product.size]}
+        onConfirm={handleConfirm}
+        mainCategory="tiles"
+      />
     </div> 
   );
 }

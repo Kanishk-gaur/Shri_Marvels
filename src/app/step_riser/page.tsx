@@ -1,10 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, CheckCircle2, Layers, ShieldCheck } from "lucide-react";
+import { ArrowDown, CheckCircle2, Layers, ShieldCheck, ListPlus, ListMinus } from "lucide-react";
 import Image from "next/image";
+import { useCatalog } from "@/context/CatalogContext";
+import { Button } from "@/components/ui/button";
+import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
-// Data for the new Texture/Design Collection Grid
+// Data for the Texture/Design Collection Grid
 const textureCollection = [
   { "code": "01", "image": "/images/step_riser_tiles/01.png" },
   { "code": "02", "image": "/images/step_riser_tiles/02.png" },
@@ -106,26 +110,36 @@ const textureCollection = [
   { "code": "307", "image": "/images/step_riser_tiles/307.png" }
 ];
 
-export default function Home() {
+export default function StepRiserPage() {
+  const [activeProduct, setActiveProduct] = useState<any>(null);
+  const { addItemToCatalog } = useCatalog();
+
+  const handleConfirm = (selectedSizes: string[], quantity: number) => {
+    if (activeProduct) {
+      addItemToCatalog({
+        id: activeProduct.title.replace(/\s+/g, '-').toLowerCase(),
+        name: activeProduct.title,
+        imageUrl: activeProduct.image,
+        category: "Step & Riser",
+        sizes: activeProduct.sizesArray, // Save the actual individual sizes
+        selectedSizes: selectedSizes,
+        quantity: quantity
+      });
+      setActiveProduct(null);
+    }
+  };
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-white font-sans selection:bg-black selection:text-white">
-      {/* =========================================
-          HERO SECTION: Architectural & Premium
-      ========================================= */}
+      {/* HERO SECTION */}
       <section className="relative w-full pt-28 pb-12 md:pt-36 md:pb-20 px-4 md:px-8 bg-neutral-50/50 overflow-hidden">
-        
-        {/* Abstract Background Decoration */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
             <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-gray-200 to-transparent opacity-40 blur-3xl" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-stone-200 to-transparent opacity-40 blur-3xl" />
-            {/* Grid Pattern */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* LEFT: Typography & Call to Action (Span 7 cols) */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -139,29 +153,18 @@ export default function Home() {
                 </span>
                 <span className="text-xs font-semibold tracking-wide text-neutral-600 uppercase">2025 Collection Available</span>
               </div>
-
               <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-neutral-900 leading-[0.95]">
                 STEP <span className="font-serif italic font-light text-neutral-400">&</span><br />
                 RISER
               </h1>
-
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 border-l-2 border-neutral-900 pl-6 mt-2">
                 <p className="text-lg md:text-xl text-neutral-600 max-w-md leading-relaxed">
                   Elevate your staircase with our premium ceramic solutions. 
                   <span className="font-semibold text-neutral-900"> Anti-skid technology</span> meets architectural aesthetics.
                 </p>
               </div>
-
-              <div className="flex flex-wrap items-center gap-4 mt-4">
-                <button className="group px-8 py-4 bg-neutral-900 text-white rounded-full font-medium transition-all hover:bg-neutral-800 hover:scale-105 flex items-center gap-3 shadow-xl shadow-neutral-900/20">
-                  View Collection
-                  <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
-                </button>
-               
-              </div>
             </motion.div>
 
-            {/* RIGHT: Visual Showcase (Span 5 cols) */}
             <div className="lg:col-span-5 relative h-[450px] md:h-[550px] flex items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -169,43 +172,14 @@ export default function Home() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative w-full h-full"
               >
-                {/* Back Card */}
                 <div className="absolute top-10 right-10 w-3/4 h-3/4 bg-stone-200 rounded-3xl -z-10" />
-                
-                {/* Main Image Container */}
-                <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-stone-900/20 group">
-                  <Image
-                    src="/images/step/kp1.png"
-                    alt="KP Ceramic Steps and Risers"
-                    fill
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  
-                  {/* Floating Detail Card */}
-                  <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-white/20"
-                  >
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1">Featured</p>
-                        <p className="text-neutral-900 font-bold text-lg">Sandy Black Series</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1">Finish</p>
-                        <p className="text-neutral-900 font-medium">Matte 3FT</p>
-                      </div>
-                    </div>
-                  </motion.div>
+                <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl group">
+                  <Image src="/images/step/kp1.png" alt="KP Ceramic Steps" fill className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 </div>
               </motion.div>
             </div>
-
           </div>
-
-          {/* Bottom Feature Strip */}
+          
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -232,135 +206,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =========================================
-          PRODUCT SHOWCASE GRID
-      ========================================= */}
+      {/* PRODUCT SHOWCASE GRID */}
       <section className="py-16 md:py-24 px-4 md:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-           {/* HL-JET GREY */}
-           <ProductShowcase
+          <ProductShowcase
             title="FULL BODY SANDY BLACK"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/1.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/3.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/2.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY BLACK", 
+                image: "/images/step/1.png", 
+                sizesArray: ["300X1200", "200X1200MM"] // Fixed: Individual sizes here
+            })}
+            tiles={[{ imageUrl: "/images/step/3.png", width: 300, height: 100 }, { imageUrl: "/images/step/2.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CREAM */}
           <ProductShowcase
             title="FULL BODY SANDY CHOCO"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/4.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/6.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/5.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY CHOCO", 
+                image: "/images/step/4.png", 
+                sizesArray: ["300X1200", "200X1200MM"] // Fixed: Individual sizes here
+            })}
+            tiles={[{ imageUrl: "/images/step/6.png", width: 300, height: 100 }, { imageUrl: "/images/step/5.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CHOCO */}
+          {/* Repeat for other showcases, ensuring you split the 'sizes' string into sizesArray: ["Size1", "Size2"] */}
           <ProductShowcase
             title="FULL BODY SANDY NERO"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/7.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/9.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/8.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY NERO", 
+                image: "/images/step/7.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/9.png", width: 300, height: 100 }, { imageUrl: "/images/step/8.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-BROWN */}
           <ProductShowcase
             title="FULL BODY SANDY COPPER"
             sizes="600X1200 / 300X1200MM"
             finish="3 FT"
             image="/images/step/11.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/13.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/12.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY COPPER", 
+                image: "/images/step/11.png", 
+                sizesArray: ["600X1200", "300X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/13.png", width: 300, height: 100 }, { imageUrl: "/images/step/12.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-NATURAL */}
-          <ProductShowcase
+           <ProductShowcase
             title="FULL BODY SANDY KOTA"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/14.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/16.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/15.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY KOTA", 
+                image: "/images/step/14.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/16.png", width: 300, height: 100 }, { imageUrl: "/images/step/15.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-BEIGE */}
           <ProductShowcase
             title="FULL BODY SANDY VERDE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/17.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/19.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/18.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY VERDE", 
+                image: "/images/step/17.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/19.png", width: 300, height: 100 }, { imageUrl: "/images/step/18.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="FULL BODY SANDY ROMAN"
@@ -368,123 +294,77 @@ export default function Home() {
             finish="3 FT"
             image="/images/step/20.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/26.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/32.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY ROMAN", 
+                image: "/images/step/20.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/26.png", width: 300, height: 100 }, { imageUrl: "/images/step/32.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CREAM */}
           <ProductShowcase
             title="FULL BODY SANDY MOCHA"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/21.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/27.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/33.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY MOCHA", 
+                image: "/images/step/21.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/27.png", width: 300, height: 100 }, { imageUrl: "/images/step/33.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CHOCO */}
           <ProductShowcase
             title="FULL BODY SANDY DOVE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/22.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/28.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/34.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY DOVE", 
+                image: "/images/step/22.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/28.png", width: 300, height: 100 }, { imageUrl: "/images/step/34.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-BROWN */}
           <ProductShowcase
             title="FULL BODY SANDY CREMA"
             sizes="600X1200 / 300X1200MM"
             finish="3 FT"
             image="/images/step/23.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/29.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/35.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY CREMA", 
+                image: "/images/step/23.png", 
+                sizesArray: ["600X1200", "300X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/29.png", width: 300, height: 100 }, { imageUrl: "/images/step/35.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-NATURAL */}
           <ProductShowcase
             title="FULL BODY SANDY BEIGE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/24.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/30.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/36.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY BEIGE", 
+                image: "/images/step/24.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/30.png", width: 300, height: 100 }, { imageUrl: "/images/step/36.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-BEIGE */}
           <ProductShowcase
             title="FULL BODY SANDY WHITE"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT"
             image="/images/step/25.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/31.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/37.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY SANDY WHITE", 
+                image: "/images/step/25.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/31.png", width: 300, height: 100 }, { imageUrl: "/images/step/37.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="FULL BODY HL-JET BLACK SP"
@@ -492,134 +372,90 @@ export default function Home() {
             finish="4 FT"
             image="/images/step/38.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/44.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/50.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-JET BLACK SP", 
+                image: "/images/step/38.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/44.png", width: 300, height: 100 }, { imageUrl: "/images/step/50.png", width: 280, height: 80 }]}
           />
-
           <ProductShowcase
             title="FULL BODY HL-WHITE"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
             image="/images/step/39.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/45.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/51.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-WHITE", 
+                image: "/images/step/39.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/45.png", width: 300, height: 100 }, { imageUrl: "/images/step/51.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CREAM */}
           <ProductShowcase
             title="FULL BODY HL-CHOCO"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
             image="/images/step/40.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/46.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/52.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-CHOCO", 
+                image: "/images/step/40.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/46.png", width: 300, height: 100 }, { imageUrl: "/images/step/52.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-CHOCO */}
           <ProductShowcase
             title="FULL BODY HL-NERO"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
             image="/images/step/41.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/47.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/53.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-NERO", 
+                image: "/images/step/41.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/47.png", width: 300, height: 100 }, { imageUrl: "/images/step/53.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-BROWN */}
           <ProductShowcase
             title="FULL BODY HL-PEACH"
             sizes="600X1200 / 300X1200MM"
             finish="4 FT"
             image="/images/step/42.png"
             isReversed={false}
-            tiles={[
-              {
-                imageUrl: "/images/step/48.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/54.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-PEACH", 
+                image: "/images/step/42.png", 
+                sizesArray: ["600X1200", "300X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/48.png", width: 300, height: 100 }, { imageUrl: "/images/step/54.png", width: 280, height: 80 }]}
           />
-
-          {/* HL-NATURAL */}
           <ProductShowcase
             title="FULL BODY HL-RIVER"
             sizes="300X1200 / 200X1200MM"
             finish="4 FT"
             image="/images/step/43.png"
             isReversed={true}
-            tiles={[
-              {
-                imageUrl: "/images/step/49.png",
-                width: 300,
-                height: 100,
-              },
-              {
-                imageUrl: "/images/step/55.png",
-                width: 280,
-                height: 80,
-              },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "FULL BODY HL-RIVER", 
+                image: "/images/step/43.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/49.png", width: 300, height: 100 }, { imageUrl: "/images/step/55.png", width: 280, height: 80 }]}
           />
-
           <ProductShowcase
             title="GVT 901"
             sizes="300X1200 / 200X1200MM"
             finish="3 FT / 4 FT"
             image="/images/step/56.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/78.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/100.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 901", 
+                image: "/images/step/56.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/78.png", width: 300, height: 100 }, { imageUrl: "/images/step/100.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 902"
@@ -627,10 +463,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/57.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/79.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/101.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 902", 
+                image: "/images/step/57.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/79.png", width: 300, height: 100 }, { imageUrl: "/images/step/101.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 903"
@@ -638,10 +476,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/58.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/80.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/102.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 903", 
+                image: "/images/step/58.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/80.png", width: 300, height: 100 }, { imageUrl: "/images/step/102.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 904"
@@ -649,10 +489,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/59.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/81.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/103.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 904", 
+                image: "/images/step/59.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/81.png", width: 300, height: 100 }, { imageUrl: "/images/step/103.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 905"
@@ -660,10 +502,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/60.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/82.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/104.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 905", 
+                image: "/images/step/60.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/82.png", width: 300, height: 100 }, { imageUrl: "/images/step/104.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 923"
@@ -671,10 +515,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/61.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/83.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/105.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 923", 
+                image: "/images/step/61.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/83.png", width: 300, height: 100 }, { imageUrl: "/images/step/105.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 924"
@@ -682,10 +528,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/62.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/84.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/106.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 924", 
+                image: "/images/step/62.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/84.png", width: 300, height: 100 }, { imageUrl: "/images/step/106.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 906"
@@ -693,10 +541,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/63.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/85.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/107.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 906", 
+                image: "/images/step/63.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/85.png", width: 300, height: 100 }, { imageUrl: "/images/step/107.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 907"
@@ -704,10 +554,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/64.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/86.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/108.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 907", 
+                image: "/images/step/64.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/86.png", width: 300, height: 100 }, { imageUrl: "/images/step/108.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 908"
@@ -715,10 +567,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/65.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/87.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/109.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 908", 
+                image: "/images/step/65.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/87.png", width: 300, height: 100 }, { imageUrl: "/images/step/109.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 909"
@@ -726,10 +580,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/66.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/88.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/110.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 909", 
+                image: "/images/step/66.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/88.png", width: 300, height: 100 }, { imageUrl: "/images/step/110.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 910"
@@ -737,10 +593,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/67.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/89.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/111.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 910", 
+                image: "/images/step/67.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/89.png", width: 300, height: 100 }, { imageUrl: "/images/step/111.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 911"
@@ -748,10 +606,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/68.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/90.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/112.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 911", 
+                image: "/images/step/68.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/90.png", width: 300, height: 100 }, { imageUrl: "/images/step/112.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 912"
@@ -759,10 +619,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/69.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/91.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/113.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 912", 
+                image: "/images/step/69.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/91.png", width: 300, height: 100 }, { imageUrl: "/images/step/113.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 913"
@@ -770,10 +632,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/70.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/92.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/114.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 913", 
+                image: "/images/step/70.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/92.png", width: 300, height: 100 }, { imageUrl: "/images/step/114.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 914"
@@ -781,10 +645,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/71.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/93.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/115.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 914", 
+                image: "/images/step/71.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/93.png", width: 300, height: 100 }, { imageUrl: "/images/step/115.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 915"
@@ -792,10 +658,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/72.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/94.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/116.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 915", 
+                image: "/images/step/72.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/94.png", width: 300, height: 100 }, { imageUrl: "/images/step/116.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 916"
@@ -803,10 +671,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/73.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/95.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/117.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 916", 
+                image: "/images/step/73.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/95.png", width: 300, height: 100 }, { imageUrl: "/images/step/117.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 917"
@@ -814,10 +684,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/74.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/96.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/118.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 917", 
+                image: "/images/step/74.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/96.png", width: 300, height: 100 }, { imageUrl: "/images/step/118.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 919"
@@ -825,10 +697,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/75.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/97.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/119.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 919", 
+                image: "/images/step/75.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/97.png", width: 300, height: 100 }, { imageUrl: "/images/step/119.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 921"
@@ -836,10 +710,12 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/76.png"
             isReversed={false}
-            tiles={[
-              { imageUrl: "/images/step/98.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/120.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 921", 
+                image: "/images/step/76.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/98.png", width: 300, height: 100 }, { imageUrl: "/images/step/120.png", width: 280, height: 80 }]}
           />
           <ProductShowcase
             title="GVT 922"
@@ -847,139 +723,55 @@ export default function Home() {
             finish="3 FT / 4 FT"
             image="/images/step/77.png"
             isReversed={true}
-            tiles={[
-              { imageUrl: "/images/step/99.png", width: 300, height: 100 },
-              { imageUrl: "/images/step/121.png", width: 280, height: 80 },
-            ]}
+            onAdd={() => setActiveProduct({ 
+                title: "GVT 922", 
+                image: "/images/step/77.png", 
+                sizesArray: ["300X1200", "200X1200MM"]
+            })}
+            tiles={[{ imageUrl: "/images/step/99.png", width: 300, height: 100 }, { imageUrl: "/images/step/121.png", width: 280, height: 80 }]}
           />
         </div>
       </section>
 
-      {/* =========================================
-          TEXTURE GALLERY GRID (NEW SECTION)
-      ========================================= */}
+      {/* TEXTURE GALLERY */}
       <section className="py-16 px-4 md:px-8 bg-white border-t border-neutral-100">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-              Design Collection
-            </h2>
-            <p className="text-neutral-500 tracking-widest text-sm uppercase">
-              Premium Textures & Finishes
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">Design Collection</h2>
+            <p className="text-neutral-500 tracking-widest text-sm uppercase">Premium Textures & Finishes</p>
           </div>
-<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-  {textureCollection.map((item) => (
-    <motion.div
-      key={item.code}
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="group cursor-pointer"
-    >
-      {/* Image Container - Slightly decreased height */}
-      <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden bg-neutral-100 shadow-sm border border-neutral-200 group-hover:shadow-md transition-all duration-300">
-        <Image
-          src={item.image}
-          alt={`Texture finish ${item.code}`}
-          fill
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+            {textureCollection.map((item) => (
+              <motion.div key={item.code} className="group cursor-pointer">
+                <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden border border-neutral-200 group-hover:shadow-md transition-all">
+                  <Image src={item.image} alt={item.code} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                </div>
+                <p className="mt-3 text-sm font-semibold text-neutral-700 group-hover:text-black">{item.code}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DIALOG FOR QUANTITY */}
+      {activeProduct && (
+        <SizeSelectionDialog
+          isOpen={!!activeProduct}
+          onClose={() => setActiveProduct(null)}
+          subcategory={activeProduct.title}
+          availableSizes={activeProduct.sizesArray} // Fixed: Passing array of sizes
+          onConfirm={handleConfirm}
+          mainCategory="tiles"
         />
-        {/* Optional Overlay on Hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
-      </div>
-
-      {/* Label */}
-      <div className="mt-3 px-1">
-        <p className="text-sm font-semibold text-neutral-700 group-hover:text-black transition-colors">
-          {item.code}
-        </p>
-      </div>
-    </motion.div>
-  ))}
-</div>
-        </div>
-      </section>
-
-      {/* =========================================
-          PRODUCT SPECIFICATIONS
-      ========================================= */}
-      <section
-        style={{ background: "#f9f9f9" }}
-        className="py-16 md:py-24 px-4 md:px-8"
-      >
-        <div className="max-w-6xl mx-auto">
-          <h2
-            style={{
-              fontSize: "28px",
-              fontWeight: "700",
-              color: "#1a1a1a",
-              marginBottom: "16px",
-            }}
-          >
-            Product Specifications
-          </h2>
-
-          <div className="overflow-x-auto rounded-lg shadow-sm border border-neutral-200">
-            <table className="w-full border-collapse text-sm bg-white">
-              <thead>
-                <tr className="bg-neutral-900 text-white">
-                  <th className="p-4 text-left font-semibold tracking-wide">SIZE</th>
-                  <th className="p-4 text-left font-semibold tracking-wide">PRODUCT NAME</th>
-                  <th className="p-4 text-left font-semibold tracking-wide">COVERAGE</th>
-                  <th className="p-4 text-left font-semibold tracking-wide">PACKING</th>
-                  <th className="p-4 text-left font-semibold tracking-wide">WEIGHT</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                <tr className="hover:bg-neutral-50 transition-colors">
-                  <td className="p-4 font-medium text-neutral-700">300 X 1200</td>
-                  <td className="p-4 text-neutral-600">ONE STEP BOX</td>
-                  <td className="p-4 text-neutral-600">11.61 SQFT</td>
-                  <td className="p-4 text-neutral-600">3 PCS.</td>
-                  <td className="p-4 text-neutral-600">25.5 KG</td>
-                </tr>
-                <tr className="hover:bg-neutral-50 transition-colors">
-                  <td className="p-4 font-medium text-neutral-700">200 X 1200</td>
-                  <td className="p-4 text-neutral-600">ONE RISER BOX</td>
-                  <td className="p-4 text-neutral-600">7.74 SQFT</td>
-                  <td className="p-4 text-neutral-600">3 PCS.</td>
-                  <td className="p-4 text-neutral-600">16.5 KG</td>
-                </tr>
-                <tr className="hover:bg-neutral-50 transition-colors">
-                  <td className="p-4 font-medium text-neutral-700">600 X 1200</td>
-                  <td className="p-4 text-neutral-600">ONE STEP BOX</td>
-                  <td className="p-4 text-neutral-600">23.23 SQFT</td>
-                  <td className="p-4 text-neutral-600">3 PCS.</td>
-                  <td className="p-4 text-neutral-600">60 KG</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      )}
     </div>
   );
 }
 
-function ProductShowcase({
-  title,
-  sizes,
-  finish,
-  image,
-  isReversed,
-  tiles = [],
-}: {
-  title: string;
-  sizes: string;
-  finish: string;
-  image: string;
-  isReversed: boolean;
-  tiles?: Array<{ imageUrl: string; width: number; height: number }>;
-}) {
-  const contentOrder = isReversed ? "order-2 md:order-2" : "order-2 md:order-1";
-  const imageOrder = isReversed ? "order-1 md:order-1" : "order-1 md:order-2";
+function ProductShowcase({ title, sizes, finish, image, isReversed, onAdd, tiles = [] }: any) {
+  const { isItemInCatalog, removeItemFromCatalog } = useCatalog();
+  const productId = title.replace(/\s+/g, '-').toLowerCase();
+  const isInCatalog = isItemInCatalog(productId);
 
   return (
     <motion.div 
@@ -989,99 +781,45 @@ function ProductShowcase({
       transition={{ duration: 0.6 }}
       className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-20 md:mb-32"
     >
-      {/* Image Section */}
-      <div className={imageOrder}>
+      <div className={isReversed ? "order-1 md:order-2" : "order-1"}>
         <div className="relative w-full h-[610px] rounded-2xl overflow-hidden shadow-2xl group">
-          {/* Decorative Border Frame */}
-          <div className="absolute inset-0 border-2 border-white/20 z-10 pointer-events-none rounded-2xl"></div>
-          
-          <Image
-            src={image || "/placeholder.svg"}
-            alt={`${title} installed in stairs`}
-            fill
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-          
-          {/* Hover Overlay Effect */}
+          <Image src={image} alt={title} fill className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-500"></div>
         </div>
       </div>
-
-      {/* Product Details Section */}
-      <div className={`${contentOrder} flex flex-col justify-center`}>
+      <div className={isReversed ? "order-2 md:order-1 flex flex-col justify-center" : "order-2 flex flex-col justify-center"}>
         <div className="w-12 h-1 bg-neutral-900 mb-6"></div>
-        
-        {/* Product Title */}
-        <h2
-          style={{
-            fontSize: "clamp(32px, 4vw, 48px)",
-            fontWeight: "800",
-            lineHeight: "1.1",
-            color: "#1a1a1a",
-            marginBottom: "12px",
-            letterSpacing: "-0.5px"
-          }}
-        >
-          {title}
-        </h2>
-
-        {/* Tagline */}
-        <p className="text-sm tracking-[2px] text-neutral-500 uppercase font-semibold mb-6">
-          Architectural Series
-        </p>
-
-        {/* Size and Finish Badges */}
+        <h2 className="text-4xl md:text-5xl font-extrabold text-neutral-900 leading-[1.1] mb-4">{title}</h2>
+        <p className="text-sm tracking-[2px] text-neutral-500 uppercase font-semibold mb-6">Architectural Series</p>
         <div className="flex flex-wrap gap-3 mb-8">
-          <span className="px-3 py-1 bg-neutral-100 text-neutral-600 text-xs font-medium rounded-md uppercase tracking-wide">
-            {sizes}
-          </span>
-          <span className="px-3 py-1 bg-neutral-900 text-white text-xs font-medium rounded-md uppercase tracking-wide">
-            {finish}
-          </span>
+          <span className="px-3 py-1 bg-neutral-100 text-neutral-600 text-xs font-medium rounded-md uppercase tracking-wide">{sizes}</span>
+          <span className="px-3 py-1 bg-neutral-900 text-white text-xs font-medium rounded-md uppercase tracking-wide">{finish}</span>
+        </div>
+        
+        <div className="mb-8">
+          <Button
+            onClick={() => isInCatalog ? removeItemFromCatalog(productId) : onAdd()}
+            variant={isInCatalog ? "destructive" : "default"}
+            className="bg-neutral-900 text-white hover:bg-neutral-800 h-12 px-8 rounded-full transition-all shadow-lg"
+          >
+            {isInCatalog ? (
+              <><ListMinus className="w-4 h-4 mr-2" /> Remove from Catalog</>
+            ) : (
+              <><ListPlus className="w-4 h-4 mr-2" /> Add to Catalog</>
+            )}
+          </Button>
         </div>
 
         <div className="space-y-4">
-          <p className="text-xs font-bold text-neutral-900 uppercase tracking-wide border-b border-neutral-200 pb-2 mb-4">
-            Visual Reference
-          </p>
-          
+          <p className="text-xs font-bold text-neutral-900 uppercase tracking-wide border-b border-neutral-200 pb-2 mb-4">Visual Reference</p>
           <div className="flex flex-col gap-6 items-start">
-            {tiles.map((tile, idx) => (
-              <div
-                key={idx}
-                className="group flex flex-col items-start"
-              >
-                <div
-                  style={{
-                    width: `${tile.width}px`,
-                    height: `${tile.height}px`,
-                  }}
-                  className="rounded-lg shadow-md overflow-hidden border border-neutral-200 relative"
-                >
-                  <Image
-                    src={tile.imageUrl}
-                    alt={`${title} tile variation ${idx + 1}`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
+            {tiles.map((tile: any, idx: number) => (
+              <div key={idx} className="group flex flex-col items-start">
+                <div style={{ width: `${tile.width}px`, height: `${tile.height}px` }} className="rounded-lg shadow-md overflow-hidden border border-neutral-200 relative">
+                  <Image src={tile.imageUrl} alt="variation" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
                 </div>
-                <p className="mt-2 text-xs text-neutral-400 font-medium">Size: {tile.width}px</p>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Quick Specs Box */}
-        <div className="mt-8 p-6 bg-neutral-50 rounded-xl border border-neutral-100">
-          <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-            <div>
-              <p className="text-xs text-neutral-400 mb-1">Coverage Area</p>
-              <p className="font-bold text-neutral-900">11.61 SQFT</p>
-            </div>
-            <div>
-              <p className="text-xs text-neutral-400 mb-1">Box Weight</p>
-              <p className="font-bold text-neutral-900">25.5 KG</p>
-            </div>
           </div>
         </div>
       </div>

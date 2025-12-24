@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useCatalog } from "@/context/CatalogContext";
 import { Button } from "../ui/button";
 import { ListPlus, ListMinus } from "lucide-react";
+import { useState } from "react";
+import { SizeSelectionDialog } from "../size-selection-dialog";
 
 interface TileShowcaseProps {
   section: TileShowcaseSection;
@@ -15,6 +17,22 @@ interface TileShowcaseProps {
 export default function TileShowcase({ section, sectionIndex }: TileShowcaseProps) {
   const { house, tiles } = section;
   const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
+  const [activeTile, setActiveTile] = useState<{ id: string, name: string, image: string, size: string } | null>(null);
+
+  const handleConfirm = (selectedSizes: string[], quantity: number) => {
+    if (activeTile) {
+      addItemToCatalog({
+        id: activeTile.id,
+        name: activeTile.name,
+        imageUrl: activeTile.image,
+        category: "Roof Tiles",
+        sizes: [activeTile.size],
+        selectedSizes: selectedSizes,
+        quantity: quantity
+      });
+      setActiveTile(null);
+    }
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 md:p-6 lg:p-8 hover:shadow-xl transition-shadow duration-300">
@@ -44,13 +62,11 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
               if (isInCatalog) {
                 removeItemFromCatalog(tileId);
               } else {
-                addItemToCatalog({
+                setActiveTile({
                   id: tileId,
                   name: tile.label || "Unnamed Tile",
-                  imageUrl: tile.image || "/placeholder.svg",
-                  category: "Roof Tiles",
-                  sizes: [tile.size || "Standard"],
-                  selectedSizes: [tile.size || "Standard"]
+                  image: tile.image || "/placeholder.svg",
+                  size: tile.size || "Standard"
                 });
               }
             };
@@ -88,7 +104,6 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
                   </div>
                 </div>
 
-                {/* Updated Button: Always visible */}
                 <Button
                   size="icon"
                   variant={isInCatalog ? "destructive" : "outline"}
@@ -102,6 +117,17 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
           })}
         </div>
       </div>
+
+      {activeTile && (
+        <SizeSelectionDialog
+          isOpen={!!activeTile}
+          onClose={() => setActiveTile(null)}
+          subcategory={activeTile.name}
+          availableSizes={[activeTile.size]}
+          onConfirm={handleConfirm}
+          mainCategory="tiles"
+        />
+      )}
     </div>
   );
 }
