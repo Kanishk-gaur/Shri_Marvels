@@ -2,16 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/context/CatalogContext";
-import { Input } from "@/components/ui/input"; // Import Input component
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Plus, Minus } from "lucide-react"; 
+import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Edit2 } from "lucide-react"; 
 import { useState } from "react";
+import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
 export default function CatalogPage() {
-  const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog(); //
+  const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // State to track which item is being edited
+  const [editingItem, setEditingItem] = useState<any | null>(null);
 
   const handleCreateCatalog = async () => {
     if (catalogItems.length === 0) return;
@@ -28,7 +32,7 @@ export default function CatalogPage() {
                 imageUrl: item.imageUrl,
                 selectedSizes: item.selectedSizes,
                 category: item.category,
-                quantity: item.quantity || 1
+                sizeConfigs: item.sizeConfigs 
             })) 
         }),
       });
@@ -47,10 +51,11 @@ export default function CatalogPage() {
     }
   };
 
-  // Helper to update quantity via buttons or manual input
-  const handleUpdateQuantity = (itemId: string, currentSizes: string[], value: number) => {
-    const newQty = Math.max(1, value); 
-    updateItemSizes(itemId, currentSizes, newQty);
+  const handleEditConfirm = (selectedSizes: string[], sizeConfigs: Record<string, number>) => {
+    if (editingItem) {
+      updateItemSizes(editingItem.id, selectedSizes, sizeConfigs);
+      setEditingItem(null);
+    }
   };
 
   return (
@@ -81,62 +86,58 @@ export default function CatalogPage() {
           <p className="text-xl text-white/50">Your catalog is empty.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {catalogItems.map((item) => (
             <div key={item.id} className="flex flex-col border border-white/10 rounded-lg overflow-hidden bg-white/5 backdrop-blur-sm shadow-lg">
-              <div className="relative aspect-square">
+              <div className="relative aspect-video">
                 <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
               </div>
               <div className="p-4 flex-grow">
-                <h2 className="text-lg font-semibold truncate text-white">{item.name}</h2>
-                <p className="text-sm text-cyan-400 mb-4">{item.category}</p>
-                
-                {/* Quantity Controls with Manual Input */}
-                <div className="flex items-center justify-between bg-white/10 p-2 rounded-md mb-4 border border-white/5">
-                  <span className="text-xs text-white/70 uppercase font-bold tracking-tighter">Quantity</span>
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => handleUpdateQuantity(item.id, item.selectedSizes, (item.quantity || 1) - 1)}
-                      className="p-1 hover:bg-white/20 rounded-full transition-colors"
-                    >
-                      <Minus size={14} />
-                    </button>
-                    
-                    <Input
-                      type="number"
-                      value={item.quantity || 1}
-                      onChange={(e) => handleUpdateQuantity(item.id, item.selectedSizes, parseInt(e.target.value) || 1)}
-                      className="w-14 h-8 bg-transparent border-white/20 text-center font-bold text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    />
-
-                    <button 
-                      onClick={() => handleUpdateQuantity(item.id, item.selectedSizes, (item.quantity || 1) + 1)}
-                      className="p-1 hover:bg-white/20 rounded-full transition-colors"
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
+                <div className="flex justify-between items-start mb-2">
+                  <h2 className="text-lg font-semibold truncate text-white max-w-[70%]">{item.name}</h2>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 px-2 text-cyan-400 hover:text-cyan-300 hover:bg-white/5"
+                    onClick={() => setEditingItem(item)}
+                  >
+                    <Edit2 className="w-3.5 h-3.5 mr-1" /> Edit
+                  </Button>
                 </div>
-
-                <div className="mt-4">
-                  <p className="text-xs text-white/50 mb-2 font-bold uppercase tracking-wider">Selected Sizes:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {item.selectedSizes.map((size) => (
-                      <span key={size} className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 text-[10px] rounded border border-cyan-500/30 font-medium">
-                        {size}
-                      </span>
-                    ))}
-                  </div>
+                <p className="text-sm text-cyan-400 mb-6">{item.category}</p>
+                
+                <p className="text-xs text-white/50 mb-3 font-bold uppercase tracking-wider">Sizes & Quantities:</p>
+                
+                <div className="space-y-2">
+                  {item.selectedSizes.map((size) => (
+                    <div key={size} className="flex items-center justify-between bg-white/5 p-2 rounded border border-white/5">
+                      <span className="text-xs font-medium text-white/80">{size}</span>
+                      <span className="text-xs font-bold text-cyan-400">{item.sizeConfigs?.[size] || 1} Pcs</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="p-4 pt-0">
-                <Button variant="destructive" className="w-full bg-red-600/80 hover:bg-red-700" onClick={() => removeItemFromCatalog(item.id)}>
-                  <Trash2 className="w-4 h-4 mr-2" /> Remove
+              <div className="p-4 pt-2">
+                <Button variant="destructive" className="w-full bg-red-600/80 hover:bg-red-700 h-9 text-xs" onClick={() => removeItemFromCatalog(item.id)}>
+                  <Trash2 className="w-3 h-3 mr-2" /> Remove Product
                 </Button>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {/* Edit Dialog Integration */}
+      {editingItem && (
+        <SizeSelectionDialog
+          isOpen={!!editingItem}
+          onClose={() => setEditingItem(null)}
+          subcategory={editingItem.name}
+          availableSizes={editingItem.sizes} // Uses original sizes array from catalog item
+          onConfirm={handleEditConfirm}
+          initialConfigs={editingItem.sizeConfigs} // NEW: Pass current config to dialog
+          mainCategory="tiles"
+        />
       )}
     </div>
   );

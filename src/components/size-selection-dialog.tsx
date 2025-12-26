@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input" // Import the Input component
+import { Input } from "@/components/ui/input"
 import { subCategoryDisplayNames } from "@/data/utils"
 
 interface SizeSelectionDialogProps {
@@ -12,8 +12,9 @@ interface SizeSelectionDialogProps {
   onClose: () => void
   subcategory: string
   availableSizes: string[]
-  onConfirm: (sizes: string[], quantity: number) => void // Updated signature
+  onConfirm: (sizes: string[], sizeConfigs: Record<string, number>) => void
   mainCategory: "marvel" | "tiles"
+  initialConfigs?: Record<string, number> // NEW: Optional prop for editing
 }
 
 export function SizeSelectionDialog({
@@ -22,22 +23,40 @@ export function SizeSelectionDialog({
   subcategory,
   availableSizes,
   onConfirm,
-  mainCategory,
+  initialConfigs,
 }: SizeSelectionDialogProps) {
-  const [selected, setSelected] = useState<string[]>([]);
-  const [quantity, setQuantity] = useState<string>("1"); // State for quantity input
+  const [sizeConfigs, setSizeConfigs] = useState<Record<string, number>>({});
+
+  // NEW: Sync state with initialConfigs when dialog opens for editing
+  useEffect(() => {
+    if (isOpen && initialConfigs) {
+      setSizeConfigs(initialConfigs);
+    } else if (isOpen) {
+      setSizeConfigs({});
+    }
+  }, [isOpen, initialConfigs]);
 
   const toggleSize = (size: string) => {
-    setSelected((prev: string[]) => 
-      prev.includes(size) ? prev.filter((s: string) => s !== size) : [...prev, size]
-    );
+    setSizeConfigs((prev) => {
+      const next = { ...prev };
+      if (next[size] !== undefined) {
+        delete next[size];
+      } else {
+        next[size] = 1;
+      }
+      return next;
+    });
+  }
+
+  const handleQuantityChange = (size: string, value: string) => {
+    const qty = parseInt(value) || 0;
+    setSizeConfigs(prev => ({ ...prev, [size]: qty }));
   }
 
   const handleConfirm = () => {
-    if (selected.length > 0) {
-      onConfirm(selected, parseInt(quantity) || 1); // Pass selected sizes and quantity
-      setSelected([]); 
-      setQuantity("1");
+    const selectedSizes = Object.keys(sizeConfigs);
+    if (selectedSizes.length > 0) {
+      onConfirm(selectedSizes, sizeConfigs);
       onClose();
     }
   }
@@ -48,14 +67,14 @@ export function SizeSelectionDialog({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="bg-white/10 backdrop-blur-md rounded-2xl p-8 w-full max-w-md mx-4 relative border border-white/20"
+            className="bg-neutral-900 rounded-2xl p-8 w-full max-w-md mx-4 relative border border-white/10 shadow-2xl"
             initial={{ scale: 0.9, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 50 }}
@@ -64,49 +83,60 @@ export function SizeSelectionDialog({
             <button onClick={onClose} className="absolute top-4 right-4 text-white/70 hover:text-white">
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              Select Sizes for {displayName}
+            <h2 className="text-2xl font-bold text-white mb-2 text-center">
+              {initialConfigs ? "Edit Selection" : "Select Sizes & Quantities"}
             </h2>
+            <p className="text-white/60 text-sm text-center mb-6">{displayName}</p>
             
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="space-y-4 mb-8 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
               {availableSizes.map((size) => {
-                const isSelected = selected.includes(size);
+                const isSelected = sizeConfigs[size] !== undefined;
                 return (
-                  <Button
-                    key={size}
-                    onClick={() => toggleSize(size)}
-                    className={`relative py-4 px-2 rounded-xl border transition-all duration-200 ${
-                      isSelected 
-                        ? 'bg-cyan-500 text-white border-cyan-400' 
-                        : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
-                    }`}
-                  >
-                    {isSelected && <Check size={14} className="absolute top-1 right-1" />}
-                    {size}
-                  </Button>
+                  <div key={size} className="space-y-2 p-3 rounded-xl border border-white/10 bg-white/5 transition-all">
+                    <Button
+                      onClick={() => toggleSize(size)}
+                      className={`w-full flex justify-between items-center py-5 px-4 rounded-lg border transition-all duration-200 ${
+                        isSelected 
+                          ? 'bg-cyan-500 text-white border-cyan-400' 
+                          : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
+                      }`}
+                    >
+                      <span className="font-medium">{size}</span>
+                      {isSelected && <Check size={18} />}
+                    </Button>
+
+                    <AnimatePresence>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="pt-2"
+                        >
+                          <div className="flex items-center gap-4 px-1">
+                            <label className="text-xs text-white/50 whitespace-nowrap">PIECES:</label>
+                            <Input
+                              type="number"
+                              min="1"
+                              value={sizeConfigs[size]}
+                              onChange={(e) => handleQuantityChange(size, e.target.value)}
+                              className="bg-black/20 border-white/10 text-white h-9 focus:ring-cyan-500"
+                            />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 );
               })}
             </div>
 
-            {/* Quantity Input Field */}
-            <div className="mb-8">
-              <label className="block text-white/80 text-sm mb-2 ml-1">Number of Pieces</label>
-              <Input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                className="bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-cyan-500"
-                placeholder="Enter quantity..."
-              />
-            </div>
-
             <Button 
-              className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-bold py-3 rounded-lg disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-bold py-3 rounded-lg"
               onClick={handleConfirm}
-              disabled={selected.length === 0}
+              disabled={Object.keys(sizeConfigs).length === 0}
             >
-              Add {selected.length > 0 ? `(${selected.length})` : ""} to Catalog
+              Update Catalog
             </Button>
           </motion.div>
         </motion.div>

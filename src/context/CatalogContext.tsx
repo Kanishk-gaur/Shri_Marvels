@@ -56,27 +56,21 @@ const SIZE_MAP: Record<string, string> = {
   "6x36": "6x36,9x36,12x36",
 };
 
-/**
- * Transforms raw product sizes into commercial strings.
- * If the string contains commas and isn't in the map, it breaks it into an array automatically.
- */
 export const transformProductSizes = (rawSizes: string[]): string[] => {
   let mapped: string[] = [];
   rawSizes.forEach((size) => {
     const key = size.trim();
     if (SIZE_MAP[key]) {
-      // Use predefined mapping
       const values = SIZE_MAP[key].split(",").map((v) => v.trim());
       mapped = [...mapped, ...values];
     } else if (key.includes(",")) {
-      // Automatic fallback: break comma-separated strings into array
       const splitValues = key.split(",").map((v) => v.trim());
       mapped = [...mapped, ...splitValues];
     } else {
       mapped.push(key);
     }
   });
-  return Array.from(new Set(mapped)); // Remove duplicates
+  return Array.from(new Set(mapped));
 };
 
 export interface CatalogItem {
@@ -86,7 +80,7 @@ export interface CatalogItem {
   sizes: string[]; 
   category: string;
   selectedSizes: string[];
-  quantity?: number; // Added quantity property
+  sizeConfigs?: Record<string, number>; // Added to store per-size quantities
 }
 
 interface CatalogContextType {
@@ -94,7 +88,7 @@ interface CatalogContextType {
   addItemToCatalog: (item: CatalogItem) => void;
   removeItemFromCatalog: (itemId: string) => void;
   isItemInCatalog: (itemId: string) => boolean;
-  updateItemSizes: (itemId: string, sizes: string[], quantity?: number) => void; // Updated signature
+  updateItemSizes: (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => void; // Updated signature
 }
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
@@ -106,6 +100,7 @@ export const productToCatalogItem = (product: Product): CatalogItem => ({
   category: product.category,
   sizes: transformProductSizes(product.sizes || []),
   selectedSizes: [],
+  sizeConfigs: {},
 });
 
 export const CatalogProvider = ({ children }: { children: ReactNode }) => {
@@ -142,9 +137,9 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
     setCatalogItems((prev) => prev.filter((i) => i.id !== itemId));
   };
 
-  const updateItemSizes = (itemId: string, sizes: string[], quantity?: number) => {
+  const updateItemSizes = (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => {
     setCatalogItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, selectedSizes: sizes, quantity } : item))
+      prev.map((item) => (item.id === itemId ? { ...item, selectedSizes: sizes, sizeConfigs } : item))
     );
   };
 
