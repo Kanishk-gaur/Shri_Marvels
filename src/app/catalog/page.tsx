@@ -2,20 +2,30 @@
 
 import { Button } from "@/components/ui/button";
 import { useCatalog } from "@/context/CatalogContext";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Edit2 } from "lucide-react"; 
 import { useState } from "react";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
+// Define a type for catalog items to avoid using 'any'
+interface CatalogItem {
+  id: string;
+  name: string;
+  imageUrl: string;
+  category: string;
+  selectedSizes: string[];
+  sizes: string[];
+  sizeConfigs?: Record<string, number>;
+}
+
 export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // State to track which item is being edited
-  const [editingItem, setEditingItem] = useState<any | null>(null);
+  // Use the CatalogItem type instead of 'any'
+  const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
 
   const handleCreateCatalog = async () => {
     if (catalogItems.length === 0) return;
