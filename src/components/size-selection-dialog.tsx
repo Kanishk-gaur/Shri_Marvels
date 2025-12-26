@@ -14,7 +14,7 @@ interface SizeSelectionDialogProps {
   availableSizes: string[]
   onConfirm: (sizes: string[], sizeConfigs: Record<string, number>) => void
   mainCategory: "marvel" | "tiles"
-  initialConfigs?: Record<string, number> // NEW: Optional prop for editing
+  initialConfigs?: Record<string, number>
 }
 
 export function SizeSelectionDialog({
@@ -27,7 +27,6 @@ export function SizeSelectionDialog({
 }: SizeSelectionDialogProps) {
   const [sizeConfigs, setSizeConfigs] = useState<Record<string, number>>({});
 
-  // NEW: Sync state with initialConfigs when dialog opens for editing
   useEffect(() => {
     if (isOpen && initialConfigs) {
       setSizeConfigs(initialConfigs);

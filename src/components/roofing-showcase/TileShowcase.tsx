@@ -19,8 +19,15 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
   const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
   const [activeTile, setActiveTile] = useState<{ id: string, name: string, image: string, size: string } | null>(null);
 
-  const handleConfirm = (selectedSizes: string[], quantity: number) => {
+  /**
+   * Updated to receive sizeConfigs Record to resolve the Type Error.
+   * Calculates total quantity from the individual size configurations.
+   */
+  const handleConfirm = (selectedSizes: string[], sizeConfigs: Record<string, number>) => {
     if (activeTile) {
+      // Calculate total quantity across all selected sizes
+      const totalQuantity = Object.values(sizeConfigs).reduce((sum, qty) => sum + qty, 0);
+
       addItemToCatalog({
         id: activeTile.id,
         name: activeTile.name,
@@ -28,7 +35,8 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
         category: "Roof Tiles",
         sizes: [activeTile.size],
         selectedSizes: selectedSizes,
-        quantity: quantity
+        sizeConfigs: sizeConfigs, // Store the per-size mapping
+        quantity: totalQuantity  // Store the total sum
       });
       setActiveTile(null);
     }

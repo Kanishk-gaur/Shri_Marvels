@@ -27,7 +27,14 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
     }
   };
 
-  const handleConfirm = (selectedSizes: string[], quantity: number) => {
+  /**
+   * Updated to receive sizeConfigs Record to resolve the Type Error.
+   * Calculates total quantity from the individual size configurations.
+   */
+  const handleConfirm = (selectedSizes: string[], sizeConfigs: Record<string, number>) => {
+    // Calculate total quantity across all selected sizes
+    const totalQuantity = Object.values(sizeConfigs).reduce((sum, qty) => sum + qty, 0);
+
     addItemToCatalog({
       id: itemId,
       name: section.product.name,
@@ -35,7 +42,8 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
       category: "Roof Tiles",
       sizes: [section.product.size],
       selectedSizes: selectedSizes,
-      quantity: quantity
+      sizeConfigs: sizeConfigs, // Store the per-size mapping
+      quantity: totalQuantity  // Store the total sum
     });
     setIsDialogOpen(false);
   };

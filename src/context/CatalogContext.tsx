@@ -80,7 +80,8 @@ export interface CatalogItem {
   sizes: string[]; 
   category: string;
   selectedSizes: string[];
-  sizeConfigs?: Record<string, number>; // Added to store per-size quantities
+  quantity?: number; // Added to support total count
+  sizeConfigs?: Record<string, number>; // Maps each size to its specific quantity
 }
 
 interface CatalogContextType {
@@ -88,7 +89,7 @@ interface CatalogContextType {
   addItemToCatalog: (item: CatalogItem) => void;
   removeItemFromCatalog: (itemId: string) => void;
   isItemInCatalog: (itemId: string) => boolean;
-  updateItemSizes: (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => void; // Updated signature
+  updateItemSizes: (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => void;
 }
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
@@ -100,6 +101,7 @@ export const productToCatalogItem = (product: Product): CatalogItem => ({
   category: product.category,
   sizes: transformProductSizes(product.sizes || []),
   selectedSizes: [],
+  quantity: 0,
   sizeConfigs: {},
 });
 
@@ -139,7 +141,13 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
 
   const updateItemSizes = (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => {
     setCatalogItems((prev) =>
-      prev.map((item) => (item.id === itemId ? { ...item, selectedSizes: sizes, sizeConfigs } : item))
+      prev.map((item) => {
+        if (item.id === itemId) {
+          const totalQty = sizeConfigs ? Object.values(sizeConfigs).reduce((a, b) => a + b, 0) : 0;
+          return { ...item, selectedSizes: sizes, sizeConfigs, quantity: totalQty };
+        }
+        return item;
+      })
     );
   };
 

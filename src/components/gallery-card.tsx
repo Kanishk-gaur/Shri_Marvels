@@ -27,12 +27,17 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
   const sizeString = product.sizes[0] || "1x1";
 
   /**
-   * Called when sizes and quantity are confirmed in the dialog
+   * Called when sizes and quantity are confirmed in the dialog.
+   * Updated to receive sizeConfigs Record to resolve the Type Error.
    */
-  const handleConfirmSizes = (selectedSizes: string[], quantity: number) => {
+  const handleConfirmSizes = (selectedSizes: string[], sizeConfigs: Record<string, number>) => {
     const item = productToCatalogItem(product);
     item.selectedSizes = selectedSizes;
-    item.quantity = quantity; // Save the quantity to the item
+    item.sizeConfigs = sizeConfigs;
+    
+    // Calculate total quantity across all selected sizes for the catalog item
+    item.quantity = Object.values(sizeConfigs).reduce((sum, qty) => sum + qty, 0);
+
     addItemToCatalog(item);
     setIsDialogOpen(false);
   };
@@ -49,7 +54,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
   
   const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
-  // MASONRY GRID LOGIC (Original unchanged)
+  // MASONRY GRID LOGIC
   let gridClass = "col-span-12 row-span-8 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-18";
   switch (sizeString) {
     case "(POLISHED)12x24": gridClass = "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-11"; break;
@@ -99,7 +104,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
     case "9x36": gridClass = "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-8 lg:row-span-10"; break;
     case "6x36": gridClass = "col-span-12 row-span-8 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-14"; break;
     case "6x36 in": gridClass = "col-span-12 row-span-6 md:col-span-8 md:row-span-6 lg:col-span-8 lg:row-span-7"; break;
-    case "6x36 inch": gridClass = "col-span-12 row-span-6 md:col-span-8 md:row-span-6 lg:col-span-6 lg:row-6"; break;
+    case "6x36 inch": gridClass = "col-span-12 row-span-6 md:col-span-8 md:row-6 lg:col-span-6 lg:row-6"; break;
     case "18x12 inch": gridClass = "col-span-12 row-span-10 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-12"; break;
     case "12x18 mm": gridClass = "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-20"; break;
     case "12x18 inches": gridClass = "col-span-8 row-span-14 md:col-span-4 md:row-span-15 lg:col-span-3 lg:row-span-20"; break;
@@ -204,7 +209,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
         subcategory={product.subcategory}
         availableSizes={displaySizes} 
         onConfirm={handleConfirmSizes}
-        mainCategory={product.category as "marvel" | "tiles"} // ADD THIS LINE
+        mainCategory={product.category as "marvel" | "tiles"}
       />
     </>
   );
