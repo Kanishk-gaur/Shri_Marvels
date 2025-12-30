@@ -3,10 +3,9 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// Removed unused ListMinus to resolve ESLint warning
 import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Edit2 } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-import { useCatalog, CatalogItem } from "@/context/CatalogContext";
+import { useCatalog, CatalogItem, transformProductSizes } from "@/context/CatalogContext";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
 // --- START: Size Mapping ---
@@ -52,19 +51,14 @@ export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Replaced 'any' with 'CatalogItem' to match Context types
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
 
-  
   const groupedCatalog = useMemo(() => {
-    // Explicitly typed as CatalogItem[]
     const groups: { [key: string]: CatalogItem[] } = {};
-    
     catalogItems.forEach((item) => {
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
       const groupKey = `${item.subcategory} (${displaySize})`;
-
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(item);
     });
@@ -89,7 +83,6 @@ export default function CatalogPage() {
       a.download = "shri_marvels_catalog.pdf";
       a.click();
     } catch (err: unknown) {
-      // Improved error type handling
       setError(err instanceof Error ? err.message : "An unknown error occurred");
     } finally {
       setIsGenerating(false);
@@ -97,7 +90,7 @@ export default function CatalogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50 pt-20">
+    <div className="min-h-screen bg-orange-50 pt-20 pb-20">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
         
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
@@ -146,8 +139,9 @@ export default function CatalogPage() {
                   const aspectClass = getGalleryStyleAspect(item.sizes[0]);
 
                   return (
-                    <div key={item.id} className="group flex flex-col bg-white border border-zinc-200 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+                    <div key={item.id} className="group relative flex flex-col bg-white border border-zinc-200 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 overflow-hidden">
                       
+                      {/* Full Image Container handles the hover triggers */}
                       <div className={`relative w-full ${aspectClass} overflow-hidden bg-zinc-100`}>
                         <Image 
                           src={item.imageUrl} 
@@ -155,41 +149,46 @@ export default function CatalogPage() {
                           fill 
                           className="object-cover transition-transform duration-700 group-hover:scale-110" 
                         />
-                        <div className="absolute top-2 right-2 z-10">
+                        
+                        {/* Remove Button Overlay */}
+                        <div className="absolute top-2 right-2 z-30">
                           <Button 
                             variant="destructive" 
                             size="sm"
                             className="h-8 w-8 p-0 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                            // item.id is already a string in CatalogItem
                             onClick={() => removeItemFromCatalog(item.id)}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
+
+                        {/* Order Selection Overlay - Appears over the image on hover */}
+                        <div className="absolute inset-x-0 bottom-0 p-4 bg-black/50 backdrop-blur translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+                           <p className="text-[10px] font-bold text-white/60 uppercase tracking-tighter mb-2">Selected Sizes:</p>
+                           <div className="space-y-1 max-h-[150px] overflow-y-auto custom-scrollbar">
+                            {item.selectedSizes.map((s: string) => (
+                              <div key={s} className="flex justify-between items-center text-[11px] bg-white/10 px-2 py-1.5 border border-white/10 rounded text-white">
+                                <span className="font-medium">{s}</span>
+                                <span className="font-black">{item.sizeConfigs?.[s] || 1} Pcs</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="p-4 flex flex-col flex-grow">
-                        <div className="flex justify-between items-start mb-2">
+                      {/* Title & Edit Section (always visible below image) */}
+                      <div className="p-4 flex flex-col bg-white">
+                        <div className="flex justify-between items-start">
                           <h3 className="text-xs md:text-sm font-bold text-zinc-800 line-clamp-2 leading-tight">
                             {item.name}
                           </h3>
                           <button 
                             className="p-1 text-zinc-400 hover:text-zinc-800 transition-colors"
                             onClick={() => setEditingItem(item)}
-                            title="Edit Quantity/Size"
+                            title="Edit Selection"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
-                        </div>
-
-                        <div className="mt-auto space-y-2">
-                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">Your Order Selection:</p>
-                          {item.selectedSizes.map((s: string) => (
-                            <div key={s} className="flex justify-between items-center text-[11px] bg-zinc-50 px-2 py-1.5 border border-zinc-100 rounded">
-                              <span className="text-zinc-600 font-medium">{s}</span>
-                              <span className="text-zinc-900 font-black">{item.sizeConfigs?.[s] || 1} Pcs</span>
-                            </div>
-                          ))}
                         </div>
                       </div>
                     </div>
@@ -206,9 +205,8 @@ export default function CatalogPage() {
           isOpen={!!editingItem}
           onClose={() => setEditingItem(null)}
           subcategory={editingItem.subcategory}
-          availableSizes={editingItem.sizes}
+          availableSizes={transformProductSizes(editingItem.sizes)} 
           onConfirm={(sz, conf) => {
-            // item.id is already a string in CatalogItem
             updateItemSizes(editingItem.id, sz, conf);
             setEditingItem(null);
           }}
