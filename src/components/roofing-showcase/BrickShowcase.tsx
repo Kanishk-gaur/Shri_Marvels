@@ -39,7 +39,8 @@ export default function BrickShowcase({ section }: BrickShowcaseProps) {
       id: itemId,
       name: section.product.name,
       imageUrl: section.product.image,
-      category: "Roof Tiles",
+      category: "tiles", // Categorized under "tiles" for catalog consistency
+      subcategory: "Roof Tile", // Added missing required property to satisfy CatalogItem interface
       sizes: [section.product.size],
       selectedSizes: selectedSizes,
       sizeConfigs: sizeConfigs, // Store the per-size mapping

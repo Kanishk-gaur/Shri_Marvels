@@ -22,16 +22,23 @@ export function SubcategoryCard({ mainCategory, subcategory, availableSizes }: S
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { addItemToCatalog } = useCatalog()
 
-  const handleConfirm = (selectedSizes: string[]) => {
+  const handleConfirm = (selectedSizes: string[], sizeConfigs: Record<string, number>) => {
+    // Calculate total quantity from configurations to maintain state consistency
+    const totalQuantity = Object.values(sizeConfigs).reduce((sum, qty) => sum + qty, 0);
+
     addItemToCatalog({
       id: subcategory.id,
       name: subcategory.name,
       category: mainCategory,
+      // Add the missing required subcategory property
+      subcategory: subcategory.id, 
       imageUrl: subcategory.exampleImage || "/placeholder.svg",
       sizes: availableSizes,
       selectedSizes: selectedSizes,
-    })
-  }
+      sizeConfigs: sizeConfigs, // Map of size to quantity
+      quantity: totalQuantity   // Total number of items
+    });
+  };
 
   return (
     <>

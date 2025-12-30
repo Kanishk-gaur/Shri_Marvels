@@ -28,11 +28,12 @@ export default function TileShowcase({ section, sectionIndex }: TileShowcaseProp
       // Calculate total quantity across all selected sizes
       const totalQuantity = Object.values(sizeConfigs).reduce((sum, qty) => sum + qty, 0);
 
-      addItemToCatalog({
+     addItemToCatalog({
         id: activeTile.id,
         name: activeTile.name,
         imageUrl: activeTile.image,
-        category: "Roof Tiles",
+        category: "tiles", // Setting to "tiles" for consistency with other catalog items
+        subcategory: "Roof Tile", // Added missing required property
         sizes: [activeTile.size],
         selectedSizes: selectedSizes,
         sizeConfigs: sizeConfigs, // Store the per-size mapping

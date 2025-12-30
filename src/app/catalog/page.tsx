@@ -3,12 +3,13 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Edit2, ListMinus } from "lucide-react"; 
+// Removed unused ListMinus to resolve ESLint warning
+import { Trash2, FileText, Loader2, ArrowLeft, Bookmark, Edit2 } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
-import { useCatalog } from "@/context/CatalogContext";
+import { useCatalog, CatalogItem } from "@/context/CatalogContext";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 
-// --- START: Size Mapping (Synced with gallery/page.tsx) ---
+// --- START: Size Mapping ---
 const sizeDisplayNames: Record<string, string> = { 
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
@@ -26,10 +27,6 @@ const sizeDisplayNames: Record<string, string> = {
 
 const getSizeDisplayName = (rawSize: string): string => sizeDisplayNames[rawSize] || rawSize;
 
-/**
- * MASONRY ASPECT RATIO LOGIC (Synced with gallery-card.tsx)
- * Converts the gallery's row-span logic into CSS aspect ratios for the catalog grid.
- */
 const getGalleryStyleAspect = (sizeString: string) => {
   switch (sizeString) {
     case "(POLISHED)12x24": return "aspect-[4/3]";
@@ -55,19 +52,17 @@ export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
+  // Replaced 'any' with 'CatalogItem' to match Context types
+  const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
 
-  /**
-   * GROUPING LOGIC (Exactly like gallery/page.tsx)
-   * Groups items by their Subcategory and Display Size Heading.
-   */
+  
   const groupedCatalog = useMemo(() => {
-    const groups: { [key: string]: any[] } = {};
+    // Explicitly typed as CatalogItem[]
+    const groups: { [key: string]: CatalogItem[] } = {};
     
     catalogItems.forEach((item) => {
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
-      // Construct the exact heading format used in the gallery
       const groupKey = `${item.subcategory} (${displaySize})`;
 
       if (!groups[groupKey]) groups[groupKey] = [];
@@ -93,8 +88,9 @@ export default function CatalogPage() {
       a.href = url;
       a.download = "shri_marvels_catalog.pdf";
       a.click();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      // Improved error type handling
+      setError(err instanceof Error ? err.message : "An unknown error occurred");
     } finally {
       setIsGenerating(false);
     }
@@ -104,7 +100,6 @@ export default function CatalogPage() {
     <div className="min-h-screen bg-orange-50 pt-20">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
         
-        {/* Navigation & Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
           <Link href="/gallery">
             <Button variant="ghost" className="text-zinc-600 hover:text-zinc-900 transition-colors">
@@ -142,12 +137,10 @@ export default function CatalogPage() {
         ) : (
           Object.entries(groupedCatalog).map(([groupTitle, items]) => (
             <div key={groupTitle} className="mb-16">
-              {/* SECTION HEADING: Exact match to Gallery Page */}
               <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-8 pb-3 border-b-2 border-zinc-300">
                 {groupTitle}
               </h2>
 
-              {/* GRID: items-start prevents stretching, maintaining proper tile shapes */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-start">
                 {items.map((item) => {
                   const aspectClass = getGalleryStyleAspect(item.sizes[0]);
@@ -155,7 +148,6 @@ export default function CatalogPage() {
                   return (
                     <div key={item.id} className="group flex flex-col bg-white border border-zinc-200 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
                       
-                      {/* IMAGE CONTAINER: Aspect ratio synced with Gallery masonry logic */}
                       <div className={`relative w-full ${aspectClass} overflow-hidden bg-zinc-100`}>
                         <Image 
                           src={item.imageUrl} 
@@ -163,12 +155,12 @@ export default function CatalogPage() {
                           fill 
                           className="object-cover transition-transform duration-700 group-hover:scale-110" 
                         />
-                        {/* Remove Action - similar placement to Gallery buttons */}
                         <div className="absolute top-2 right-2 z-10">
                           <Button 
                             variant="destructive" 
                             size="sm"
                             className="h-8 w-8 p-0 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                            // item.id is already a string in CatalogItem
                             onClick={() => removeItemFromCatalog(item.id)}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -176,7 +168,6 @@ export default function CatalogPage() {
                         </div>
                       </div>
 
-                      {/* Product Details Section */}
                       <div className="p-4 flex flex-col flex-grow">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="text-xs md:text-sm font-bold text-zinc-800 line-clamp-2 leading-tight">
@@ -210,7 +201,6 @@ export default function CatalogPage() {
         )}
       </div>
 
-      {/* Edit Sizes Modal */}
       {editingItem && (
         <SizeSelectionDialog
           isOpen={!!editingItem}
@@ -218,11 +208,12 @@ export default function CatalogPage() {
           subcategory={editingItem.subcategory}
           availableSizes={editingItem.sizes}
           onConfirm={(sz, conf) => {
+            // item.id is already a string in CatalogItem
             updateItemSizes(editingItem.id, sz, conf);
             setEditingItem(null);
           }}
           initialConfigs={editingItem.sizeConfigs}
-          mainCategory={editingItem.category}
+          mainCategory={editingItem.category as "marvel" | "tiles"}
         />
       )}
     </div>
