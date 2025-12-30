@@ -3,7 +3,9 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import type { Product } from "@/data";
 
-// 1. Full Size Mapping Object
+/**
+ * Full Size Mapping Object synced with gallery logic
+ */
 const SIZE_MAP: Record<string, string> = {
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
@@ -56,6 +58,9 @@ const SIZE_MAP: Record<string, string> = {
   "6x36": "6x36,9x36,12x36",
 };
 
+/**
+ * Transforms raw product sizes into readable strings based on the map
+ */
 export const transformProductSizes = (rawSizes: string[]): string[] => {
   let mapped: string[] = [];
   rawSizes.forEach((size) => {
@@ -79,9 +84,10 @@ export interface CatalogItem {
   imageUrl: string;
   sizes: string[]; 
   category: string;
+  subcategory: string; //
   selectedSizes: string[];
-  quantity?: number; // Added to support total count
-  sizeConfigs?: Record<string, number>; // Maps each size to its specific quantity
+  quantity?: number; 
+  sizeConfigs?: Record<string, number>; 
 }
 
 interface CatalogContextType {
@@ -94,20 +100,26 @@ interface CatalogContextType {
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
 
+/**
+ * Converts a base Product to a CatalogItem format
+ */
 export const productToCatalogItem = (product: Product): CatalogItem => ({
   id: String(product.id),
   name: product.name,
   imageUrl: product.image || "/placeholder.svg",
   category: product.category,
-  sizes: transformProductSizes(product.sizes || []),
+  subcategory: product.subcategory, //
+  sizes: product.sizes || [],
   selectedSizes: [],
   quantity: 0,
   sizeConfigs: {},
 });
 
+
 export const CatalogProvider = ({ children }: { children: ReactNode }) => {
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
 
+  // Load from LocalStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("shri-marvels-catalog-v3");
@@ -121,6 +133,7 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // Save to LocalStorage on changes
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("shri-marvels-catalog-v3", JSON.stringify(catalogItems));
