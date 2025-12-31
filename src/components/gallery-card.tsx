@@ -51,6 +51,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       setIsDialogOpen(true);
     }
   };
+ const isImportedBorder = product.subcategory === "Border Tiles";
   
   const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
@@ -162,20 +163,34 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
             
             {/* Catalog Button Toggle */}
             <div className="absolute top-2 right-2 z-10 opacity-100">
-               <Button
+              <Button
                   variant="default"
-                  size="sm"
+                  // Use small size for Imported Border
+                  size={isImportedBorder ? "sm" : "sm"} 
                   onClick={handleCatalogToggle}
-                  className={`${
-                    isInCatalog ? "bg-red-500/80 hover:bg-red-600" : "bg-black/40 hover:bg-black/60"
-                  } text-white backdrop-blur-sm border-none h-8 transition-colors`}
+                  className={`text-white backdrop-blur-sm border-none transition-colors ${
+                    isInCatalog 
+                      ? "bg-red-500 hover:bg-red-600" // Red when in catalog
+                      : "bg-gray-500 hover:bg-gray-600" // Gray when not in catalog
+                  } ${
+                    isImportedBorder 
+                      ? "h-6 px-2 text-[9px]" // Reduced size specifically for Imported Border
+                      : "h-8 px-3 text-[12px]" // Standard size for others
+                  }`}
               >
                   {isInCatalog ? (
-                    <><ListMinus className="w-4 h-4 mr-1" /> Remove</>
+                    <>
+                      <ListMinus className={isImportedBorder ? "w-3 h-3 mr-1" : "w-4 h-4 mr-1"} /> 
+                      Remove
+                    </>
                   ) : (
-                    <><ListPlus className="w-4 h-4 mr-1" /> Add</>
+                    <>
+                      <ListPlus className={isImportedBorder ? "w-3 h-3 mr-1" : "w-4 h-4 mr-1"} /> 
+                      Add
+                    </>
                   )}
               </Button>
+            
             </div>
 
             {!isLoaded && product.image && (

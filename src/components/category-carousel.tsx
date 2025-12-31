@@ -38,7 +38,6 @@ const TILE_GRID_ITEMS_PER_PAGE = 6;
 const SHOW_ALL_ITEMS_PER_PAGE = 999;
 
 export function CategoryCarousel({
- 
   categories,
   categoryType,
   imageAspectRatio = "aspect-[16/10]",
@@ -237,7 +236,7 @@ export function CategoryCarousel({
                     className={`relative bg-white overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col border-2 ${
                       isTileSection
                         ? "border-white rounded-2xl bg-gradient-to-b from-white to-bronze-50/30"
-                        : "border-slate-100 hover:border-emerald-300 rounded-2xl"
+                        : "border-slate-100 rounded-2xl" // REMOVED 'hover:border-emerald-300'
                     }`}
                     style={
                       isTileSection
@@ -247,7 +246,12 @@ export function CategoryCarousel({
                                 ? `${bronzeColors.light}40`
                                 : "white",
                           }
-                        : {}
+                        : {
+                            borderColor:
+                              hoveredCard === category.id
+                                ? `${bronzeColors.primary}30`
+                                : "transparent",
+                          }
                     }
                     whileHover={{
                       y: isTileSection ? -6 : -4,
@@ -545,9 +549,7 @@ export function CategoryCarousel({
                           hoveredCard === category.id ? [0, 15, -15, 0] : 0,
                       }}
                       transition={{ duration: 0.5 }}
-                    >
-                      
-                    </motion.div>
+                    ></motion.div>
                   </>
                 )}
               </motion.div>
