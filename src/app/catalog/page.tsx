@@ -1,4 +1,3 @@
-// src/app/catalog/page.tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -21,7 +20,16 @@ export default function CatalogPage() {
     catalogItems.forEach((item) => {
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
-      const groupKey = `${item.subcategory} (${displaySize})`;
+      
+      // Dynamic Title Logic
+      let typeLabel = item.subcategory;
+      if (item.category === "roof_tiles") {
+        typeLabel = `Roof Tile - ${item.subcategory}`;
+      } else if (item.category === "step_riser") {
+        typeLabel = `Step Riser - ${item.subcategory}`;
+      }
+
+      const groupKey = `${typeLabel} (${displaySize})`;
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(item);
     });

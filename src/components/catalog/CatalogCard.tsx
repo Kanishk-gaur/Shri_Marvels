@@ -1,6 +1,5 @@
-// src/components/catalog/CatalogCard.tsx
 import Image from "next/image";
-import { Trash2, Edit2 } from "lucide-react";
+import { Trash2, Edit2, HardHat, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CatalogItem } from "@/context/CatalogContext";
 import { getGridSpanClass } from "./utils";
@@ -13,6 +12,10 @@ interface CatalogCardProps {
 
 export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
   const gridSpanClass = getGridSpanClass(item.sizes[0]);
+  
+  // Category-specific logic
+  const isRoofTile = item.category === "roof_tiles";
+  const isStepRiser = item.category === "step_riser";
 
   return (
     <div 
@@ -26,6 +29,18 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           className="object-cover transition-transform duration-700 group-hover:scale-110" 
         />
         
+        {/* Category Badge */}
+        {(isRoofTile || isStepRiser) && (
+          <div className="absolute top-2 left-2 z-30">
+            <span className={`flex items-center gap-1 text-[9px] uppercase font-black px-2 py-1 rounded-sm shadow-sm ${
+              isRoofTile ? "bg-orange-600 text-white" : "bg-blue-600 text-white"
+            }`}>
+              {isRoofTile ? <HardHat size={10} /> : <Layers size={10} />}
+              {isRoofTile ? "Roof Tile" : "Step Riser"}
+            </span>
+          </div>
+        )}
+
         {/* Remove Button Overlay */}
         <div className="absolute top-2 right-2 z-30">
           <Button 
@@ -53,16 +68,21 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
       </div>
 
       {/* Title & Edit Section */}
-      <div className="p-1 h-6 flex items-center justify-between bg-white border-t border-zinc-100">
-        <h3 className="text-[9px] md:text-[12px] font-semibold text-zinc-800 truncate pr-2">
-          {item.name}
-        </h3>
+      <div className="p-2 flex items-center justify-between bg-white border-t border-zinc-100">
+        <div className="truncate pr-2">
+          <h3 className="text-[10px] md:text-[13px] font-bold text-zinc-800 truncate">
+            {item.name}
+          </h3>
+          <p className="text-[8px] text-zinc-400 uppercase tracking-widest leading-none">
+            {item.subcategory}
+          </p>
+        </div>
         <button 
-          className="p-1 text-zinc-400 hover:text-zinc-800 transition-colors"
+          className="p-1.5 text-zinc-400 hover:text-zinc-800 transition-colors"
           onClick={() => onEdit(item)}
           title="Edit Selection"
         >
-          <Edit2 className="w-3 h-3" />
+          <Edit2 className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>
