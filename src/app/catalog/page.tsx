@@ -1,3 +1,4 @@
+// src/app/catalog/page.tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -21,12 +22,13 @@ export default function CatalogPage() {
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
       
-      // Dynamic Title Logic
+      // Dynamic Title Logic for Step & Riser and Roofing
       let typeLabel = item.subcategory;
+      
       if (item.category === "roof_tiles") {
         typeLabel = `Roof Tile - ${item.subcategory}`;
-      } else if (item.category === "step_riser") {
-        typeLabel = `Step Riser - ${item.subcategory}`;
+      } else if (item.subcategory === "Step & Riser" || item.category === "step_riser") {
+        typeLabel = `Step & Riser - ${item.name}`;
       }
 
       const groupKey = `${typeLabel} (${displaySize})`;

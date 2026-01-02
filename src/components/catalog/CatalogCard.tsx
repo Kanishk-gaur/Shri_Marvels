@@ -1,3 +1,4 @@
+// src/components/catalog/CatalogCard.tsx
 import Image from "next/image";
 import { Trash2, Edit2, HardHat, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,9 +14,9 @@ interface CatalogCardProps {
 export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
   const gridSpanClass = getGridSpanClass(item.sizes[0]);
   
-  // Category-specific logic
+  // Enhanced Category-specific logic
   const isRoofTile = item.category === "roof_tiles";
-  const isStepRiser = item.category === "step_riser";
+  const isStepRiser = item.category === "step_riser" || item.subcategory === "Step & Riser";
 
   return (
     <div 
@@ -29,14 +30,14 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           className="object-cover transition-transform duration-700 group-hover:scale-110" 
         />
         
-        {/* Category Badge */}
+        {/* Category Badge - Shows for both Roof Tiles and Step Risers */}
         {(isRoofTile || isStepRiser) && (
           <div className="absolute top-2 left-2 z-30">
             <span className={`flex items-center gap-1 text-[9px] uppercase font-black px-2 py-1 rounded-sm shadow-sm ${
               isRoofTile ? "bg-orange-600 text-white" : "bg-blue-600 text-white"
             }`}>
               {isRoofTile ? <HardHat size={10} /> : <Layers size={10} />}
-              {isRoofTile ? "Roof Tile" : "Step Riser"}
+              {isRoofTile ? "Roof Tile" : "Step & Riser"}
             </span>
           </div>
         )}
