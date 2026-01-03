@@ -1,3 +1,4 @@
+// src/context/CatalogContext.tsx
 "use client";
 
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
@@ -84,7 +85,7 @@ export interface CatalogItem {
   imageUrl: string;
   sizes: string[]; 
   category: string;
-  subcategory: string; //
+  subcategory: string; 
   selectedSizes: string[];
   quantity?: number; 
   sizeConfigs?: Record<string, number>; 
@@ -96,6 +97,7 @@ interface CatalogContextType {
   removeItemFromCatalog: (itemId: string) => void;
   isItemInCatalog: (itemId: string) => boolean;
   updateItemSizes: (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => void;
+  clearCatalog: () => void; // Added interface definition
 }
 
 const CatalogContext = createContext<CatalogContextType | undefined>(undefined);
@@ -108,13 +110,12 @@ export const productToCatalogItem = (product: Product): CatalogItem => ({
   name: product.name,
   imageUrl: product.image || "/placeholder.svg",
   category: product.category,
-  subcategory: product.subcategory, //
+  subcategory: product.subcategory, 
   sizes: product.sizes || [],
   selectedSizes: [],
   quantity: 0,
   sizeConfigs: {},
 });
-
 
 export const CatalogProvider = ({ children }: { children: ReactNode }) => {
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
@@ -152,6 +153,16 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
     setCatalogItems((prev) => prev.filter((i) => i.id !== itemId));
   };
 
+  /**
+   * Clears all items from the catalog.
+   * Includes a confirmation check to prevent accidental deletion.
+   */
+  const clearCatalog = () => {
+    if (window.confirm("Are you sure you want to remove all items from your catalog?")) {
+      setCatalogItems([]);
+    }
+  };
+
   const updateItemSizes = (itemId: string, sizes: string[], sizeConfigs?: Record<string, number>) => {
     setCatalogItems((prev) =>
       prev.map((item) => {
@@ -165,7 +176,14 @@ export const CatalogProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <CatalogContext.Provider value={{ catalogItems, addItemToCatalog, removeItemFromCatalog, isItemInCatalog, updateItemSizes }}>
+    <CatalogContext.Provider value={{ 
+      catalogItems, 
+      addItemToCatalog, 
+      removeItemFromCatalog, 
+      isItemInCatalog, 
+      updateItemSizes,
+      clearCatalog // Exposed in provider
+    }}>
       {children}
     </CatalogContext.Provider>
   );

@@ -3,19 +3,36 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { FileText, Loader2, ArrowLeft, Bookmark } from "lucide-react"; 
+import { FileText, Loader2, ArrowLeft, Bookmark, Trash2 } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import { useCatalog, CatalogItem, transformProductSizes } from "@/context/CatalogContext";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 import { CatalogGroup } from "@/components/catalog/CatalogGroup";
 import { getSizeDisplayName } from "@/components/catalog/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CatalogPage() {
-  const { catalogItems, removeItemFromCatalog, updateItemSizes } = useCatalog();
+  const { catalogItems, removeItemFromCatalog, updateItemSizes, clearCatalog } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
-  console.log(catalogItems);
+  
+  // States for the generation popup
+  const [showGenDialog, setShowGenDialog] = useState(false);
+  const [pdfMetadata, setPdfMetadata] = useState({ 
+    name: "", 
+    title: "", 
+    description: "" 
+  });
 
   const groupedCatalog = useMemo(() => {
     const groups: { [key: string]: CatalogItem[] } = {};
@@ -23,9 +40,7 @@ export default function CatalogPage() {
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
       
-      // Dynamic Title Logic for Step & Riser and Roofing
       let typeLabel = item.subcategory;
-      
       if (item.category === "roof_tiles") {
         typeLabel = `Roof Tile - ${item.subcategory}`;
       } else if (item.subcategory === "Step & Riser" || item.category === "step_riser") {
@@ -43,18 +58,24 @@ export default function CatalogPage() {
     if (catalogItems.length === 0) return;
     setIsGenerating(true);
     setError(null);
+    setShowGenDialog(false);
+    
     try {
       const response = await fetch("/api/generate-catalog-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: catalogItems }),
+        body: JSON.stringify({ 
+          items: catalogItems,
+          metadata: pdfMetadata // Sending name, title, and description
+        }),
       });
+      
       if (!response.ok) throw new Error("Generation failed");
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "shri_marvels_catalog.pdf";
+      a.download = `${pdfMetadata.title || "shri_marvels"}_catalog.pdf`;
       a.click();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "An unknown error occurred");
@@ -77,14 +98,27 @@ export default function CatalogPage() {
             <h1 className="text-3xl font-bold text-zinc-800">My Custom Catalog</h1>
             <p className="text-zinc-500 text-sm mt-1">{catalogItems.length} Products Selected</p>
           </div>
-          <Button 
-            onClick={handleCreateCatalog} 
-            disabled={isGenerating || catalogItems.length === 0} 
-            className="bg-zinc-800 hover:bg-zinc-700 text-white min-w-[180px] shadow-lg"
-          >
-            {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
-            Generate PDF
-          </Button>
+
+          <div className="flex items-center gap-3">
+            {catalogItems.length > 0 && (
+              <Button 
+                variant="outline"
+                onClick={clearCatalog}
+                className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                <Trash2 className="mr-2 h-4 w-4" /> Clear All
+              </Button>
+            )}
+            
+            <Button 
+              onClick={() => setShowGenDialog(true)}
+              disabled={isGenerating || catalogItems.length === 0} 
+              className="bg-zinc-800 hover:bg-zinc-700 text-white min-w-[180px] shadow-lg"
+            >
+              {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
+              Generate PDF
+            </Button>
+          </div>
         </div>
 
         {error && (
@@ -97,9 +131,6 @@ export default function CatalogPage() {
           <div className="text-center py-32 bg-white/50 rounded-3xl border-2 border-dashed border-zinc-200">
             <Bookmark className="mx-auto mb-4 text-zinc-300" size={80} />
             <p className="text-xl text-zinc-400 font-medium">Your catalog is currently empty.</p>
-            <Link href="/gallery" className="mt-4 inline-block text-zinc-800 underline font-bold">
-              Go add some products
-            </Link>
           </div>
         ) : (
           Object.entries(groupedCatalog).map(([groupTitle, items]) => (
@@ -113,6 +144,60 @@ export default function CatalogPage() {
           ))
         )}
       </div>
+
+      {/* GENERATION DIALOG WITH NAME, TITLE, AND DESCRIPTION */}
+      <Dialog open={showGenDialog} onOpenChange={setShowGenDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Catalog Details</DialogTitle>
+            <DialogDescription>
+              Enter the details you want to appear on the front page of your PDF.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            {/* Name Field */}
+            <div className="grid gap-2">
+              <label htmlFor="name" className="text-sm font-medium text-zinc-700">Client Name</label>
+              <Input
+                id="name"
+                placeholder="e.g. John Doe"
+                value={pdfMetadata.name}
+                onChange={(e) => setPdfMetadata(prev => ({ ...prev, name: e.target.value }))}
+              />
+            </div>
+            {/* Title Field */}
+            <div className="grid gap-2">
+              <label htmlFor="title" className="text-sm font-medium text-zinc-700">Catalog Title</label>
+              <Input
+                id="title"
+                placeholder="e.g. Living Room Renovation"
+                value={pdfMetadata.title}
+                onChange={(e) => setPdfMetadata(prev => ({ ...prev, title: e.target.value }))}
+              />
+            </div>
+            {/* Description Field */}
+            <div className="grid gap-2">
+              <label htmlFor="description" className="text-sm font-medium text-zinc-700">Notes / Description</label>
+              <Textarea
+                id="description"
+                placeholder="Any specific requirements or notes..."
+                rows={3}
+                value={pdfMetadata.description}
+                onChange={(e) => setPdfMetadata(prev => ({ ...prev, description: e.target.value }))}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowGenDialog(false)}>Cancel</Button>
+            <Button 
+              onClick={handleCreateCatalog} 
+              className="bg-zinc-800 text-white hover:bg-zinc-700"
+            >
+              Confirm & Generate
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {editingItem && (
         <SizeSelectionDialog
