@@ -15,6 +15,7 @@ export default function CatalogPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
+  console.log(catalogItems);
 
   const groupedCatalog = useMemo(() => {
     const groups: { [key: string]: CatalogItem[] } = {};

@@ -56,6 +56,7 @@ export const getSizeDisplayName = (rawSize: string): string => sizeDisplayNames[
 
 export const getGridSpanClass = (sizeString: string) => {
   switch (sizeString) {
+    case "7 x 5 inch" : return  "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14"; 
     case "8x12, 12x18, 18x24, 2x2, 2x3, 2x4" : return  "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-37"; 
     case "(POLISHED)12x24": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-11";
     case "18x12/8x12": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-14";

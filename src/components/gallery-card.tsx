@@ -51,7 +51,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
       setIsDialogOpen(true);
     }
   };
- const isImportedBorder = product.subcategory === "Border Tiles";
+ const isImportedBorder = product.subcategory === "Border Tiles" || product.subcategory === "Golden & Silver Border Tiles";;
   
   const altText = `${product.name} ${subCategoryDisplayNames[product.subcategory] || product.subcategory} Tile in size ${sizeString} made of ${product.material}`;
 
@@ -149,7 +149,7 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
     default: gridClass = "col-span-12 row-span-9 md:col-span-4 md:row-span-11 lg:col-span-3 lg:row-span-16";
   }
 
-  return (
+ return (
     <>
       <motion.div
         className={`group ${gridClass}`}
@@ -161,38 +161,35 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
         <div className="flex flex-col h-full bg-white overflow-hidden border border-zinc-200/80 transition-shadow duration-300 hover:shadow-lg">
           <div className="relative w-full flex-grow overflow-hidden">
             
-            {/* Catalog Button Toggle */}
-            <div className="absolute top-2 right-2 z-10 opacity-100">
-              <Button
-                  variant="default"
-                  // Use small size for Imported Border
-                  size={isImportedBorder ? "sm" : "sm"} 
-                  onClick={handleCatalogToggle}
-                  className={`text-white backdrop-blur-sm border-none transition-colors ${
-                    isInCatalog 
-                      ? "bg-red-500 hover:bg-red-600" // Red when in catalog
-                      : "bg-gray-500 hover:bg-gray-600" // Gray when not in catalog
-                  } ${
-                    isImportedBorder 
-                      ? "h-6 px-2 text-[9px]" // Reduced size specifically for Imported Border
-                      : "h-8 px-3 text-[12px]" // Standard size for others
-                  }`}
-              >
-                  {isInCatalog ? (
-                    <>
-                      <ListMinus className={isImportedBorder ? "w-3 h-3 mr-1" : "w-4 h-4 mr-1"} /> 
-                      Remove
-                    </>
-                  ) : (
-                    <>
-                      <ListPlus className={isImportedBorder ? "w-3 h-3 mr-1" : "w-4 h-4 mr-1"} /> 
-                      Add
-                    </>
-                  )}
-              </Button>
-            
-            </div>
+            {/* Standard Catalog Button Toggle (Hidden for Imported Borders) */}
+            {!isImportedBorder && (
+              <div className="absolute top-2 right-2 z-10 opacity-100">
+                <Button
+                    variant="default"
+                    size="sm" 
+                    onClick={handleCatalogToggle}
+                    className={`text-white backdrop-blur-sm border-none transition-colors h-8 px-3 text-[12px] ${
+                      isInCatalog 
+                        ? "bg-red-500 hover:bg-red-600" 
+                        : "bg-gray-500 hover:bg-gray-600"
+                    }`}
+                >
+                    {isInCatalog ? (
+                      <>
+                        <ListMinus className="w-4 h-4 mr-1" /> 
+                        Remove
+                      </>
+                    ) : (
+                      <>
+                        <ListPlus className="w-4 h-4 mr-1" /> 
+                        Add
+                      </>
+                    )}
+                </Button>
+              </div>
+            )}
 
+            {/* ... Image logic remains the same ... */}
             {!isLoaded && product.image && (
               <div className="absolute inset-0 bg-zinc-200 animate-pulse"></div>
             )}
@@ -209,16 +206,34 @@ export default function GalleryCard({ product, index = 0, priority = false }: Ga
               <div className="absolute inset-0 bg-gray-300"></div>
             )}
           </div>
-          <div className="p-1 h-6 flex items-center">
-            <h3 className="text-zinc-800 font-semibold text-[9px] md:text-[12px] truncate w-full" title={product.name}>
+
+          {/* Bottom Section: Aligned Name and Button for Imported Border */}
+          <div className={`p-1 flex items-center justify-between ${isImportedBorder ? "h-auto py-1" : "h-6"}`}>
+            <h3 className="text-zinc-800 font-semibold text-[9px] md:text-[12px] truncate flex-grow mr-1" title={product.name}>
               {product.name}
             </h3>
+
+            {/* Catalog Button: Specific for Imported Borders, styled with gray bg */}
+            {isImportedBorder && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleCatalogToggle}
+                className={`text-white transition-colors h-5 px-2 text-[8px] flex-shrink-0 border-none ${
+                  isInCatalog 
+                    ? "bg-red-500 hover:bg-red-600" 
+                    : "bg-gray-500 hover:bg-gray-600" // Changed from zinc-800 to gray-500 to match others
+                }`}
+              >
+                {isInCatalog ? <ListMinus className="w-2.5 h-2.5" /> : <ListPlus className="w-2.5 h-2.5" />}
+                <span className="ml-1">{isInCatalog ? "Remove" : "Add"}</span>
+              </Button>
+            )}
           </div>
         </div>
       </motion.div>
 
-      {/* Pop-up for size selection with mapped values */}
-     <SizeSelectionDialog
+      <SizeSelectionDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         subcategory={product.subcategory}

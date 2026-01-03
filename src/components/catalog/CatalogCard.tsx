@@ -4,6 +4,7 @@ import { Trash2, Edit2, HardHat, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CatalogItem } from "@/context/CatalogContext";
 import { getGridSpanClass } from "./utils";
+import { cn } from "@/lib/utils";
 
 interface CatalogCardProps {
   item: CatalogItem;
@@ -12,15 +13,24 @@ interface CatalogCardProps {
 }
 
 export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
-  const gridSpanClass = getGridSpanClass(item.sizes[0]);
-  
-  // Enhanced Category-specific logic
-  const isRoofTile = item.category === "roof_tiles";
+  // Logic: Check if subcategory is "Roof Tile"
+  const isRoofTile = item.subcategory === "Roof Tile";
   const isStepRiser = item.category === "step_riser" || item.subcategory === "Step & Riser";
+
+  /**
+   * Apply requested dimensions if subcategory is "Roof Tile".
+   * Parent container in CatalogGroup.tsx uses 'grid-cols-24'.
+   */
+  const gridSpanClass = isRoofTile 
+    ? "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14" 
+    : getGridSpanClass(item.sizes[0]);
 
   return (
     <div 
-      className={`group relative flex flex-col bg-white border border-zinc-200/80 shadow-sm transition-all hover:shadow-xl ${gridSpanClass}`}
+      className={cn(
+        "group relative flex flex-col bg-white border border-zinc-200/80 shadow-sm transition-all hover:shadow-xl",
+        gridSpanClass
+      )}
     >
       <div className="relative w-full flex-grow overflow-hidden bg-zinc-100">
         <Image 
@@ -28,14 +38,16 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           alt={item.name} 
           fill 
           className="object-cover transition-transform duration-700 group-hover:scale-110" 
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
         />
         
-        {/* Category Badge - Shows for both Roof Tiles and Step Risers */}
+        {/* Category Badge */}
         {(isRoofTile || isStepRiser) && (
           <div className="absolute top-2 left-2 z-30">
-            <span className={`flex items-center gap-1 text-[9px] uppercase font-black px-2 py-1 rounded-sm shadow-sm ${
+            <span className={cn(
+              "flex items-center gap-1 text-[9px] uppercase font-black px-2 py-1 rounded-sm shadow-sm",
               isRoofTile ? "bg-orange-600 text-white" : "bg-blue-600 text-white"
-            }`}>
+            )}>
               {isRoofTile ? <HardHat size={10} /> : <Layers size={10} />}
               {isRoofTile ? "Roof Tile" : "Step & Riser"}
             </span>
@@ -48,7 +60,10 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
             variant="destructive" 
             size="sm"
             className="h-8 w-8 p-0 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={() => onRemove(item.id)}
+            onClick={(e) => {
+                e.stopPropagation();
+                onRemove(item.id);
+            }}
           >
             <Trash2 className="w-4 h-4" />
           </Button>
