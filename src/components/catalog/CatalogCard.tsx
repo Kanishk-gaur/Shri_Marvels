@@ -1,6 +1,6 @@
 // src/components/catalog/CatalogCard.tsx
 import Image from "next/image";
-import { Trash2, Edit2, HardHat, Layers } from "lucide-react";
+import { Trash2, Edit2 } from "lucide-react"; // Removed HardHat and Layers icons
 import { Button } from "@/components/ui/button";
 import { CatalogItem } from "@/context/CatalogContext";
 import { getGridSpanClass } from "./utils";
@@ -13,16 +13,15 @@ interface CatalogCardProps {
 }
 
 export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
-  // Logic: Check if subcategory is "Roof Tile"
+  // Logic: Check if subcategory is "Roof Tile" for specialized grid spans
   const isRoofTile = item.subcategory === "Roof Tile";
-  const isStepRiser = item.category === "step_riser" || item.subcategory === "Step & Riser";
 
   /**
    * Apply requested dimensions if subcategory is "Roof Tile".
    * Parent container in CatalogGroup.tsx uses 'grid-cols-24'.
    */
   const gridSpanClass = isRoofTile 
-    ? "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14" 
+    ? "col-span-12 row-span-12 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14" 
     : getGridSpanClass(item.sizes[0]);
 
   return (
@@ -41,18 +40,7 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
         />
         
-        {/* Category Badge */}
-        {(isRoofTile || isStepRiser) && (
-          <div className="absolute top-2 left-2 z-30">
-            <span className={cn(
-              "flex items-center gap-1 text-[9px] uppercase font-black px-2 py-1 rounded-sm shadow-sm",
-              isRoofTile ? "bg-orange-600 text-white" : "bg-blue-600 text-white"
-            )}>
-              {isRoofTile ? <HardHat size={10} /> : <Layers size={10} />}
-              {isRoofTile ? "Roof Tile" : "Step & Riser"}
-            </span>
-          </div>
-        )}
+        {/* Removed Category Badge (Roof Tile / Step & Riser text overlay) from here */}
 
         {/* Remove Button Overlay */}
         <div className="absolute top-2 right-2 z-30">
@@ -89,9 +77,7 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           <h3 className="text-[10px] md:text-[13px] font-bold text-zinc-800 truncate">
             {item.name}
           </h3>
-          <p className="text-[8px] text-zinc-400 uppercase tracking-widest leading-none">
-            {item.subcategory}
-          </p>
+          {/* Removed redundant subcategory text display */}
         </div>
         <button 
           className="p-1.5 text-zinc-400 hover:text-zinc-800 transition-colors"

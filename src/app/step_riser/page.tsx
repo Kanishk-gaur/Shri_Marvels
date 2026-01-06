@@ -159,11 +159,11 @@ export default function StepRiserPage() {
         id: activeProduct.title.replace(/\s+/g, "-").toLowerCase(),
         name: activeProduct.title,
         imageUrl: activeProduct.image,
-        // Ensure category matches "marvel" | "tiles" if strict, 
+        // Ensure category matches "marvel" | "tiles" if strict,
         // otherwise use the top-level category
-        category: "tiles", 
+        category: "tiles",
         // Add the missing required subcategory property
-        subcategory: "Step & Riser", 
+        subcategory: "Step & Riser",
         sizes: activeProduct.sizesArray || [],
         selectedSizes: selectedSizes,
         sizeConfigs: configs,
@@ -1029,12 +1029,16 @@ export default function StepRiserPage() {
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     />
 
-                    {/* Catalog Button Overlay */}
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-2 right-2 z-20">
+                      {/* Removed opacity-0 and group-hover:opacity-100 to make it always visible */}
                       <Button
                         size="icon"
                         variant={isInCatalog ? "destructive" : "secondary"}
-                        className="h-8 w-8 rounded-full shadow-lg"
+                        className={`h-9 w-9 rounded-full shadow-lg border-none transition-colors ${
+                          !isInCatalog
+                            ? "bg-white text-neutral-900 hover:bg-gray-100"
+                            : "bg-red-500 text-white"
+                        }`}
                         onClick={() =>
                           isInCatalog
                             ? removeItemFromCatalog(productId)
@@ -1046,9 +1050,9 @@ export default function StepRiserPage() {
                         }
                       >
                         {isInCatalog ? (
-                          <ListMinus className="w-4 h-4" />
+                          <ListMinus className="w-4.5 h-4.5" />
                         ) : (
-                          <ListPlus className="w-4 h-4" />
+                          <ListPlus className="w-4.5 h-4.5" />
                         )}
                       </Button>
                     </div>
