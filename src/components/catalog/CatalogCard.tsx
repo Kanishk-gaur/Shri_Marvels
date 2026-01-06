@@ -1,6 +1,6 @@
 // src/components/catalog/CatalogCard.tsx
 import Image from "next/image";
-import { Trash2, Edit2 } from "lucide-react"; // Removed HardHat and Layers icons
+import { Trash2, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CatalogItem } from "@/context/CatalogContext";
 import { getGridSpanClass } from "./utils";
@@ -13,16 +13,28 @@ interface CatalogCardProps {
 }
 
 export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
-  // Logic: Check if subcategory is "Roof Tile" for specialized grid spans
+  // Logic: Identify specific types based on subcategory string matches
+  const isStepRiser = item.subcategory === "Step & Riser";
+  const isDesignCollection = item.subcategory === "Design Collection";
   const isRoofTile = item.subcategory === "Roof Tile";
 
   /**
-   * Apply requested dimensions if subcategory is "Roof Tile".
+   * Determine the grid span based on the product type.
    * Parent container in CatalogGroup.tsx uses 'grid-cols-24'.
    */
-  const gridSpanClass = isRoofTile 
-    ? "col-span-12 row-span-12 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14" 
-    : getGridSpanClass(item.sizes[0]);
+  let gridSpanClass = getGridSpanClass(item.sizes[0]);
+
+  // Priority logic for Step Riser types
+  if (isStepRiser) {
+    // First Type: Standard Step Riser
+    gridSpanClass = "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-35";
+  } else if (isDesignCollection) {
+    // Second Type: Design Collection (Premium Textures & Finishes)
+    gridSpanClass = "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-10";
+  } else if (isRoofTile) {
+    // Standard Roof Tile sizing
+    gridSpanClass = "col-span-12 row-span-12 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14";
+  }
 
   return (
     <div 
@@ -40,8 +52,6 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
         />
         
-        {/* Removed Category Badge (Roof Tile / Step & Riser text overlay) from here */}
-
         {/* Remove Button Overlay */}
         <div className="absolute top-2 right-2 z-30">
           <Button 
@@ -77,7 +87,6 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
           <h3 className="text-[10px] md:text-[13px] font-bold text-zinc-800 truncate">
             {item.name}
           </h3>
-          {/* Removed redundant subcategory text display */}
         </div>
         <button 
           className="p-1.5 text-zinc-400 hover:text-zinc-800 transition-colors"

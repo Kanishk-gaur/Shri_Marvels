@@ -128,7 +128,7 @@ export const getGridSpanClass = (sizeString: string) => {
     case "24x2.5": return "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-7";
     case "24x2": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-7";
     case "12x2.5": return "col-span-12 row-span-7 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-9";
-    case "24x1": return "col-span-24 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-6";
+    case "24x1": return "col-span-24 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-5";
     case "6x6": return "col-span-12 row-span-11 md:col-span-4 md:row-span-10 lg:col-span-3 lg:row-span-13";
     case "8x12 inches": return "col-span-12 row-span-15 md:col-span-4 md:row-span-11 lg:col-span-6 lg:row-span-25";
     case "8x12": return "col-span-6 row-span-12 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-21";

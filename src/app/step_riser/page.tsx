@@ -30,6 +30,7 @@ interface ProductData {
   title: string;
   image: string;
   sizesArray: string[];
+  isDesignCollection?: boolean; // Add this flag
 }
 
 interface ProductShowcaseProps {
@@ -151,23 +152,23 @@ export default function StepRiserPage() {
 
   const handleConfirm = (
     selectedSizes: string[],
-    configs: Record<string, number> // Renamed to configs for clarity
+    configs: Record<string, number>
   ) => {
     if (activeProduct) {
+      // Determine subcategory based on whether it's a design collection item
+      const subcategory = activeProduct.isDesignCollection 
+        ? "Design Collection" 
+        : "Step & Riser";
+
       addItemToCatalog({
-        // Generate a unique ID string
         id: activeProduct.title.replace(/\s+/g, "-").toLowerCase(),
         name: activeProduct.title,
         imageUrl: activeProduct.image,
-        // Ensure category matches "marvel" | "tiles" if strict,
-        // otherwise use the top-level category
         category: "tiles",
-        // Add the missing required subcategory property
-        subcategory: "Step & Riser",
+        subcategory: subcategory, // Use the determined subcategory
         sizes: activeProduct.sizesArray || [],
         selectedSizes: selectedSizes,
         sizeConfigs: configs,
-        // Calculate total quantity from configs to match the updateItemSizes logic
         quantity: Object.values(configs).reduce((a, b) => a + b, 0),
       });
       setActiveProduct(null);
@@ -1030,7 +1031,6 @@ export default function StepRiserPage() {
                     />
 
                     <div className="absolute top-2 right-2 z-20">
-                      {/* Removed opacity-0 and group-hover:opacity-100 to make it always visible */}
                       <Button
                         size="icon"
                         variant={isInCatalog ? "destructive" : "secondary"}
@@ -1046,6 +1046,7 @@ export default function StepRiserPage() {
                                 title: `Design ${item.code}`,
                                 image: item.image,
                                 sizesArray: ["300X1200", "200X1200MM"],
+                                isDesignCollection: true, // Add this flag for design collection items
                               })
                         }
                       >
