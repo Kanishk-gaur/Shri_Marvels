@@ -1,3 +1,5 @@
+import { join } from 'path';
+import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
@@ -13,28 +15,46 @@ function getBaseUrl() {
 /**
  * FIXED: Detects if the image is PNG or JPEG to prevent rendering failure
  */
+// src/app/api/generate-catalog-pdf/route.ts
+
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    const baseUrl = getBaseUrl();
-    const absoluteUrl = url.startsWith('/') ? `${baseUrl}${url}` : url;
-    
-    const response = await fetch(absoluteUrl);
-    if (!response.ok) return null;
+    // 1. DIRECT FILE SYSTEM ACCESS FOR LOCAL IMAGES
+    if (url.startsWith('/')) {
+      // Resolve the path to the 'public' directory
+      const filePath = join(process.cwd(), 'public', url);
 
+      if (existsSync(filePath)) {
+        const fileBuffer = readFileSync(filePath);
+        const base64 = fileBuffer.toString('base64');
+        
+        // Determine format based on extension
+        const extension = url.split('.').pop()?.toLowerCase();
+        const format = extension === 'png' ? 'PNG' : 'JPEG';
+        const contentType = extension === 'png' ? 'image/png' : 'image/jpeg';
+
+        return {
+          data: `data:${contentType};base64,${base64}`,
+          format: format
+        };
+      } else {
+        console.error(`File not found on disk: ${filePath}`);
+      }
+    }
+
+    // 2. FALLBACK FOR EXTERNAL URLS (only if strictly necessary)
+    const response = await fetch(url);
+    if (!response.ok) return null;
     const arrayBuffer = await response.arrayBuffer();
     const contentType = response.headers.get('content-type') || 'image/jpeg';
     const base64 = Buffer.from(arrayBuffer).toString('base64');
     
-    // Determine the format for jsPDF
-    const format = contentType.includes('png') ? 'PNG' : 'JPEG';
-    
-
     return {
       data: `data:${contentType};base64,${base64}`,
-      format: format
+      format: contentType.includes('png') ? 'PNG' : 'JPEG'
     };
   } catch (error) {
-    console.error("PDF Image Fetch Error:", error);
+    console.error("PDF Image Error:", url, error);
     return null;
   }
 }
