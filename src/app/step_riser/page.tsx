@@ -1046,7 +1046,7 @@ export default function StepRiserPage() {
                                 title: `Design ${item.code}`,
                                 image: item.image,
                                 sizesArray: ["300X1200", "200X1200MM"],
-                                isDesignCollection: true, // Add this flag for design collection items
+                                isDesignCollection: true, // Add this flag for design collection
                               })
                         }
                       >
