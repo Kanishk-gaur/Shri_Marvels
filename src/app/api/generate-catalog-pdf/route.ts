@@ -3,8 +3,12 @@ import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
+// Increase timeout for large PDF generation (Vercel max is 60s for Hobby)
+export const maxDuration = 60; 
+export const dynamic = 'force-dynamic';
+
 /**
- * FIXED: Resolves the domain for server-side fetching of local images
+ * Resolves the domain for server-side fetching
  */
 function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
@@ -13,38 +17,35 @@ function getBaseUrl() {
 }
 
 /**
- * FIXED: Detects if the image is PNG or JPEG to prevent rendering failure
+ * Fetches and converts images to Base64.
+ * Includes a timeout per image to prevent one stuck request from failing the whole PDF.
  */
-// src/app/api/generate-catalog-pdf/route.ts
-
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    // 1. DIRECT FILE SYSTEM ACCESS FOR LOCAL IMAGES
+    // 1. Local Disk Access (Fastest)
     if (url.startsWith('/')) {
-      // Resolve the path to the 'public' directory
       const filePath = join(process.cwd(), 'public', url);
-
       if (existsSync(filePath)) {
         const fileBuffer = readFileSync(filePath);
-        const base64 = fileBuffer.toString('base64');
-        
-        // Determine format based on extension
         const extension = url.split('.').pop()?.toLowerCase();
         const format = extension === 'png' ? 'PNG' : 'JPEG';
-        const contentType = extension === 'png' ? 'image/png' : 'image/jpeg';
-
         return {
-          data: `data:${contentType};base64,${base64}`,
-          format: format
+          data: `data:image/${extension === 'png' ? 'png' : 'jpeg'};base64,${fileBuffer.toString('base64')}`,
+          format
         };
-      } else {
-        console.error(`File not found on disk: ${filePath}`);
       }
     }
 
-    // 2. FALLBACK FOR EXTERNAL URLS (only if strictly necessary)
-    const response = await fetch(url);
+    // 2. Network Fetch with Timeout
+    const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 5000); // 5s timeout per image
+
+    const response = await fetch(absoluteUrl, { signal: controller.signal });
+    clearTimeout(id);
+
     if (!response.ok) return null;
+    
     const arrayBuffer = await response.arrayBuffer();
     const contentType = response.headers.get('content-type') || 'image/jpeg';
     const base64 = Buffer.from(arrayBuffer).toString('base64');
@@ -54,10 +55,10 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       format: contentType.includes('png') ? 'PNG' : 'JPEG'
     };
   } catch (error) {
-    console.error("PDF Image Error:", url, error);
-    return null;
+    return null; // Skip failing images instead of crashing the whole PDF
   }
 }
+// ... rest of your getGridDimensions and generatePdfFromItems functions ...
 /**
  * MASONRY GRID MAPPING
  * Mirrors dimensions from src/components/gallery-card.tsx
@@ -163,19 +164,20 @@ function getGridDimensions(sizeString: string) {
   return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
 }
 
-async function generatePdfFromItems(items: any[], metadata: any): Promise<ArrayBuffer> {
-  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+async function generatePdfFromItems(items: any[], metadata: any): Promise<Uint8Array> {
+  const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 15;
   const colUnit = (pageWidth - (margin * 2)) / 24;
   let yPos = 25;
 
-  // Branding Header
+  // Header
   doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
-  doc.text(metadata.title || "Agrawal Ceramics Catalog", margin, yPos);
+  doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
 
+  // Group items by subcategory
   const groups: Record<string, any[]> = {};
   items.forEach(item => {
     const key = item.subcategory || "General";
@@ -185,57 +187,67 @@ async function generatePdfFromItems(items: any[], metadata: any): Promise<ArrayB
 
   for (const [title, groupItems] of Object.entries(groups)) {
     if (yPos > pageHeight - 40) { doc.addPage(); yPos = 20; }
-    
     doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
     yPos += 10;
 
-    let xOffset = margin, maxRowHeight = 0, usedCols = 0;
+    // PERFORMANCE: Process images in parallel chunks
+    const CHUNK_SIZE = 10;
+    for (let i = 0; i < groupItems.length; i += CHUNK_SIZE) {
+      const chunk = groupItems.slice(i, i + CHUNK_SIZE);
+      const imageResults = await Promise.all(chunk.map(item => getBase64Image(item.imageUrl)));
 
-    for (const item of groupItems) {
-      // Get sizeString from item data
-      const sizeString = item.sizes?.[0] || "1x1";
-      const { width, height, colSpan } = getGridDimensions(sizeString);
-      
-      if (usedCols + colSpan > 24) { 
-        yPos += maxRowHeight + 15; 
-        xOffset = margin; usedCols = 0; maxRowHeight = 0; 
-      }
-      
-      if (yPos + height + 25 > pageHeight) { 
-        doc.addPage(); yPos = 20; xOffset = margin; usedCols = 0; 
-      }
+      let xOffset = margin, maxRowHeight = 0, usedCols = 0;
 
-      // Fetch and Add Image
-      const img = await getBase64Image(item.imageUrl);
-      if (img) {
-        doc.addImage(img.data, img.format, xOffset, yPos, width, height);
-      }
+      imageResults.forEach((img, idx) => {
+        const item = chunk[idx];
+        const sizeString = item.sizes?.[0] || "Standard";
+        const { width, height, colSpan } = getGridDimensions(sizeString);
+        
+        if (usedCols + colSpan > 24) { 
+          yPos += maxRowHeight + 15; 
+          xOffset = margin; usedCols = 0; maxRowHeight = 0; 
+        }
+        
+        if (yPos + height + 25 > pageHeight) { 
+          doc.addPage(); yPos = 20; xOffset = margin; usedCols = 0; 
+        }
 
-      doc.setFontSize(8).text(item.name, xOffset, yPos + height + 5, { maxWidth: width });
+        if (img) {
+          doc.addImage(img.data, img.format, xOffset, yPos, width, height, undefined, 'FAST');
+        }
 
-      maxRowHeight = Math.max(maxRowHeight, height);
-      xOffset += (colSpan * colUnit);
-      usedCols += colSpan;
+        doc.setFontSize(8).setTextColor(50, 50, 50);
+        doc.text(item.name, xOffset, yPos + height + 5, { maxWidth: width });
+
+        maxRowHeight = Math.max(maxRowHeight, height);
+        xOffset += (colSpan * colUnit);
+        usedCols += colSpan;
+      });
+      yPos += maxRowHeight + 15;
     }
-    yPos += maxRowHeight + 25;
   }
   
-  return doc.output("arraybuffer");
+  return new Uint8Array(doc.output("arraybuffer"));
 }
 
 export async function POST(request: NextRequest) {
   try {
     const { items, metadata } = await request.json();
-    const pdf = await generatePdfFromItems(items, metadata);
+    if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
-    return new Response(pdf, {
+    const pdfData = await generatePdfFromItems(items, metadata);
+
+    // FIX: Explicitly cast pdfData to any to bypass the URLSearchParams type conflict
+    return new Response(pdfData as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="catalog.pdf"',
+        'Content-Disposition': `attachment; filename="${metadata.title || 'shri_marvels'}_catalog.pdf"`,
+        'Content-Length': pdfData.byteLength.toString(),
       },
     });
   } catch (err) {
+    console.error("PDF API Error:", err);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }

@@ -1,4 +1,3 @@
-// src/app/catalog/page.tsx
 "use client";
 
 import { useMemo, useState } from "react";
@@ -8,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useCatalog, CatalogItem, transformProductSizes } from "@/context/CatalogContext";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 import { CatalogGroup } from "@/components/catalog/CatalogGroup";
-// Import the mapping utilities from your data layer
 import { getSizeDisplayName, subCategoryDisplayNames } from "@/data/utils"; 
+import { jsPDF } from "jspdf";
 import {
   Dialog,
   DialogContent,
@@ -21,41 +20,51 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+/**
+ * Maps sizeString to the exact 24-column grid span and row height.
+ * Replicated from your API logic to maintain visual consistency.
+ */
+function getGridDimensions(sizeString: string) {
+  const colUnit = 7.5; 
+  const rowUnit = 2.0; 
+  let colSpan = 8; 
+  let rowSpan = 16;
+
+  switch (sizeString) {
+    case "600x1200 mm (24x48 inch)": colSpan = 8; rowSpan = 32; break;
+    case "24x24 inch":
+    case "600x600 mm": colSpan = 12; rowSpan = 25; break;
+    case "1200x1800 mm (48x72 inch)": colSpan = 24; rowSpan = 34; break;
+    case "12x18": colSpan = 8; rowSpan = 13; break;
+    case "8x12": colSpan = 6; rowSpan = 20; break;
+    default: colSpan = 12; rowSpan = 18;
+  }
+
+  return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
+}
+
 export default function CatalogPage() {
   const { catalogItems, removeItemFromCatalog, updateItemSizes, clearCatalog } = useCatalog();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
-  
-  // States for the generation popup
   const [showGenDialog, setShowGenDialog] = useState(false);
-  const [pdfMetadata, setPdfMetadata] = useState({ 
-    name: "", 
-    title: "", 
-    description: "" 
-  });
+  const [pdfMetadata, setPdfMetadata] = useState({ name: "", title: "", description: "" });
 
   const groupedCatalog = useMemo(() => {
     const groups: { [key: string]: CatalogItem[] } = {};
     catalogItems.forEach((item) => {
-      // 1. Get the clean display size (e.g., "2x3" instead of "600x900 mm")
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
-      
-      // 2. Map the internal subcategory name to your custom display name
-      // Example: "Glitter Emboss" becomes "High Gloss Glitter Emboss Poster"
       const subcatDisplayName = subCategoryDisplayNames[item.subcategory] || item.subcategory;
-      
       let typeLabel = subcatDisplayName;
 
-      // Handle special naming logic for specific categories
       if (item.category === "roof_tiles") {
         typeLabel = `Roof Tile - ${subcatDisplayName}`;
       } else if (item.subcategory === "Step & Riser" || item.category === "step_riser") {
         typeLabel = `Step & Riser - ${item.name}`;
       }
 
-      // 3. Create the group heading using the new display name
       const groupKey = `${typeLabel} (${displaySize})`;
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(item);
@@ -70,24 +79,72 @@ export default function CatalogPage() {
     setShowGenDialog(false);
     
     try {
-      const response = await fetch("/api/generate-catalog-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          items: catalogItems,
-          metadata: pdfMetadata 
-        }),
-      });
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 15;
+      const colUnit = (pageWidth - (margin * 2)) / 24;
+      let yPos = 25;
+
+      // Branding Header
+      doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
+      doc.text(pdfMetadata.title || "Shri Marvels Catalog", margin, yPos);
       
-      if (!response.ok) throw new Error("Generation failed");
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${pdfMetadata.title || "shri_marvels"}_catalog.pdf`;
-      a.click();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred");
+      yPos += 10;
+      doc.setFontSize(11).setTextColor(60, 60, 60);
+      doc.text(`Client: ${pdfMetadata.name || "Valued Customer"}`, margin, yPos);
+      yPos += 15;
+
+      for (const [title, items] of Object.entries(groupedCatalog)) {
+        if (yPos > pageHeight - 40) { doc.addPage(); yPos = 20; }
+
+        doc.setFont("helvetica", "bold").setFontSize(14).setTextColor(30, 30, 30);
+        doc.text(title, margin, yPos);
+        yPos += 10;
+
+        let currentX = margin;
+        let usedCols = 0;
+        let maxRowHeight = 0;
+
+        for (const item of items) {
+          const sizeStr = item.sizes[0] || "Standard";
+          const { width, height, colSpan } = getGridDimensions(sizeStr);
+
+          if (usedCols + colSpan > 24) {
+            yPos += maxRowHeight + 15;
+            currentX = margin;
+            usedCols = 0;
+            maxRowHeight = 0;
+          }
+
+          if (yPos + height + 25 > pageHeight) {
+            doc.addPage();
+            yPos = 20;
+            currentX = margin;
+            usedCols = 0;
+          }
+
+          try {
+            // Browser can draw images directly from local paths or URLs
+            doc.addImage(item.imageUrl, 'JPEG', currentX, yPos, width, height, undefined, 'FAST');
+          } catch (e) {
+            console.error("Skipping image due to load error:", item.imageUrl);
+          }
+
+          doc.setFontSize(8).setTextColor(50, 50, 50);
+          doc.text(item.name, currentX, yPos + height + 5, { maxWidth: width });
+          
+          maxRowHeight = Math.max(maxRowHeight, height);
+          currentX += (colSpan * colUnit);
+          usedCols += colSpan;
+        }
+        yPos += maxRowHeight + 20;
+      }
+
+      doc.save(`${pdfMetadata.title || "shri_marvels"}_catalog.pdf`);
+    } catch (err: any) {
+      setError("Failed to generate PDF. For very large catalogs, please try a smaller selection.");
+      console.error(err);
     } finally {
       setIsGenerating(false);
     }
@@ -96,7 +153,6 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen bg-orange-50 pt-20 pb-20">
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
-        
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
           <Link href="/gallery">
             <Button variant="ghost" className="text-zinc-600 hover:text-zinc-900 transition-colors">
@@ -125,7 +181,7 @@ export default function CatalogPage() {
               className="bg-zinc-800 hover:bg-zinc-700 text-white min-w-[180px] shadow-lg"
             >
               {isGenerating ? <Loader2 className="animate-spin mr-2" /> : <FileText className="mr-2" />}
-              Generate PDF
+              {isGenerating ? "Processing..." : "Generate PDF"}
             </Button>
           </div>
         </div>
@@ -154,7 +210,6 @@ export default function CatalogPage() {
         )}
       </div>
 
-      {/* Generation Dialog */}
       <Dialog open={showGenDialog} onOpenChange={setShowGenDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
