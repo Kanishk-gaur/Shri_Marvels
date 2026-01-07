@@ -27,6 +27,7 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
     
     // Determine the format for jsPDF
     const format = contentType.includes('png') ? 'PNG' : 'JPEG';
+    
 
     return {
       data: `data:${contentType};base64,${base64}`,
