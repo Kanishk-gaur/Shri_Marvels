@@ -337,3 +337,6 @@ export const generateSizes = (products: Product[]) => {
 
 // Export sizeDisplayNames and subCategoryDisplayNames for use elsewhere if needed
 export { sizeDisplayNames, subCategoryDisplayNames };
+export const getSizeDisplayName = (rawSize: string): string => {
+  return sizeDisplayNames[rawSize] || rawSize;
+};

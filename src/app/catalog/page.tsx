@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useCatalog, CatalogItem, transformProductSizes } from "@/context/CatalogContext";
 import { SizeSelectionDialog } from "@/components/size-selection-dialog";
 import { CatalogGroup } from "@/components/catalog/CatalogGroup";
-import { getSizeDisplayName } from "@/components/catalog/utils";
+// Import the mapping utilities from your data layer
+import { getSizeDisplayName, subCategoryDisplayNames } from "@/data/utils"; 
 import {
   Dialog,
   DialogContent,
@@ -37,16 +38,24 @@ export default function CatalogPage() {
   const groupedCatalog = useMemo(() => {
     const groups: { [key: string]: CatalogItem[] } = {};
     catalogItems.forEach((item) => {
+      // 1. Get the clean display size (e.g., "2x3" instead of "600x900 mm")
       const rawSize = item.sizes[0] || "Standard";
       const displaySize = getSizeDisplayName(rawSize);
       
-      let typeLabel = item.subcategory;
+      // 2. Map the internal subcategory name to your custom display name
+      // Example: "Glitter Emboss" becomes "High Gloss Glitter Emboss Poster"
+      const subcatDisplayName = subCategoryDisplayNames[item.subcategory] || item.subcategory;
+      
+      let typeLabel = subcatDisplayName;
+
+      // Handle special naming logic for specific categories
       if (item.category === "roof_tiles") {
-        typeLabel = `Roof Tile - ${item.subcategory}`;
+        typeLabel = `Roof Tile - ${subcatDisplayName}`;
       } else if (item.subcategory === "Step & Riser" || item.category === "step_riser") {
         typeLabel = `Step & Riser - ${item.name}`;
       }
 
+      // 3. Create the group heading using the new display name
       const groupKey = `${typeLabel} (${displaySize})`;
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(item);
@@ -66,7 +75,7 @@ export default function CatalogPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           items: catalogItems,
-          metadata: pdfMetadata // Sending name, title, and description
+          metadata: pdfMetadata 
         }),
       });
       
@@ -145,7 +154,7 @@ export default function CatalogPage() {
         )}
       </div>
 
-      {/* GENERATION DIALOG WITH NAME, TITLE, AND DESCRIPTION */}
+      {/* Generation Dialog */}
       <Dialog open={showGenDialog} onOpenChange={setShowGenDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -155,7 +164,6 @@ export default function CatalogPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            {/* Name Field */}
             <div className="grid gap-2">
               <label htmlFor="name" className="text-sm font-medium text-zinc-700">Client Name</label>
               <Input
@@ -165,7 +173,6 @@ export default function CatalogPage() {
                 onChange={(e) => setPdfMetadata(prev => ({ ...prev, name: e.target.value }))}
               />
             </div>
-            {/* Title Field */}
             <div className="grid gap-2">
               <label htmlFor="title" className="text-sm font-medium text-zinc-700">Catalog Title</label>
               <Input
@@ -175,7 +182,6 @@ export default function CatalogPage() {
                 onChange={(e) => setPdfMetadata(prev => ({ ...prev, title: e.target.value }))}
               />
             </div>
-            {/* Description Field */}
             <div className="grid gap-2">
               <label htmlFor="description" className="text-sm font-medium text-zinc-700">Notes / Description</label>
               <Textarea
