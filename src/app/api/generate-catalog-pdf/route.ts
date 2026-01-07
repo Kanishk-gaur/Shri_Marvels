@@ -1,41 +1,42 @@
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
-interface CatalogItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  sizes: string[];
-  category: string;
-  subcategory: string;
-  selectedSizes: string[];
-  sizeConfigs?: { [key: string]: number };
-}
-
-interface PdfMetadata {
-  name: string;
-  title: string;
-  description: string;
-}
-
+/**
+ * FIXED: Resolves the domain for server-side fetching of local images
+ */
 function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return `http://localhost:${process.env.PORT || 3000}`;
 }
 
-async function getBase64Image(url: string): Promise<string | null> {
+/**
+ * FIXED: Detects if the image is PNG or JPEG to prevent rendering failure
+ */
+async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
+    const baseUrl = getBaseUrl();
+    const absoluteUrl = url.startsWith('/') ? `${baseUrl}${url}` : url;
+    
     const response = await fetch(absoluteUrl);
     if (!response.ok) return null;
+
     const arrayBuffer = await response.arrayBuffer();
-    return `data:image/jpeg;base64,${Buffer.from(arrayBuffer).toString('base64')}`;
-  } catch {
-    // Variable removed to satisfy @typescript-eslint/no-unused-vars
+    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
+    
+    // Determine the format for jsPDF
+    const format = contentType.includes('png') ? 'PNG' : 'JPEG';
+
+    return {
+      data: `data:${contentType};base64,${base64}`,
+      format: format
+    };
+  } catch (error) {
+    console.error("PDF Image Fetch Error:", error);
     return null;
   }
 }
-
 /**
  * MASONRY GRID MAPPING
  * Mirrors dimensions from src/components/gallery-card.tsx
@@ -141,39 +142,38 @@ function getGridDimensions(sizeString: string) {
   return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
 }
 
-async function generatePdfFromItems(items: CatalogItem[], metadata: PdfMetadata): Promise<ArrayBuffer> {
+async function generatePdfFromItems(items: any[], metadata: any): Promise<ArrayBuffer> {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 15;
   const colUnit = (pageWidth - (margin * 2)) / 24;
-  let yPos = 20;
+  let yPos = 25;
 
+  // Branding Header
   doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
-  doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
+  doc.text(metadata.title || "Agrawal Ceramics Catalog", margin, yPos);
   yPos += 15;
 
-  const groups: Record<string, CatalogItem[]> = {};
+  const groups: Record<string, any[]> = {};
   items.forEach(item => {
-    const rawSize = item.sizes[0] || "Standard";
-    const groupKey = `${item.subcategory} (${rawSize})`;
-    if (!groups[groupKey]) groups[groupKey] = [];
-    groups[groupKey].push(item);
+    const key = item.subcategory || "General";
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
   });
 
   for (const [title, groupItems] of Object.entries(groups)) {
     if (yPos > pageHeight - 40) { doc.addPage(); yPos = 20; }
     
-    doc.setFont("helvetica", "bold").setFontSize(14).setTextColor(30, 30, 30);
-    doc.text(title, margin, yPos);
-    yPos += 2;
-    doc.setDrawColor(200, 200, 200).line(margin, yPos, pageWidth - margin, yPos);
+    doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
     yPos += 10;
 
     let xOffset = margin, maxRowHeight = 0, usedCols = 0;
 
     for (const item of groupItems) {
-      const { width, height, colSpan } = getGridDimensions(item.sizes[0]);
+      // Get sizeString from item data
+      const sizeString = item.sizes?.[0] || "1x1";
+      const { width, height, colSpan } = getGridDimensions(sizeString);
       
       if (usedCols + colSpan > 24) { 
         yPos += maxRowHeight + 15; 
@@ -184,47 +184,37 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PdfMetadata)
         doc.addPage(); yPos = 20; xOffset = margin; usedCols = 0; 
       }
 
-      const imgData = await getBase64Image(item.imageUrl);
-      if (imgData) doc.addImage(imgData, "JPEG", xOffset, yPos, width, height);
+      // Fetch and Add Image
+      const img = await getBase64Image(item.imageUrl);
+      if (img) {
+        doc.addImage(img.data, img.format, xOffset, yPos, width, height);
+      }
 
-      const textY = yPos + height + 5;
-      doc.setFont("helvetica", "bold").setFontSize(8).setTextColor(40, 40, 40);
-      doc.text(item.name, xOffset, textY, { maxWidth: width });
-      
-      doc.setFont("helvetica", "normal").setFontSize(6).setTextColor(120, 120, 120);
-      const sizeInfo = item.selectedSizes.map(s => `${s} (${item.sizeConfigs?.[s] || 1} Pcs)`).join(", ");
-      doc.text(sizeInfo, xOffset, textY + 4, { maxWidth: width });
+      doc.setFontSize(8).text(item.name, xOffset, yPos + height + 5, { maxWidth: width });
 
       maxRowHeight = Math.max(maxRowHeight, height);
       xOffset += (colSpan * colUnit);
       usedCols += colSpan;
     }
-    yPos += maxRowHeight + 20;
+    yPos += maxRowHeight + 25;
   }
   
-  // Return standard ArrayBuffer to resolve TS2322 incompatibility
   return doc.output("arraybuffer");
 }
 
 export async function POST(request: NextRequest) {
   try {
     const { items, metadata } = await request.json();
-    const pdfArrayBuffer = await generatePdfFromItems(items, metadata);
-    const safeTitle = (metadata.title || 'shri_marvels').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    const pdf = await generatePdfFromItems(items, metadata);
 
-    // Standard Blob constructor accepts ArrayBuffer natively
-    const blob = new Blob([pdfArrayBuffer], { type: 'application/pdf' });
-
-    return new Response(blob, {
+    return new Response(pdf, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${safeTitle}_catalog.pdf"`,
+        'Content-Disposition': 'attachment; filename="catalog.pdf"',
       },
     });
   } catch (err) {
-    // Error logged to satisfy @typescript-eslint/no-unused-vars
-    console.error("PDF API Error:", err);
-    return new Response(JSON.stringify({ error: 'Failed' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
