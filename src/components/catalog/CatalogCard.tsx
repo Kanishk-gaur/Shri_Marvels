@@ -26,24 +26,22 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
 
   // Priority logic for Step Riser types
   if (isStepRiser) {
-    // First Type: Standard Step Riser
     gridSpanClass = "col-span-24 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-35";
   } else if (isDesignCollection) {
-    // Second Type: Design Collection (Premium Textures & Finishes)
     gridSpanClass = "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-10";
   } else if (isRoofTile) {
-    // Standard Roof Tile sizing
     gridSpanClass = "col-span-12 row-span-12 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-14";
   }
 
   return (
     <div 
       className={cn(
-        "group relative flex flex-col bg-white border border-zinc-200/80 shadow-sm transition-all hover:shadow-xl",
+        // CHANGED: Removed bg-white, border, and shadow-sm to make the card transparent
+        "group relative flex flex-col bg-transparent transition-all hover:shadow-xl",
         gridSpanClass
       )}
     >
-      <div className="relative w-full flex-grow overflow-hidden bg-zinc-100">
+      <div className="relative w-full flex-grow overflow-hidden bg-zinc-100 rounded-lg">
         <Image 
           src={item.imageUrl} 
           alt={item.name} 
@@ -82,7 +80,8 @@ export function CatalogCard({ item, onRemove, onEdit }: CatalogCardProps) {
       </div>
 
       {/* Title & Edit Section */}
-      <div className="p-2 flex items-center justify-between bg-white border-t border-zinc-100">
+      {/* CHANGED: Changed bg-white to bg-transparent and removed border-t */}
+      <div className="p-2 flex items-center justify-between bg-transparent">
         <div className="truncate pr-2">
           <h3 className="text-[10px] md:text-[13px] font-bold text-zinc-800 truncate">
             {item.name}

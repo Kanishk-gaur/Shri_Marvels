@@ -1,3 +1,4 @@
+// src/components/product-card.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -21,7 +22,6 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
   const { isItemInCatalog, addItemToCatalog, removeItemFromCatalog } = useCatalog();
   const isInCatalog = isItemInCatalog(String(product.id)); 
   
-  // Transform sizes for display on the gallery card
   const displaySizes = transformProductSizes(product.sizes || []);
 
   const handleCatalogToggle = (e: React.MouseEvent) => {
@@ -41,15 +41,15 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.6 }}
     >
-      <div className="relative overflow-hidden rounded-2xl bg-white/10 backdrop-blur-sm shadow-xl group-hover:shadow-2xl transition-all duration-300">
-        <div className="aspect-square relative overflow-hidden">
+      {/* REMOVED: bg-white/10 and shadow-xl. ADDED: bg-transparent */}
+      <div className="relative overflow-hidden rounded-2xl bg-transparent transition-all duration-300">
+        <div className="aspect-square relative overflow-hidden rounded-2xl">
           <Image
             src={product.image || "/placeholder.svg"}
             alt={product.name}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
           />
-          {/* MODIFIED: Removed 'opacity-0 group-hover:opacity-100' to keep buttons visible at all times */}
           <div className="absolute top-4 right-4 flex flex-col space-y-2 transition-opacity duration-300">
             <motion.button
               className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
@@ -62,13 +62,14 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           </div>
         </div>
 
-        <div className="p-6 text-white">
-          <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
-          <p className="text-white/70 text-sm">
+        {/* UPDATED: text-zinc-800 and text-zinc-500 for visibility on light background */}
+        <div className="p-4 pt-4 text-left">
+          <h3 className="font-bold text-lg line-clamp-2 text-zinc-800">{product.name}</h3>
+          <p className="text-zinc-500 text-sm">
             {product.subcategory} • {displaySizes.join(" | ")}
           </p>
           <Link href={`/${product.category}/${product.id}`}>
-            <Button className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-purple-500">
+            <Button className="w-full mt-4 bg-zinc-800 hover:bg-zinc-700 text-white">
               View Details
             </Button>
           </Link>

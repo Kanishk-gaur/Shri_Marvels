@@ -76,7 +76,7 @@ export const getGridSpanClass = (sizeString: string) => {
     case "45x600 mm (1.77x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-9";
     case "40x600 mm (1.57x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-9";
     case "25x600 mm (0.98x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-8";
-    case "20x600 mm (0.79x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-7";
+    case "20x600 mm (0.79x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-6";
     case "10x600 mm (0.39x23.6 inch)": return "col-span-24 row-span-5 md:col-span-2 md:row-span-12 lg:col-span-8 lg:row-span-6";
     case "900x600 mm": return "col-span-24 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
     case "900x600 mm (36x24 inch)": return "col-span-24 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
@@ -111,13 +111,13 @@ export const getGridSpanClass = (sizeString: string) => {
     case "8x12 in": return "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-20";
     case "12x18": return "col-span-12 row-span-11 md:col-span-4 md:row-9 lg:col-span-4 lg:row-span-14";
     case "8x6": return "col-span-4 row-span-8 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
-    case "20x600": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-8 lg:row-span-7";
+    case "20x600": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-8 lg:row-span-6";
     case "10x600": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-8 lg:row-span-6";
     case "900x300 mm": return "col-span-12 row-span-10 md:col-span-6 md:row-span-9 lg:col-span-4 lg:row-span-13";
     case "1200x300 mm": return "col-span-12 row-span-11 md:col-span-6 md:row-span-9 lg:col-span-6 lg:row-span-13";
     case "1000x300 mm": return "col-span-12 row-span-10 md:col-span-6 md:row-span-8 lg:col-span-6 lg:row-span-18";
-    case "6x48": return "col-span-12 row-span-5 md:col-span-6 md:row-span-6 lg:col-span-12 lg:row-span-8";
-    case "4x48": return "col-span-12 row-span-5 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-7";
+    case "6x48": return "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-12 lg:row-span-8";
+    case "4x48": return "col-span-24 row-span-6 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-7";
     case "4x2": return "col-span-6 row-span-14 md:col-span-4 md:row-span-20 lg:col-span-4 lg:row-span-34";
     case "600x1200 mm": return "col-span-12 row-span-26 md:col-span-6 md:row-span-28 lg:col-span-4 lg:row-span-34";
     case "2x4": return "col-span-12 row-span-26 md:col-span-6 md:row-span-28 lg:col-span-4 lg:row-span-34";
@@ -142,7 +142,7 @@ export const getGridSpanClass = (sizeString: string) => {
     case "300x200 mm (12x8 inch)": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
     case "3x2": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
     case "6x8": return "col-span-12 row-span-11 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-17";
-    case "24x3": return "col-span-12 row-span-5 md:col-span-6 md:row-span-4 lg:col-span-6 lg:row-span-7";
+    case "24x3": return "col-span-24 row-span-6 md:col-span-6 md:row-span-4 lg:col-span-6 lg:row-span-7";
     default: return "col-span-12 row-span-10 md:col-span-4 md:row-span-11 lg:col-span-3 lg:row-span-17";
   }
 };
