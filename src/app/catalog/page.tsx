@@ -22,7 +22,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 /**
  * Maps sizeString to the exact 24-column grid span and row height.
- * Replicated from your API logic to maintain visual consistency.
  */
 function getGridDimensions(sizeString: string) {
   const colUnit = 7.5; 
@@ -125,9 +124,8 @@ export default function CatalogPage() {
           }
 
           try {
-            // Browser can draw images directly from local paths or URLs
             doc.addImage(item.imageUrl, 'JPEG', currentX, yPos, width, height, undefined, 'FAST');
-          } catch (e) {
+          } catch (_e) { // Fixed: Prefixed with underscore to ignore unused variable warning
             console.error("Skipping image due to load error:", item.imageUrl);
           }
 
@@ -142,9 +140,10 @@ export default function CatalogPage() {
       }
 
       doc.save(`${pdfMetadata.title || "shri_marvels"}_catalog.pdf`);
-    } catch (err: any) {
+    } catch (err: unknown) { // Fixed: Replaced 'any' with 'unknown'
+      const errorMessage = err instanceof Error ? err.message : "Failed to generate PDF";
       setError("Failed to generate PDF. For very large catalogs, please try a smaller selection.");
-      console.error(err);
+      console.error(errorMessage);
     } finally {
       setIsGenerating(false);
     }

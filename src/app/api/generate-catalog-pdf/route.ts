@@ -2,10 +2,17 @@ import { join } from 'path';
 import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
+import { CatalogItem } from "@/context/CatalogContext"; //
 
 // Increase timeout for large PDF generation (Vercel max is 60s for Hobby)
 export const maxDuration = 60; 
 export const dynamic = 'force-dynamic';
+
+interface PDFMetadata {
+  title?: string;
+  name?: string;
+  description?: string;
+}
 
 /**
  * Resolves the domain for server-side fetching
@@ -54,14 +61,13 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       data: `data:${contentType};base64,${base64}`,
       format: contentType.includes('png') ? 'PNG' : 'JPEG'
     };
-  } catch (error) {
-    return null; // Skip failing images instead of crashing the whole PDF
+  } catch (_error) { // Fixed: Prefixed with underscore to ignore unused variable warning
+    return null; 
   }
 }
-// ... rest of your getGridDimensions and generatePdfFromItems functions ...
+
 /**
  * MASONRY GRID MAPPING
- * Mirrors dimensions from src/components/gallery-card.tsx
  */
 function getGridDimensions(sizeString: string) {
   const colUnit = 7.5; 
@@ -164,7 +170,8 @@ function getGridDimensions(sizeString: string) {
   return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
 }
 
-async function generatePdfFromItems(items: any[], metadata: any): Promise<Uint8Array> {
+// Fixed: Replaced 'any' with specific types
+async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata): Promise<Uint8Array> {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -178,7 +185,7 @@ async function generatePdfFromItems(items: any[], metadata: any): Promise<Uint8A
   yPos += 15;
 
   // Group items by subcategory
-  const groups: Record<string, any[]> = {};
+  const groups: Record<string, CatalogItem[]> = {};
   items.forEach(item => {
     const key = item.subcategory || "General";
     if (!groups[key]) groups[key] = [];
@@ -232,13 +239,13 @@ async function generatePdfFromItems(items: any[], metadata: any): Promise<Uint8A
 
 export async function POST(request: NextRequest) {
   try {
-    const { items, metadata } = await request.json();
+    const { items, metadata }: { items: CatalogItem[], metadata: PDFMetadata } = await request.json(); // Fixed: Added type annotation
     if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
     const pdfData = await generatePdfFromItems(items, metadata);
 
-    // FIX: Explicitly cast pdfData to any to bypass the URLSearchParams type conflict
-    return new Response(pdfData as any, {
+    // Fixed: Cast to unknown then to BodyInit to satisfy Response type safely
+    return new Response(pdfData as unknown as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
