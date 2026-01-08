@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
-// Configuration for Vercel Serverless environment
+// Increase timeout for large PDF generation
 export const maxDuration = 60; 
 export const dynamic = 'force-dynamic';
 
@@ -13,8 +13,10 @@ interface PDFMetadata {
   description?: string;
 }
 
-// CLEAN FIX: Using a local interface instead of importing from CatalogContext.
-// This prevents the API from pulling in your massive frontend data and components.
+/**
+ * CLEAN FIX: Define the CatalogItem interface locally.
+ * Importing this from CatalogContext was pulling in your 900MB data file.
+ */
 interface LocalCatalogItem {
   id: string | number;
   name: string;
@@ -23,18 +25,12 @@ interface LocalCatalogItem {
   sizes?: string[];
 }
 
-/**
- * Resolves the domain for server-side fetching
- */
 function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return `http://localhost:${process.env.PORT || 3000}`;
 }
 
-/**
- * Fetches and converts images to Base64 using local disk or network.
- */
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
     if (url.startsWith('/')) {
@@ -52,7 +48,7 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
 
     const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 5000); 
+    const id = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(absoluteUrl, { signal: controller.signal });
     clearTimeout(id);
@@ -178,20 +174,61 @@ function getGridDimensions(sizeString: string) {
 // Fixed: Replaced 'any' with specific types
 async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMetadata): Promise<Uint8Array> {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 15;
+  const colUnit = (pageWidth - (margin * 2)) / 24;
   let yPos = 25;
 
   doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
   doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
 
-  for (const item of items) {
-    if (yPos > 250) { doc.addPage(); yPos = 20; }
-    const imgData = await getBase64Image(item.imageUrl);
-    if (imgData) {
-      doc.addImage(imgData.data, imgData.format, margin, yPos, 40, 40);
-      doc.setFontSize(12).setTextColor(0).text(item.name, margin + 45, yPos + 10);
-      yPos += 50;
+  const groups: Record<string, LocalCatalogItem[]> = {};
+  items.forEach(item => {
+    const key = item.subcategory || "General";
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+  });
+
+  for (const [title, groupItems] of Object.entries(groups)) {
+    if (yPos > pageHeight - 40) { doc.addPage(); yPos = 20; }
+    doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
+    yPos += 10;
+
+    const CHUNK_SIZE = 5;
+    for (let i = 0; i < groupItems.length; i += CHUNK_SIZE) {
+      const chunk = groupItems.slice(i, i + CHUNK_SIZE);
+      const imageResults = await Promise.all(chunk.map(item => getBase64Image(item.imageUrl)));
+
+      let xOffset = margin, maxRowHeight = 0, usedCols = 0;
+
+      imageResults.forEach((img, idx) => {
+        const item = chunk[idx];
+        const sizeString = item.sizes?.[0] || "Standard";
+        const { width, height, colSpan } = getGridDimensions(sizeString);
+        
+        if (usedCols + colSpan > 24) { 
+          yPos += maxRowHeight + 15; 
+          xOffset = margin; usedCols = 0; maxRowHeight = 0; 
+        }
+        
+        if (yPos + height + 25 > pageHeight) { 
+          doc.addPage(); yPos = 20; xOffset = margin; usedCols = 0; 
+        }
+
+        if (img) {
+          doc.addImage(img.data, img.format, xOffset, yPos, width, height, undefined, 'FAST');
+        }
+
+        doc.setFontSize(8).setTextColor(50, 50, 50);
+        doc.text(item.name, xOffset, yPos + height + 5, { maxWidth: width });
+
+        maxRowHeight = Math.max(maxRowHeight, height);
+        xOffset += (colSpan * colUnit);
+        usedCols += colSpan;
+      });
+      yPos += maxRowHeight + 15;
     }
   }
   
@@ -200,28 +237,26 @@ async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMeta
 
 export async function POST(request: NextRequest) {
   try {
-    // DYNAMIC IMPORT: Prevents bundling the 900MB file at build time.
-    // It is only loaded into memory when this specific endpoint is called.
-    await import('@/data/products'); 
-
     const body = (await request.json()) as { items: LocalCatalogItem[]; metadata: PDFMetadata };
     const { items, metadata } = body;
     
     if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
     const pdfData = await generatePdfFromItems(items, metadata);
-    const responseBody = new Uint8Array(pdfData);
 
-    return new Response(responseBody, {
+    // FIXED: Convert Uint8Array to a Blob to satisfy BodyInit without using 'any'
+    const blob = new Blob([new Uint8Array(pdfData)], { type: 'application/pdf' });
+
+    return new Response(blob, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${(metadata.title || 'catalog').replace(/\s+/g, '_')}.pdf"`,
-        'Content-Length': responseBody.byteLength.toString(),
       },
     });
-  } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Internal Error';
-    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown Error';
+    console.error("PDF API Error:", message);
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
