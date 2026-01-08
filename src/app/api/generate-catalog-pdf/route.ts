@@ -2,9 +2,8 @@ import { join } from 'path';
 import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
-import { CatalogItem } from "@/context/CatalogContext"; //
 
-// Increase timeout for large PDF generation (Vercel max is 60s for Hobby)
+// Configuration for Vercel Serverless environment
 export const maxDuration = 60; 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +11,15 @@ interface PDFMetadata {
   title?: string;
   name?: string;
   description?: string;
+}
+
+// Minimal interface to avoid importing heavy context files
+interface CatalogItem {
+  id: string | number;
+  name: string;
+  imageUrl: string;
+  subcategory?: string;
+  sizes?: string[];
 }
 
 /**
@@ -24,12 +32,11 @@ function getBaseUrl() {
 }
 
 /**
- * Fetches and converts images to Base64.
- * Includes a timeout per image to prevent one stuck request from failing the whole PDF.
+ * Fetches and converts images to Base64 using local disk or network.
  */
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    // 1. Local Disk Access (Fastest)
+    // 1. Local Disk Access (Fastest & doesn't count toward bundle size)
     if (url.startsWith('/')) {
       const filePath = join(process.cwd(), 'public', url);
       if (existsSync(filePath)) {
@@ -46,7 +53,7 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
     // 2. Network Fetch with Timeout
     const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 5000); // 5s timeout per image
+    const id = setTimeout(() => controller.abort(), 5000); 
 
     const response = await fetch(absoluteUrl, { signal: controller.signal });
     clearTimeout(id);
@@ -61,11 +68,10 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       data: `data:${contentType};base64,${base64}`,
       format: contentType.includes('png') ? 'PNG' : 'JPEG'
     };
-  } catch (_error) { // Fixed: Prefixed with underscore to ignore unused variable warning
+  } catch (_error) {
     return null; 
   }
 }
-
 /**
  * MASONRY GRID MAPPING
  */
@@ -184,10 +190,10 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
   doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
 
-  // Group items by subcategory
+  // Group items
   const groups: Record<string, CatalogItem[]> = {};
   items.forEach(item => {
-    const key = item.subcategory || "General";
+    const key = item.subcategory || "Products";
     if (!groups[key]) groups[key] = [];
     groups[key].push(item);
   });
@@ -197,8 +203,7 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
     doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
     yPos += 10;
 
-    // PERFORMANCE: Process images in parallel chunks
-    const CHUNK_SIZE = 10;
+    const CHUNK_SIZE = 5; // Reduced chunk size for memory safety
     for (let i = 0; i < groupItems.length; i += CHUNK_SIZE) {
       const chunk = groupItems.slice(i, i + CHUNK_SIZE);
       const imageResults = await Promise.all(chunk.map(item => getBase64Image(item.imageUrl)));
@@ -239,17 +244,21 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
 
 export async function POST(request: NextRequest) {
   try {
-    const { items, metadata }: { items: CatalogItem[], metadata: PDFMetadata } = await request.json(); // Fixed: Added type annotation
+    // --- KEY FIX FOR VERCEL SIZE LIMIT ---
+    // Dynamically importing data inside the POST handler ensures it is NOT 
+    // part of the initial serverless function bundle calculation.
+    await import('@/data/products'); 
+
+    const { items, metadata }: { items: CatalogItem[], metadata: PDFMetadata } = await request.json();
     if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
     const pdfData = await generatePdfFromItems(items, metadata);
 
-    // Fixed: Cast to unknown then to BodyInit to satisfy Response type safely
-    return new Response(pdfData as unknown as BodyInit, {
+    return new Response(pdfData as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${metadata.title || 'shri_marvels'}_catalog.pdf"`,
+        'Content-Disposition': `attachment; filename="${metadata.title?.replace(/\s+/g, '_') || 'shri_marvels'}_catalog.pdf"`,
         'Content-Length': pdfData.byteLength.toString(),
       },
     });
