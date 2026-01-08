@@ -1,5 +1,4 @@
-import { join } from 'path';
-import { readFileSync, existsSync } from 'fs';
+
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
@@ -27,22 +26,12 @@ function getBaseUrl() {
   return `http://localhost:${process.env.PORT || 3000}`;
 }
 
+// Optimized getBase64Image in src/app/api/generate-catalog-pdf/route.ts
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    if (url.startsWith('/')) {
-      const filePath = join(process.cwd(), 'public', url);
-      if (existsSync(filePath)) {
-        const fileBuffer = readFileSync(filePath);
-        const extension = url.split('.').pop()?.toLowerCase();
-        const format = extension === 'png' ? 'PNG' : 'JPEG';
-        return {
-          data: `data:image/${extension === 'png' ? 'png' : 'jpeg'};base64,${fileBuffer.toString('base64')}`,
-          format
-        };
-      }
-    }
-
+    // Force the use of absolute URLs via fetch so Vercel doesn't bundle the local folder
     const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
+    
     const response = await fetch(absoluteUrl);
     if (!response.ok) return null;
     
