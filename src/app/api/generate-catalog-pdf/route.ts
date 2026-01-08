@@ -27,8 +27,13 @@ export async function POST(request: NextRequest) {
         'Content-Disposition': `attachment; filename="catalog.pdf"`,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("PDF API Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : 'An unexpected error occurred';
+    
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
