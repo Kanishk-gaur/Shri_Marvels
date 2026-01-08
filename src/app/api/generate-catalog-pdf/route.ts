@@ -13,7 +13,7 @@ interface PDFMetadata {
   description?: string;
 }
 
-// Minimal interface to avoid importing heavy context/data files which bloats the bundle
+// Minimal interface to avoid importing heavy context/data files
 interface CatalogItem {
   id: string | number;
   name: string;
@@ -22,21 +22,14 @@ interface CatalogItem {
   sizes?: string[];
 }
 
-/**
- * Resolves the domain for server-side fetching
- */
 function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return `http://localhost:${process.env.PORT || 3000}`;
 }
 
-/**
- * Fetches and converts images to Base64 using local disk or network.
- */
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
-    // 1. Local Disk Access (Fastest & doesn't count toward bundle size)
     if (url.startsWith('/')) {
       const filePath = join(process.cwd(), 'public', url);
       if (existsSync(filePath)) {
@@ -50,7 +43,6 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       }
     }
 
-    // 2. Network Fetch with Timeout
     const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), 5000); 
@@ -185,7 +177,6 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
   const colUnit = (pageWidth - (margin * 2)) / 24;
   let yPos = 25;
 
-  // Header
   doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
   doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
@@ -243,27 +234,28 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
 
 export async function POST(request: NextRequest) {
   try {
-    // Dynamically importing data ensures it's not bundled in the main package
+    // DYNAMIC IMPORT: This keeps the 900MB products file out of the main bundle
     await import('@/data/products'); 
 
-    const body = await request.json() as { items: CatalogItem[], metadata: PDFMetadata };
+    const body = (await request.json()) as { items: CatalogItem[]; metadata: PDFMetadata };
     const { items, metadata } = body;
     
-    if (!items || items.length === 0) return new Response("No items", { status: 400 });
+    if (!items || items.length === 0) {
+      return new Response("No items selected", { status: 400 });
+    }
 
     const pdfData = await generatePdfFromItems(items, metadata);
 
-    // FIX FOR ERROR 2322: 
-    // Convert the Uint8Array specifically to a standard Uint8Array to satisfy the BlobPart type
-    // and provide it to the Response as a Blob.
-    const blob = new Blob([new Uint8Array(pdfData)], { type: 'application/pdf' });
+    // FIX FOR ERROR 2345: 
+    // Convert the data to a standard Uint8Array which is a valid BodyInit type for Response
+    const responseBody = new Uint8Array(pdfData);
 
-    return new Response(blob, {
+    return new Response(responseBody, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${(metadata.title || 'catalog').replace(/\s+/g, '_')}.pdf"`,
-        'Content-Length': pdfData.byteLength.toString(),
+        'Content-Length': responseBody.byteLength.toString(),
       },
     });
   } catch (error) {
