@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  outputFileTracingExcludes: {
+ outputFileTracingExcludes: {
     '*': [
-      'node_modules/@swc/core-linux-x64-gnu',
-      'node_modules/@swc/core-linux-x64-musl',
-      'src/data/products.ts', // Explicitly exclude this from function tracing
+      '**/src/data/products.ts',
+      '**/node_modules/@swc/core-linux-x64-gnu',
+      '**/node_modules/@swc/core-linux-x64-musl'
     ],
   },
   images: {
