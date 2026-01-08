@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'fs';
 import { type NextRequest } from 'next/server';
 import { jsPDF } from "jspdf";
 
-// Increase timeout for large PDF generation
+// Configuration for Vercel Serverless environment
 export const maxDuration = 60; 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +14,9 @@ interface PDFMetadata {
 }
 
 /**
- * CLEAN FIX: Define the CatalogItem interface locally.
- * Importing this from CatalogContext was pulling in your 900MB data file.
+ * CLEAN ISOLATION: Define the CatalogItem interface locally.
+ * Do NOT import this from your context files. This prevents the 900MB data
+ * from being traced and bundled into the serverless function.
  */
 interface LocalCatalogItem {
   id: string | number;
@@ -25,14 +26,21 @@ interface LocalCatalogItem {
   sizes?: string[];
 }
 
+/**
+ * Resolves the domain for server-side fetching
+ */
 function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return `http://localhost:${process.env.PORT || 3000}`;
 }
 
+/**
+ * Fetches and converts images to Base64 using local disk or network.
+ */
 async function getBase64Image(url: string): Promise<{ data: string; format: string } | null> {
   try {
+    // 1. Local Disk Access (Fastest & doesn't count toward bundle size)
     if (url.startsWith('/')) {
       const filePath = join(process.cwd(), 'public', url);
       if (existsSync(filePath)) {
@@ -46,9 +54,10 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       }
     }
 
+    // 2. Network Fetch with Timeout
     const absoluteUrl = url.startsWith('/') ? `${getBaseUrl()}${url}` : url;
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 5000);
+    const id = setTimeout(() => controller.abort(), 5000); 
 
     const response = await fetch(absoluteUrl, { signal: controller.signal });
     clearTimeout(id);
@@ -180,13 +189,14 @@ async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMeta
   const colUnit = (pageWidth - (margin * 2)) / 24;
   let yPos = 25;
 
+  // Header
   doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
   doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
 
   const groups: Record<string, LocalCatalogItem[]> = {};
   items.forEach(item => {
-    const key = item.subcategory || "General";
+    const key = item.subcategory || "Products";
     if (!groups[key]) groups[key] = [];
     groups[key].push(item);
   });
@@ -196,7 +206,7 @@ async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMeta
     doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
     yPos += 10;
 
-    const CHUNK_SIZE = 5;
+    const CHUNK_SIZE = 5; 
     for (let i = 0; i < groupItems.length; i += CHUNK_SIZE) {
       const chunk = groupItems.slice(i, i + CHUNK_SIZE);
       const imageResults = await Promise.all(chunk.map(item => getBase64Image(item.imageUrl)));
@@ -237,24 +247,30 @@ async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMeta
 
 export async function POST(request: NextRequest) {
   try {
-    const { items, metadata } = await request.json();
-    const doc = new jsPDF();
+    const body = (await request.json()) as { items: LocalCatalogItem[]; metadata: PDFMetadata };
+    const { items, metadata } = body;
     
-    // Minimal PDF logic
-    doc.text(metadata?.title || "Catalog", 10, 10);
-    items.forEach((item: any, i: number) => {
-      doc.text(`${item.name}`, 10, 20 + (i * 10));
-    });
+    if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
-    const pdfBuffer = doc.output('arraybuffer');
-    
-    return new Response(pdfBuffer, {
+    const pdfData = await generatePdfFromItems(items, metadata);
+
+    /**
+     * FIX FOR COMPILATION ERROR:
+     * Converting to Blob satisfies BodyInit type while ensuring the data 
+     * is correctly handled as a binary file stream.
+     */
+    const blob = new Blob([new Uint8Array(pdfData)], { type: 'application/pdf' });
+
+    return new Response(blob, {
+      status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="catalog.pdf"',
+        'Content-Disposition': `attachment; filename="${(metadata.title || 'catalog').replace(/\s+/g, '_')}.pdf"`,
       },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Failed to generate PDF" }), { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    console.error("PDF API Error:", errorMessage);
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
