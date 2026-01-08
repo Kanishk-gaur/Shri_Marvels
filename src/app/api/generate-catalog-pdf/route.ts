@@ -237,26 +237,24 @@ async function generatePdfFromItems(items: LocalCatalogItem[], metadata: PDFMeta
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as { items: LocalCatalogItem[]; metadata: PDFMetadata };
-    const { items, metadata } = body;
+    const { items, metadata } = await request.json();
+    const doc = new jsPDF();
     
-    if (!items || items.length === 0) return new Response("No items", { status: 400 });
+    // Minimal PDF logic
+    doc.text(metadata?.title || "Catalog", 10, 10);
+    items.forEach((item: any, i: number) => {
+      doc.text(`${item.name}`, 10, 20 + (i * 10));
+    });
 
-    const pdfData = await generatePdfFromItems(items, metadata);
-
-    // FIXED: Convert Uint8Array to a Blob to satisfy BodyInit without using 'any'
-    const blob = new Blob([new Uint8Array(pdfData)], { type: 'application/pdf' });
-
-    return new Response(blob, {
-      status: 200,
+    const pdfBuffer = doc.output('arraybuffer');
+    
+    return new Response(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${(metadata.title || 'catalog').replace(/\s+/g, '_')}.pdf"`,
+        'Content-Disposition': 'attachment; filename="catalog.pdf"',
       },
     });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown Error';
-    console.error("PDF API Error:", message);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Failed to generate PDF" }), { status: 500 });
   }
 }
