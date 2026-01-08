@@ -13,7 +13,7 @@ interface PDFMetadata {
   description?: string;
 }
 
-// Minimal interface to avoid importing heavy context files
+// Minimal interface to avoid importing heavy context/data files which bloats the bundle
 interface CatalogItem {
   id: string | number;
   name: string;
@@ -68,7 +68,7 @@ async function getBase64Image(url: string): Promise<{ data: string; format: stri
       data: `data:${contentType};base64,${base64}`,
       format: contentType.includes('png') ? 'PNG' : 'JPEG'
     };
-  } catch (_error) {
+  } catch {
     return null; 
   }
 }
@@ -190,7 +190,6 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
   doc.text(metadata.title || "Shri Marvels Catalog", margin, yPos);
   yPos += 15;
 
-  // Group items
   const groups: Record<string, CatalogItem[]> = {};
   items.forEach(item => {
     const key = item.subcategory || "Products";
@@ -203,7 +202,7 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
     doc.setFontSize(14).setTextColor(30, 30, 30).text(title, margin, yPos);
     yPos += 10;
 
-    const CHUNK_SIZE = 5; // Reduced chunk size for memory safety
+    const CHUNK_SIZE = 5; 
     for (let i = 0; i < groupItems.length; i += CHUNK_SIZE) {
       const chunk = groupItems.slice(i, i + CHUNK_SIZE);
       const imageResults = await Promise.all(chunk.map(item => getBase64Image(item.imageUrl)));
@@ -244,26 +243,32 @@ async function generatePdfFromItems(items: CatalogItem[], metadata: PDFMetadata)
 
 export async function POST(request: NextRequest) {
   try {
-    // --- KEY FIX FOR VERCEL SIZE LIMIT ---
-    // Dynamically importing data inside the POST handler ensures it is NOT 
-    // part of the initial serverless function bundle calculation.
+    // Dynamically importing data ensures it's not bundled in the main package
     await import('@/data/products'); 
 
-    const { items, metadata }: { items: CatalogItem[], metadata: PDFMetadata } = await request.json();
+    const body = await request.json() as { items: CatalogItem[], metadata: PDFMetadata };
+    const { items, metadata } = body;
+    
     if (!items || items.length === 0) return new Response("No items", { status: 400 });
 
     const pdfData = await generatePdfFromItems(items, metadata);
 
-    return new Response(pdfData as any, {
+    // FIX FOR ERROR 2322: 
+    // Convert the Uint8Array specifically to a standard Uint8Array to satisfy the BlobPart type
+    // and provide it to the Response as a Blob.
+    const blob = new Blob([new Uint8Array(pdfData)], { type: 'application/pdf' });
+
+    return new Response(blob, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${metadata.title?.replace(/\s+/g, '_') || 'shri_marvels'}_catalog.pdf"`,
+        'Content-Disposition': `attachment; filename="${(metadata.title || 'catalog').replace(/\s+/g, '_')}.pdf"`,
         'Content-Length': pdfData.byteLength.toString(),
       },
     });
-  } catch (err) {
-    console.error("PDF API Error:", err);
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+    console.error("PDF API Error:", errorMessage);
+    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
   }
 }
