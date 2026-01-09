@@ -118,6 +118,7 @@ function getGridDimensions(sizeString: string) {
     case "3x2": colSpan = 12; rowSpan = 26; break;
     case "6x8": colSpan = 6; rowSpan = 16; break;
     case "24x3": colSpan = 12; rowSpan = 6; break;
+    
   }
 
   return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
