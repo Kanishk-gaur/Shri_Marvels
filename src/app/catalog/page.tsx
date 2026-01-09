@@ -23,11 +23,22 @@ import { Textarea } from "@/components/ui/textarea";
 /**
  * Maps sizeString to the exact 24-column grid span and row height.
  */
-function getGridDimensions(sizeString: string) {
+function getGridDimensions(sizeString: string, subcategory?: string) {
   const colUnit = 7.5; 
   const rowUnit = 2.0; 
   let colSpan = 8; 
   let rowSpan = 16;
+
+  if (subcategory === "Step & Riser") {
+    colSpan = 24;
+    rowSpan = 100;
+    return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
+  }
+  if (subcategory === "Design Collection") {
+    colSpan = 12;
+    rowSpan = 18;
+    return { width: (colSpan * colUnit) - 2, height: rowSpan * rowUnit, colSpan };
+  }
 
   switch (sizeString) {
     case "(POLISHED)12x24": colSpan = 8; rowSpan = 11; break;
@@ -189,7 +200,7 @@ export default function CatalogPage() {
 
         for (const item of items) {
           const sizeStr = item.sizes[0] || "Standard";
-          const { width, height, colSpan } = getGridDimensions(sizeStr);
+         const { width, height, colSpan } = getGridDimensions(sizeStr, item.subcategory);
 
           if (usedCols + colSpan > 24) {
             yPos += maxRowHeight + 15;
