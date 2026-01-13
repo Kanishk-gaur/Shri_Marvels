@@ -4,11 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+interface PdfMetadata {
+  name: string;
+  title: string;
+  description: string;
+}
+
 interface PdfMetadataDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  metadata: { name: string; title: string; description: string };
-  setMetadata: (data: any) => void;
+  metadata: PdfMetadata;
+  setMetadata: (data: PdfMetadata | ((prev: PdfMetadata) => PdfMetadata)) => void;
   onConfirm: () => void;
 }
 
@@ -24,17 +30,17 @@ export function PdfMetadataDialog({ isOpen, onOpenChange, metadata, setMetadata,
           <Input 
             placeholder="Client Name" 
             value={metadata.name} 
-            onChange={(e) => setMetadata((p: any) => ({ ...p, name: e.target.value }))} 
+            onChange={(e) => setMetadata((prev) => ({ ...prev, name: e.target.value }))} 
           />
           <Input 
             placeholder="Catalog Title" 
             value={metadata.title} 
-            onChange={(e) => setMetadata((p: any) => ({ ...p, title: e.target.value }))} 
+            onChange={(e) => setMetadata((prev) => ({ ...prev, title: e.target.value }))} 
           />
           <Textarea 
             placeholder="Notes / Description" 
             value={metadata.description} 
-            onChange={(e) => setMetadata((p: any) => ({ ...p, description: e.target.value }))} 
+            onChange={(e) => setMetadata((prev) => ({ ...prev, description: e.target.value }))} 
           />
         </div>
         <DialogFooter>

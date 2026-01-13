@@ -2,7 +2,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useCatalog, transformProductSizes } from "@/context/CatalogContext";
+import { useCatalog, transformProductSizes, CatalogItem } from "@/context/CatalogContext";
 import { getSizeDisplayName, subCategoryDisplayNames } from "@/data/utils";
 import { CatalogHeader } from "@/components/catalog/CatalogHeader";
 import { CatalogGroup } from "@/components/catalog/CatalogGroup";
@@ -16,11 +16,11 @@ export default function CatalogPage() {
   const { generate } = usePdfGenerator();
   const [isGenerating, setIsGenerating] = useState(false);
   const [showGenDialog, setShowGenDialog] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
   const [pdfMetadata, setPdfMetadata] = useState({ name: "", title: "", description: "" });
 
   const groupedCatalog = useMemo(() => {
-    const groups: { [key: string]: any[] } = {};
+    const groups: Record<string, CatalogItem[]> = {};
     catalogItems.forEach((item) => {
       const displaySize = getSizeDisplayName(item.sizes[0] || "Standard");
       const groupKey = `${subCategoryDisplayNames[item.subcategory] || item.subcategory} (${displaySize})`;
@@ -54,7 +54,13 @@ export default function CatalogPage() {
           </div>
         ) : (
           Object.entries(groupedCatalog).map(([title, items]) => (
-            <CatalogGroup key={title} title={title} items={items} onRemove={removeItemFromCatalog} onEdit={setEditingItem} />
+            <CatalogGroup 
+              key={title} 
+              title={title} 
+              items={items} 
+              onRemove={removeItemFromCatalog} 
+              onEdit={setEditingItem} 
+            />
           ))
         )}
       </div>
