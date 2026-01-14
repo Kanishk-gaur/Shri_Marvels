@@ -113,7 +113,7 @@ export function SizeSelectionDialog({
                           className="pt-2"
                         >
                           <div className="flex items-center gap-4 px-1">
-                            <label className="text-xs text-white/50 whitespace-nowrap">PIECES:</label>
+                            <label className="text-xs text-white/50 whitespace-nowrap">BOXES:</label>
                             <Input
                               type="number"
                               min="1"
