@@ -43,12 +43,11 @@ export function usePdfGenerator() {
     } catch {
       doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(184, 134, 11);
       doc.text("AGRAWAL CERAMICS", margin, yPos);
-      yPos += 12; // Reduced from 15
+      yPos += 12; 
     }
 
     // --- 2. Product Groups Loop ---
     for (const [title, items] of Object.entries(groupedCatalog)) {
-      // Reduced top margin check for new group
       if (yPos > pageHeight - 40) { 
         doc.addPage(); 
         drawBackground();
@@ -59,8 +58,7 @@ export function usePdfGenerator() {
       doc.setFont("helvetica", "bold").setFontSize(14).setTextColor(30, 30, 30);
       doc.text(title, margin, yPos);
       
-      // Reduced bottom margin of heading (spacing before items)
-      yPos += 7; // Reduced from 10
+      yPos += 7; 
 
       let currentX = margin;
       let usedCols = 0;
@@ -91,7 +89,8 @@ export function usePdfGenerator() {
           doc.text(item.name, currentX, yPos + height + 5, { maxWidth: width });
 
           if (item.selectedSizes && item.selectedSizes.length > 0) {
-            doc.setFont("helvetica", "normal").setFontSize(7).setTextColor(80, 80, 80);
+            // Updated to "bold" to make Qty bold in PDF
+            doc.setFont("helvetica", "bold").setFontSize(7).setTextColor(60, 60, 60);
             let sizeYPos = yPos + height + 9;
             
             const formattedItems = item.selectedSizes.map(size => {
@@ -115,8 +114,7 @@ export function usePdfGenerator() {
         usedCols += colSpan;
       }
       
-      // Reduced spacing after the product group completes
-      yPos += maxRowHeight + 25; // Reduced from 35
+      yPos += maxRowHeight + 25; 
     }
 
     // --- 3. Footer Section ---
