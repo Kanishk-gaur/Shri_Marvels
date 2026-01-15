@@ -54,95 +54,100 @@ export const sizeDisplayNames: Record<string, string> = {
 
 export const getSizeDisplayName = (rawSize: string): string => sizeDisplayNames[rawSize] || rawSize;
 
-export const getGridSpanClass = (sizeString: string) => {
-  switch (sizeString) {
-    case "12x8, 18x12, 24x18, 2x2, 3x2, 4x2": return "col-span-24 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24"; 
-    case "7 x 5 inch" : return "col-span-12 row-span-21 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-15"; 
-    case "8x12, 12x18, 18x24, 2x2, 2x3, 2x4" : return "col-span-12 row-span-21 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-38"; 
-    case "(POLISHED)12x24": return "col-span-8 row-span-9 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-12";
-    case "18x12/8x12": return "col-span-8 row-span-9 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-15";
-    case "12x18/12x8": return "col-span-6 row-span-12 md:col-span-4 md:row-span-13 lg:col-span-3 lg:row-span-21";
-    case "400x600 mm (16x24 inch)": return "col-span-12 row-span-9 md:col-span-3 md:row-span-6 lg:col-span-8 lg:row-span-19";
-    case "(LUSTER)12x24": return "col-span-12 row-span-10 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-12";
-    case "(SUGAR)12x24": return "col-span-12 row-span-10 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-12";
-    case "(Sugar)300x600 mm (11.8x23.6 inch)": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
-    case "(GLUE)300x600 mm (11.8x23.6 inch)": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
-    case "300x63 mm (12x2.5 inch)": return "col-span-24 row-span-7 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-9";
-    case "Polishing Series 300x600 mm (12x24 inch)": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
-    case "600x1200 mm (24x48 inch)": return "col-span-12 row-span-26 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-33";
-    case "300x600 mm (11.8x23.6 inch)": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-15";
-    case "300x450 mm (11.8x17.7 inch)": return "col-span-12 row-span-11 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-17";
-    case "48x600 mm (1.89x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-9";
-    case "45x600 mm (1.77x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-9";
-    case "40x600 mm (1.57x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-9";
-    case "25x600 mm (0.98x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-8";
-    case "20x600 mm (0.79x23.6 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-6";
-    case "10x600 mm (0.39x23.6 inch)": return "col-span-24 row-span-5 md:col-span-2 md:row-span-12 lg:col-span-8 lg:row-span-6";
-    case "900x600 mm": return "col-span-24 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
-    case "900x600 mm (36x24 inch)": return "col-span-24 row-span-19 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-24";
-    case "24x24 inch": return "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
-    case "600x600 mm": return "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
-    case "600x600 mm (23.6x23.6 inch)": return "col-span-12 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
-    case "600x900 mm": return "col-span-12 row-span-21 md:col-span-8 md:row-span-12 lg:col-span-4 lg:row-span-26";
-    case "600x900 mm (24x36 inch)": return "col-span-12 row-span-20 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-37";
-    case "1200x600 mm": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-19";
-    case "1200x600 mm (48x24 inch)": return "col-span-12 row-span-9 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-19";
-    case "20x1200 mm (0.79x47.2 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-8";
-    case "12x600 mm (0.47x23.6 inch)": return "col-span-24 row-span-5 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-5";
-    case "12x1200 mm (0.47x47.2 inch)": return "col-span-24 row-span-6 md:col-span-8 md:row-span-12 lg:col-span-8 lg:row-span-6";
-    case "10x450 mm (0.39x17.7 inch)": return "col-span-24 row-span-6 md:col-span-2 md:row-span-12 lg:col-span-8 lg:row-span-6";
-    case "1200x1800 mm (48x72 inch)": return "col-span-12 row-span-12 md:col-span-8 md:row-span-12 lg:col-span-12 lg:row-span-35";
-    case "600x600 mm (24x24 inch)": return "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
-    case "1200x1200 mm (48x48 inch)": return "col-span-12 row-span-14 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-26";
-    case "4x2 in": return "col-span-24 row-span-15 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-16";
-    case "2x4 in": return "col-span-12 row-span-9 md:col-span-13 md:row-span-10 lg:col-span-6 lg:row-span-16";
-    case "12x8 in": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-13";
-    case "(God)6x36": return "col-span-12 row-span-9 md:col-span-4 md:row-span-10 lg:col-span-8 lg:row-span-13";
-    case "6x36 in (c)": return "col-span-12 row-span-9 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-11";
-    case "6x36 ,9x36,12x36": return "col-span-12 row-span-9 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-16";
-    case "6x36(w)": return "col-span-12 row-span-7 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-12";
-    case "9x36": return "col-span-12 row-span-9 md:col-span-4 md:row-span-10 lg:col-span-8 lg:row-span-11";
-    case "6x36": return "col-span-12 row-span-9 md:col-span-4 md:row-span-10 lg:col-span-12 lg:row-span-15";
-    case "6x36 in": return "col-span-12 row-span-7 md:col-span-8 md:row-span-6 lg:col-span-8 lg:row-span-8";
-    case "18x12 inch": return "col-span-12 row-span-11 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-13";
-    case "12x18 mm": return "col-span-6 row-span-12 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-21";
-    case "12x18 inches": return "col-span-8 row-span-15 md:col-span-4 md:row-span-15 lg:col-span-3 lg:row-span-21";
-    case "12x18 in": return "col-span-6 row-span-12 md:col-span-4 md:row-span-13 lg:col-span-3 lg:row-span-21";
-    case "8x12 in": return "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-20";
-    case "12x18": return "col-span-12 row-span-11 md:col-span-4 md:row-9 lg:col-span-4 lg:row-span-14";
-    case "8x6": return "col-span-4 row-span-8 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
-    case "20x600": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-8 lg:row-span-6";
-    case "10x600": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-8 lg:row-span-6";
-    case "900x300 mm": return "col-span-12 row-span-10 md:col-span-6 md:row-span-9 lg:col-span-4 lg:row-span-13";
-    case "1200x300 mm": return "col-span-12 row-span-11 md:col-span-6 md:row-span-9 lg:col-span-6 lg:row-span-13";
-    case "1000x300 mm": return "col-span-12 row-span-10 md:col-span-6 md:row-span-8 lg:col-span-6 lg:row-span-18";
-    case "6x48": return "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-12 lg:row-span-8";
-    case "4x48": return "col-span-24 row-span-6 md:col-span-8 md:row-span-5 lg:col-span-12 lg:row-span-7";
-    case "4x2": return "col-span-6 row-span-14 md:col-span-4 md:row-span-20 lg:col-span-4 lg:row-span-34";
-    case "600x1200 mm": return "col-span-12 row-span-26 md:col-span-6 md:row-span-28 lg:col-span-4 lg:row-span-34";
-    case "2x4": return "col-span-12 row-span-26 md:col-span-6 md:row-span-28 lg:col-span-4 lg:row-span-34";
-    case "4x6": return "col-span-12 row-span-11 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
-    case "4x4": return "col-span-12 row-span-16 md:col-span-6 md:row-span-16 lg:col-span-6 lg:row-span-27";
-    case "12x24": return "col-span-12 row-span-10 md:col-span-3 md:row-span-6 lg:col-span-4 lg:row-span-12";
-    case "24x4": return "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-8";
-    case "24x2.5": return "col-span-24 row-span-6 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-7";
-    case "24x2": return "col-span-24 row-span-6 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-7";
-    case "12x2.5": return "col-span-12 row-span-7 md:col-span-6 md:row-span-6 lg:col-span-6 lg:row-span-9";
-    case "24x1": return "col-span-24 row-span-5 md:col-span-6 md:row-span-5 lg:col-span-6 lg:row-span-5";
-    case "6x6": return "col-span-12 row-span-11 md:col-span-4 md:row-span-10 lg:col-span-3 lg:row-span-13";
-    case "8x12 inches": return "col-span-12 row-span-15 md:col-span-4 md:row-span-11 lg:col-span-6 lg:row-span-25";
-    case "8x12": return "col-span-6 row-span-12 md:col-span-4 md:row-span-16 lg:col-span-3 lg:row-span-21";
-    case "12x8": return "col-span-12 row-span-12 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-14";
-    case "18x12": return "col-span-8 row-span-9 md:col-span-6 md:row-span-12 lg:col-span-4 lg:row-span-15";
-    case "2x2": return "col-span-8 row-span-12 md:col-span-4 md:row-span-12 lg:col-span-4 lg:row-span-19";
-    case "200x300 mm (8x12 inch)": return "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
-    case "2x3": return "col-span-6 row-span-11 md:col-span-4 md:row-span-16 lg:col-span-4 lg:row-span-26";
-    case "6x3": return "col-span-12 row-span-11 md:col-span-4 md:row-span-10 lg:col-span-3 lg:row-span-13";
-    case "8x4": return "col-span-12 row-span-11 md:col-span-3 md:row-span-10 lg:col-span-2 lg:row-span-13";
-    case "300x200 mm (12x8 inch)": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
-    case "3x2": return "col-span-8 row-span-8 md:col-span-6 md:row-span-12 lg:col-span-6 lg:row-span-18";
-    case "6x8": return "col-span-12 row-span-11 md:col-span-4 md:row-span-12 lg:col-span-3 lg:row-span-17";
-    case "24x3": return "col-span-24 row-span-6 md:col-span-6 md:row-span-4 lg:col-span-6 lg:row-span-7";
-    default: return "col-span-12 row-span-10 md:col-span-4 md:row-span-11 lg:col-span-3 lg:row-span-17";
-  }
+// src/components/catalog/utils.ts
+
+export const getGridSpanClass = (sizeString: string): string => {
+  const GRID_CLASSES: Record<string, string> = {
+    "(POLISHED)12x24": "col-span-8 row-span-8 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-11",
+    "18x12/8x12": "col-span-8 row-span-8 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-14",
+    "12x18/12x8": "col-span-6 row-span-11 md:col-span-6 md:row-span-18 lg:col-span-3 lg:row-span-20",
+    "400x600 mm (16x24 inch)": "col-span-12 row-span-9 md:col-span-12 md:row-span-18 lg:col-span-8 lg:row-span-18",
+    "(LUSTER)12x24": "col-span-12 row-span-9 md:col-span-8 md:row-span-11 lg:col-span-4 lg:row-span-11",
+    "(SUGAR)12x24": "col-span-12 row-span-9 md:col-span-8 md:row-span-11 lg:col-span-4 lg:row-span-11",
+    "(Sugar)300x600 mm (11.8x23.6 inch)": "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14",
+    "(GLUE)300x600 mm (11.8x23.6 inch)": "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14",
+    "300x63 mm (12x2.5 inch)": "col-span-24 row-span-8 md:col-span-12 md:row-span-10 lg:col-span-6 lg:row-span-8",
+    "Polishing Series 300x600 mm (12x24 inch)": "col-span-12 row-span-8 md:col-span-12 md:row-span-17 lg:col-span-6 lg:row-span-14",
+    "600x1200 mm (24x48 inch)": "col-span-12 row-span-25 md:col-span-8 md:row-span-40 lg:col-span-4 lg:row-span-32",
+    "300x600 mm (11.8x23.6 inch)": "col-span-12 row-span-8 md:col-span-8 md:row-span-12 lg:col-span-6 lg:row-span-14",
+    "300x450 mm (11.8x17.7 inch)": "col-span-12 row-span-10 md:col-span-8 md:row-span-15 lg:col-span-6 lg:row-span-16",
+    "48x600 mm (1.89x23.6 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-7 lg:col-span-8 lg:row-span-7",
+    "45x600 mm (1.77x23.6 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-7 lg:col-span-8 lg:row-span-7",
+    "40x600 mm (1.57x23.6 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-7 lg:col-span-8 lg:row-span-7",
+    "25x600 mm (0.98x23.6 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-7 lg:col-span-8 lg:row-span-7",
+    "20x600 mm (0.79x23.6 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-7 lg:col-span-8 lg:row-span-6",
+    "10x600 mm (0.39x23.6 inch)": "col-span-24 row-span-4 md:col-span-12 md:row-span-5 lg:col-span-8 lg:row-span-5",
+    "900x600 mm": "col-span-24 row-span-18 md:col-span-12 md:row-span-22 lg:col-span-8 lg:row-span-23",
+    "12x8, 18x12, 24x18, 2x2, 3x2, 4x2": "col-span-24 row-span-18 md:col-span-12 md:row-span-22 lg:col-span-8 lg:row-span-23",
+    "900x600 mm (36x24 inch)": "col-span-24 row-span-18 md:col-span-12 md:row-span-22 lg:col-span-8 lg:row-span-23",
+    "24x24 inch": "col-span-12 row-span-14 md:col-span-8 md:row-span-22 lg:col-span-6 lg:row-span-25",
+    "600x600 mm": "col-span-12 row-span-14 md:col-span-8 md:row-span-22 lg:col-span-6 lg:row-span-25",
+    "600x600 mm (23.6x23.6 inch)": "col-span-12 row-span-14 md:col-span-8 md:row-span-22 lg:col-span-6 lg:row-span-25",
+    "600x900 mm": "col-span-12 row-span-20 md:col-span-6 md:row-span-23 lg:col-span-4 lg:row-span-25",
+    "8x12, 12x18, 18x24, 2x2, 2x3, 2x4": "col-span-12 row-span-20 md:col-span-8 md:row-span-30 lg:col-span-6 lg:row-span-37",
+    "600x900 mm (24x36 inch)": "col-span-12 row-span-19 md:col-span-6 md:row-span-23 lg:col-span-6 lg:row-span-36",
+    "1200x600 mm": "col-span-12 row-span-8 md:col-span-12 md:row-span-17 lg:col-span-8 lg:row-span-18",
+    "1200x600 mm (48x24 inch)": "col-span-24 row-span-15 md:col-span-12 md:row-span-17 lg:col-span-8 lg:row-span-18",
+    "20x1200 mm (0.79x47.2 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-6 lg:col-span-8 lg:row-span-7",
+    "12x600 mm (0.47x23.6 inch)": "col-span-24 row-span-4 md:col-span-12 md:row-span-6 lg:col-span-8 lg:row-span-5",
+    "12x1200 mm (0.47x47.2 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-6 lg:col-span-8 lg:row-span-5",
+    "10x450 mm (0.39x17.7 inch)": "col-span-24 row-span-5 md:col-span-12 md:row-span-5 lg:col-span-8 lg:row-span-6",
+    "1200x1800 mm (48x72 inch)": "col-span-12 row-span-11 md:col-span-12 md:row-span-17 lg:col-span-12 lg:row-span-34",
+    "600x600 mm (24x24 inch)": "col-span-12 row-span-14 md:col-span-8 md:row-span-17 lg:col-span-6 lg:row-span-25",
+    "1200x1200 mm (48x48 inch)": "col-span-12 row-span-14 md:col-span-12 md:row-span-30 lg:col-span-6 lg:row-span-25",
+    "4x2 in": "col-span-24 row-span-14 md:col-span-12 md:row-span-17 lg:col-span-6 lg:row-span-15",
+    "2x4 in": "col-span-12 row-span-8 md:col-span-12 md:row-span-15 lg:col-span-6 lg:row-span-15",
+    "12x8 in": "col-span-8 row-span-8 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-12",
+    "(God)6x36": "col-span-12 row-span-8 md:col-span-8 md:row-span-15 lg:col-span-8 lg:row-span-12",
+    "6x36 in (c)": "col-span-24 row-span-8 md:col-span-12 md:row-span-8 lg:col-span-12 lg:row-span-10",
+    "6x36 ,9x36,12x36": "col-span-24 row-span-8 md:col-span-12 md:row-span-8 lg:col-span-12 lg:row-span-15",
+    "6x36(w)": "col-span-24 row-span-8 md:col-span-12 md:row-span-12 lg:col-span-12 lg:row-span-11",
+    "9x36": "col-span-12 row-span-8 md:col-span-8 md:row-span-15 lg:col-span-8 lg:row-span-10",
+    "6x36": "col-span-24 row-span-8 md:col-span-12 md:row-span-11 lg:col-span-12 lg:row-span-14",
+    "6x36 in": "col-span-24 row-span-6 md:col-span-12 md:row-span-11 lg:col-span-8 lg:row-span-7",
+    "6x36 inch": "col-span-12 row-span-6 md:col-span-12 md:row-span-11 lg:col-span-6 lg:row-span-6",
+    "18x12 inch": "col-span-12 row-span-10 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-12",
+    "12x18 mm": "col-span-6 row-span-11 md:col-span-6 md:row-span-21 lg:col-span-3 lg:row-span-20",
+    "12x18 inches": "col-span-8 row-span-14 md:col-span-6 md:row-span-20 lg:col-span-3 lg:row-span-20",
+    "12x18 in": "col-span-6 row-span-11 md:col-span-6 md:row-span-18 lg:col-span-3 lg:row-span-20",
+    "8x12 in": "col-span-6 row-span-10 md:col-span-6 md:row-span-21 lg:col-span-3 lg:row-span-19",
+    "12x18": "col-span-12 row-span-10 md:col-span-8 md:row-span-14 lg:col-span-4 lg:row-span-13",
+    "8x6": "col-span-8 row-span-14 md:col-span-8 md:row-span-30 lg:col-span-4 lg:row-span-25",
+    "20x600": "col-span-24 row-span-5 md:col-span-12 md:row-span-10 lg:col-span-8 lg:row-span-6",
+    "10x600": "col-span-24 row-span-6 md:col-span-12 md:row-span-10 lg:col-span-8 lg:row-span-5",
+    "900x300 mm": "col-span-12 row-span-9 md:col-span-8 md:row-span-14 lg:col-span-4 lg:row-span-12",
+    "1200x300 mm": "col-span-12 row-span-10 md:col-span-8 md:row-span-14 lg:col-span-6 lg:row-span-12",
+    "1000x300 mm": "col-span-12 row-span-9 md:col-span-8 md:row-span-13 lg:col-span-6 lg:row-span-17",
+    "6x48": "col-span-24 row-span-6 md:col-span-12 md:row-span-7 lg:col-span-12 lg:row-span-8",
+    "4x48": "col-span-24 row-span-6 md:col-span-12 md:row-span-7 lg:col-span-12 lg:row-span-7",
+    "4x2": "col-span-6 row-span-13 md:col-span-6 md:row-span-25 lg:col-span-4 lg:row-span-33",
+    "600x1200 mm": "col-span-12 row-span-25 md:col-span-8 md:row-span-39 lg:col-span-4 lg:row-span-33",
+    "2x4": "col-span-12 row-span-25 md:col-span-8 md:row-span-33 lg:col-span-4 lg:row-span-33",
+    "4x6": "col-span-12 row-span-10 md:col-span-8 md:row-span-17 lg:col-span-6 lg:row-span-17",
+    "4x4": "col-span-12 row-span-15 md:col-span-8 md:row-span-21 lg:col-span-6 lg:row-span-26",
+    "12x24": "col-span-12 row-span-9 md:col-span-8 md:row-span-11 lg:col-span-4 lg:row-span-11",
+    "24x4": "col-span-24 row-span-7 md:col-span-12 md:row-span-8 lg:col-span-6 lg:row-span-7",
+    "24x2.5": "col-span-24 row-span-6 md:col-span-12 md:row-span-7 lg:col-span-6 lg:row-span-6",
+    "24x2": "col-span-24 row-span-6 md:col-span-12 md:row-span-7 lg:col-span-6 lg:row-span-6",
+    "12x2.5": "col-span-12 row-span-6 md:col-span-8 md:row-span-7 lg:col-span-6 lg:row-span-8",
+    "24x1": "col-span-24 row-span-4 md:col-span-12 md:row-span-5 lg:col-span-6 lg:row-span-5",
+    "6x6": "col-span-12 row-span-10 md:col-span-8 md:row-span-15 lg:col-span-3 lg:row-span-12",
+    "8x12 inches": "col-span-12 row-span-14 md:col-span-8 md:row-span-22 lg:col-span-6 lg:row-span-24",
+    "8x12": "col-span-6 row-span-11 md:col-span-6 md:row-span-21 lg:col-span-3 lg:row-span-20",
+    "12x8": "col-span-12 row-span-11 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-13",
+    "18x12": "col-span-8 row-span-8 md:col-span-8 md:row-span-17 lg:col-span-4 lg:row-span-14",
+    "2x2": "col-span-8 row-span-11 md:col-span-8 md:row-span-22 lg:col-span-4 lg:row-span-18",
+    "200x300 mm (8x12 inch)": "col-span-8 row-span-14 md:col-span-6 md:row-span-22 lg:col-span-4 lg:row-span-25",
+    "2x3": "col-span-12 row-span-20 md:col-span-6 md:row-span-21 lg:col-span-4 lg:row-span-25",
+    "6x3": "col-span-12 row-span-10 md:col-span-8 md:row-span-15 lg:col-span-3 lg:row-span-12",
+    "8x4": "col-span-12 row-span-10 md:col-span-8 md:row-span-15 lg:col-span-2 lg:row-span-12",
+    "3x2/24x18/2x2": "col-span-8 row-span-8 md:col-span-8 md:row-span-17 lg:col-span-6 lg:row-span-18",
+    "300x200 mm (12x8 inch)": "col-span-12 row-span-10 md:col-span-8 md:row-span-17 lg:col-span-6 lg:row-span-17",
+    "3x2": "col-span-12 row-span-10 md:col-span-8 md:row-span-17 lg:col-span-6 lg:row-span-17",
+    "6x8": "col-span-12 row-span-10 md:col-span-6 md:row-span-17 lg:col-span-3 lg:row-span-16",
+    "24x3": "col-span-24 row-span-6 md:col-span-12 md:row-span-8 lg:col-span-6 lg:row-span-6",
+    "2 Soot": "col-span-24 row-span-6 md:col-span-12 md:row-span-10 lg:col-span-6 lg:row-span-6",
+  };
+
+  return GRID_CLASSES[sizeString] || "col-span-12 row-span-9 md:col-span-4 md:row-span-11 lg:col-span-3 lg:row-span-16";
 };

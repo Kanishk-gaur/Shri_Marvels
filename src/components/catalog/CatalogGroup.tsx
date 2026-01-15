@@ -11,12 +11,13 @@ interface CatalogGroupProps {
 
 export function CatalogGroup({ title, items, onRemove, onEdit }: CatalogGroupProps) {
   return (
-    <div className="mb-16">
-      <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-8 pb-3 border-b-2 border-zinc-300">
+    <div className="mb-16 px-0 sm:px-0">
+      <h2 className="text-xl sm:text-3xl font-bold text-zinc-800 mb-6 pb-2 border-b-2 border-zinc-300">
         {title}
       </h2>
 
-      <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense -mx-2 sm:mx-0">
+      {/* MATCHING GALLERY GRID: 24 columns, gap-4, and dense flow */}
+      <div className="grid grid-cols-24 gap-4 grid-flow-dense -mx-2 sm:mx-0">
         {items.map((item) => (
           <CatalogCard 
             key={item.id} 
