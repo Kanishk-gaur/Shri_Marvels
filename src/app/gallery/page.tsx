@@ -1,17 +1,27 @@
 // src/app/gallery/page.tsx
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef, Suspense } from "react"; 
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  useRef,
+  Suspense,
+} from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, Filter, X } from "lucide-react";
 import GalleryCard from "@/components/gallery-card";
-import { allProducts, categories, Product } from "@/data"; 
+import { allProducts, categories, Product } from "@/data";
 import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FilterChips } from "@/components/filter-chips";
 import { ProductFilter } from "@/components/product-filter";
-import { getOriginalSizeFilterValues, subCategoryDisplayNames } from "@/data/utils"; // Import display name map for schema
+import {
+  getOriginalSizeFilterValues,
+  subCategoryDisplayNames,
+} from "@/data/utils"; // Import display name map for schema
 
 // --- START: Lookup Map based on processed data (KEEP) ---
 const subcategoryNameMap = new Map<string, string>();
@@ -32,7 +42,7 @@ const subcategorySortKeys = [...categories.tiles, ...categories.marvel].map(
 
 // ---------------------------------------------------------------------
 // --- START: Size Mapping (KEEP) ---
-const sizeDisplayNames: Record<string, string> = { 
+const sizeDisplayNames: Record<string, string> = {
   "600x900 mm (24x36 inch)": "2x3",
   "900x600 mm (36x24 inch)": "3x2",
   "200x300 mm (8x12 inch)": "8x12,12x18",
@@ -110,59 +120,64 @@ const getSizeDisplayName = (rawSize: string): string => {
 // --- END: Size Mapping ---
 // ---------------------------------------------------------------------
 
-
 // --- NEW: SCHEMA GENERATION LOGIC ---
-const generateGallerySchema = (groupedProducts: { [key: string]: Product[] }) => {
-    // Collect all products from all visible groups (up to 20 for ItemList limit)
-    const allProductsInGroups = Object.values(groupedProducts).flat();
-    
-    if (allProductsInGroups.length === 0) return null;
+const generateGallerySchema = (groupedProducts: {
+  [key: string]: Product[];
+}) => {
+  // Collect all products from all visible groups (up to 20 for ItemList limit)
+  const allProductsInGroups = Object.values(groupedProducts).flat();
 
-    const itemListElements = allProductsInGroups.slice(0, 20).map((p, index) => { 
-        const subcategoryDisplayName = subCategoryDisplayNames[p.subcategory] || p.subcategory;
-        
-        return {
-            "@type": "ListItem",
-            "position": index + 1,
-            "item": {
-                "@type": "Product",
-                "name": `${p.name} - ${p.sizes[0]}`, // Use first size for simpler name
-                "image": `https://yourwebsite.com${p.image}`, // IMPORTANT: Use absolute URL
-                "url": `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`, // Placeholder detail page URL
-                "description": `${subcategoryDisplayName} tile in size ${p.sizes[0]} made of ${p.material}.`,
-                "sku": `AG-C-${p.id}`,
-                "brand": {
-                    "@type": "Brand",
-                    "name": "Agrawal Ceramics"
-                },
-                "offers": {
-                    "@type": "Offer",
-                    "url": `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`,
-                    "priceCurrency": "INR",
-                    "price": "0.00", // Placeholder: REPLACE WITH ACTUAL PRICE
-                    "itemCondition": "https://schema.org/NewCondition",
-                    "availability": "https://schema.org/InStock",
-                },
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": p.rating,
-                    "reviewCount": 10 // Placeholder: REPLACE WITH ACTUAL COUNT
-                }
-            }
-        }
-    });
+  if (allProductsInGroups.length === 0) return null;
 
-    return JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "CollectionPage", 
-        "mainEntity": {
-          "@type": "ItemList",
-          "itemListElement": itemListElements
-        }
-    }, null, 2);
+  const itemListElements = allProductsInGroups.slice(0, 20).map((p, index) => {
+    const subcategoryDisplayName =
+      subCategoryDisplayNames[p.subcategory] || p.subcategory;
+
+    return {
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: `${p.name} - ${p.sizes[0]}`, // Use first size for simpler name
+        image: `https://yourwebsite.com${p.image}`, // IMPORTANT: Use absolute URL
+        url: `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`, // Placeholder detail page URL
+        description: `${subcategoryDisplayName} tile in size ${p.sizes[0]} made of ${p.material}.`,
+        sku: `AG-C-${p.id}`,
+        brand: {
+          "@type": "Brand",
+          name: "Agrawal Ceramics",
+        },
+        offers: {
+          "@type": "Offer",
+          url: `https://yourwebsite.com/gallery?category=${p.category}&productid=${p.id}`,
+          priceCurrency: "INR",
+          price: "0.00", // Placeholder: REPLACE WITH ACTUAL PRICE
+          itemCondition: "https://schema.org/NewCondition",
+          availability: "https://schema.org/InStock",
+        },
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: p.rating,
+          reviewCount: 10, // Placeholder: REPLACE WITH ACTUAL COUNT
+        },
+      },
+    };
+  });
+
+  return JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: itemListElements,
+      },
+    },
+    null,
+    2
+  );
 };
 // --- END: SCHEMA GENERATION LOGIC ---
-
 
 export default function GalleryPage() {
   const router = useRouter();
@@ -231,18 +246,25 @@ export default function GalleryPage() {
     // 1. Filter by specific Product/Size filter first (highest priority, driven by URL params)
     if (activeProductFilter) {
       // Get all possible raw size strings corresponding to the selected display size
-      const rawSizesToFilter = getOriginalSizeFilterValues(activeProductFilter.size);
+      const rawSizesToFilter = getOriginalSizeFilterValues(
+        activeProductFilter.size
+      );
 
       products = products.filter((p) => {
         // 1a. Filter by category
         const isCategoryMatch = p.category === activeProductFilter.category;
-        
+
         // 1b. Filter by subcategory (ID slug)
-        const isSubcategoryMatch = p.subcategory.toLowerCase().replace(/ /g, "-") === activeProductFilter.subcategory;
+        const isSubcategoryMatch =
+          p.subcategory.toLowerCase().replace(/ /g, "-") ===
+          activeProductFilter.subcategory;
 
         // 1c. Filter by size: check if any of the product's raw sizes match any of the required raw sizes
-        const isSizeMatch = p.sizes.some(productRawSize => 
-            rawSizesToFilter.some(filterRawSize => productRawSize.toLowerCase() === filterRawSize.toLowerCase())
+        const isSizeMatch = p.sizes.some((productRawSize) =>
+          rawSizesToFilter.some(
+            (filterRawSize) =>
+              productRawSize.toLowerCase() === filterRawSize.toLowerCase()
+          )
         );
 
         return isCategoryMatch && isSubcategoryMatch && isSizeMatch;
@@ -375,7 +397,10 @@ export default function GalleryPage() {
   const hasProducts = Object.keys(groupedProducts).length > 0;
 
   // Generate the schema JSON-LD
-  const gallerySchema = useMemo(() => generateGallerySchema(groupedProducts), [groupedProducts]);
+  const gallerySchema = useMemo(
+    () => generateGallerySchema(groupedProducts),
+    [groupedProducts]
+  );
 
   return (
     <div className="min-h-screen bg-orange-50 pt-16">
@@ -387,7 +412,13 @@ export default function GalleryPage() {
         />
       )}
       {/* WRAPPED CONTENT IN SUSPENSE TO PREVENT CSR BAILOUT ERROR */}
-      <Suspense fallback={<div className="p-20 text-center text-xl text-zinc-800">Loading Gallery...</div>}>
+      <Suspense
+        fallback={
+          <div className="p-20 text-center text-xl text-zinc-800">
+            Loading Gallery...
+          </div>
+        }
+      >
         <motion.div
           className="relative flex items-center justify-center p-4 sm:p-6"
           initial={{ y: -50, opacity: 0 }}
@@ -510,18 +541,18 @@ export default function GalleryPage() {
                         return `${subcategory} (${displaySize})`;
                       })()}
                     </h2>
-                    
+
                     {/* NEW: Grid container now has the standard negative margin compensation for mobile. 
                         -mx-2 (8px) counters the half-gap of gap-4 (16px) relative to parent px-4 (16px). */}
-                    <div className="grid grid-cols-24 sm:grid-cols-24 gap-4 grid-flow-dense -mx-2 sm:mx-0">
-                        {Array.isArray(groupedProducts[groupKey]) &&
+                    <div className="grid grid-cols-24 sm:grid-cols-24 md:grid-cols-24  lg:grid-cols-24 gap-4 grid-flow-dense -mx-2 sm:mx-0">
+                      {Array.isArray(groupedProducts[groupKey]) &&
                         groupedProducts[groupKey].map((product, index) => (
-                            <GalleryCard
+                          <GalleryCard
                             key={`${product.id}-${index}`}
                             product={product}
                             index={index}
                             priority={groupIndex === 0 && index < 10}
-                            />
+                          />
                         ))}
                     </div>
                   </div>
