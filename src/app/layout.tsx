@@ -7,9 +7,7 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Suspense } from "react";
-// START: New imports for Catalog feature
 import { CatalogProvider } from "@/context/CatalogContext";
-// END: New imports for Catalog feature
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -124,7 +122,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* NEW: Organization Schema Markup to link logo and contact info */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -132,8 +129,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className}>
-        {/* START: Wrap the application with the CatalogProvider */}
+      <body className={`${inter.className} overflow-x-hidden`}>
         <CatalogProvider>
           <Suspense
             fallback={
@@ -143,10 +139,12 @@ export default function RootLayout({
             }
           >
             <Navigation />
-            <main className="min-h-screen">{children}</main>
+            {/* Added overflow-x-hidden here to catch page-specific leaks */}
+            <main className="min-h-screen w-full overflow-x-hidden">
+              {children}
+            </main>
           </Suspense>
         </CatalogProvider>
-        {/* END: CatalogProvider Wrap */}
         <Footer />
       </body>
     </html>
