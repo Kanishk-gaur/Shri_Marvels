@@ -806,7 +806,7 @@ export const allProducts: Product[] = [
     name: "DAIMOND-221",
     category: "tiles",
     subcategory: "High Gloss Posters",
-    sizes: ["2x3"],
+    sizes: ["3x2"],
     material: "Ceramic",
     image: "/images/daimond_collection_2_3/DIAMOND221.jpg",
     images: ["/images/daimond_collection_2_3/DIAMOND221.jpg"],
@@ -29066,22 +29066,7 @@ export const allProducts: Product[] = [
     },
     rating: 4.5,
   },
-  {
-    id: 4280,
-    name: "HG-12034",
-    category: "tiles",
-    subcategory: "High Gloss Posters",
-    sizes: ["1200x600 mm (48x24 inch)"],
-    material: "Vitrified",
-    image: "/images/cmyk-poster-series/HG-12034.png",
-    images: ["/images/cmyk-poster-series/HG-12034.png"],
-    dimensions: {
-      length: 600,
-      width: 1200,
-      unit: "mm",
-    },
-    rating: 4.5,
-  },
+ 
   {
     id: 4281,
     name: "HG-12035",
@@ -30007,7 +29992,7 @@ export const allProducts: Product[] = [
     name: "HG-1571",
     category: "tiles",
     subcategory: "God GVT",
-    sizes: ["600x900 mm (24x36 inch)"],
+    sizes: ["900x600 mm (36x24 inch)"],
     material: "Vitrified",
     image: "/images/gvt-poster-series/HG-1571.png",
     images: ["/images/gvt-poster-series/HG-1571.png"],
@@ -33351,18 +33336,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 200, width: 300, unit: "mm" },
     rating: 4.5,
   },
-  {
-    id: 4636,
-    name: "3D-3214",
-    category: "tiles",
-    subcategory: "High Gloss 3D Emboss Poster Tiles",
-    sizes: ["200x300 mm (8x12 inch)"],
-    material: "Full Digital Emboss",
-    image: "/images/posters_8x12/3D-3214.png",
-    images: ["/images/posters_8x12/3D-3214.png"],
-    dimensions: { length: 300, width: 200, unit: "mm" },
-    rating: 4.5,
-  },
+  
   {
     id: 4637,
     name: "3D-3215",
@@ -33603,18 +33577,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 200, width: 300, unit: "mm" },
     rating: 4.5,
   },
-  {
-    id: 4657,
-    name: "3D-3235",
-    category: "tiles",
-    subcategory: "High Gloss 3D Emboss Poster Tiles",
-    sizes: ["300x200 mm (12x8 inch)"],
-    material: "Full Digital Emboss",
-    image: "/images/posters_8x12/3D-3235.png",
-    images: ["/images/posters_8x12/3D-3235.png"],
-    dimensions: { length: 200, width: 300, unit: "mm" },
-    rating: 4.5,
-  },
+  
   {
     id: 4658,
     name: "3D-3236",
@@ -33945,7 +33908,7 @@ export const allProducts: Product[] = [
     name: "3D-3264",
     category: "tiles",
     subcategory: "High Gloss 3D Emboss Poster Tiles",
-    sizes: ["200x300 mm (8x12 inch)"],
+    sizes: ["300x200 mm (12x8 inch)"],
     material: "Full Digital Emboss",
     image: "/images/posters_8x12/3D-3264.png",
     images: ["/images/posters_8x12/3D-3264.png"],
@@ -34579,18 +34542,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 200, width: 300, unit: "mm" },
     rating: 4.5,
   },
-  {
-    id: 4742,
-    name: "3D-3214",
-    category: "tiles",
-    subcategory: "High Gloss Posters",
-    sizes: ["200x300 mm (8x12 inch)"],
-    material: "Full Digital Emboss",
-    image: "/images/posters_8x12/3D-3214.png",
-    images: ["/images/posters_8x12/3D-3214.png"],
-    dimensions: { length: 300, width: 200, unit: "mm" },
-    rating: 4.5,
-  },
+ 
   {
     id: 4743,
     name: "3D-3215",
@@ -35167,18 +35119,7 @@ export const allProducts: Product[] = [
     dimensions: { length: 200, width: 300, unit: "mm" },
     rating: 4.5,
   },
-  {
-    id: 4791,
-    name: "3D-3264",
-    category: "tiles",
-    subcategory: "High Gloss Posters",
-    sizes: ["200x300 mm (8x12 inch)"],
-    material: "Full Digital Emboss",
-    image: "/images/posters_8x12/3D-3264.png",
-    images: ["/images/posters_8x12/3D-3264.png"],
-    dimensions: { length: 300, width: 200, unit: "mm" },
-    rating: 4.5,
-  },
+  
   {
     id: 4792,
     name: "3D-3265",
@@ -35756,19 +35697,6 @@ export const allProducts: Product[] = [
     "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
     "rating": 4.5
   },
-  {
-    "id": 4840,
-    "name": "GBP-10",
-    "category": "marvel",
-    "subcategory": "GLITTER BRASS PATTI",
-    "sizes": ["6x36 in"],
-    "material": "Full Digital Emboss",
-    "image": "/images/GBP/GBP-10.jpeg",
-    "images": ["/images/GBP/GBP-10.jpeg"],
-    "dimensions": { "length": 914.4, "width": 152.4, "unit": "mm" },
-    "rating": 4.5
-  }
-,
   {
     "id": 4841,
     "name": "RGP-01",
