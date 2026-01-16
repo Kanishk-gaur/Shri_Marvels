@@ -40,6 +40,7 @@ const getSectionById = (id: string): RoofingSection | undefined => {
   return roofingSections.find((section) => section.id === id);
 };
 
+
 export default function PageLayout() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 pt-16">

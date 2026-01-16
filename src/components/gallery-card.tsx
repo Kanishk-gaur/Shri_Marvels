@@ -77,7 +77,7 @@ const ASPECT_RATIO_MAP: Record<string, string> = {
   "900x600 mm (36x24 inch)": "aspect-[3/2]",
 
   // Mixed sizes
-  "12x8, 18x12, 24x18, 2x2, 3x2, 4x2": "aspect-[4/3]",
+  "12x8, 18x12, 24x18, 2x2, 3x2, 4x2": "aspect-[4.5/3]",
   "8x12, 12x18, 18x24, 2x2, 2x3, 2x4": "aspect-[2/3]",
 
   // 24x24 and 600x600 (1:1 square)
@@ -187,7 +187,9 @@ const COLUMN_SPAN_MAP: Record<string, string> = {
   "600x1200 mm (24x48 inch)": "col-span-12 md:col-span-8 lg:col-span-4",
   "1200x1800 mm (48x72 inch)": "col-span-12 md:col-span-12 lg:col-span-12",
   "900x600 mm (36x24 inch)": "col-span-24 md:col-span-12 lg:col-span-8",
+  "900x600 mm": "col-span-24 md:col-span-12 lg:col-span-8",
   "1200x600 mm (48x24 inch)": "col-span-24 md:col-span-12 lg:col-span-8",
+  "1200x600 mm": "col-span-24 md:col-span-12 lg:col-span-8",
   "600x900 mm (24x36 inch)": "col-span-12 md:col-span-6 lg:col-span-6",
 
   // Very narrow strips - Full width or 2 per row
