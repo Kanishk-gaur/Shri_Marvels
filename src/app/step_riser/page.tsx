@@ -156,8 +156,8 @@ export default function StepRiserPage() {
   ) => {
     if (activeProduct) {
       // Determine subcategory based on whether it's a design collection item
-      const subcategory = activeProduct.isDesignCollection 
-        ? "Design Collection" 
+      const subcategory = activeProduct.isDesignCollection
+        ? "Design Collection"
         : "Step & Riser";
 
       addItemToCatalog({
@@ -1030,7 +1030,8 @@ export default function StepRiserPage() {
                       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     />
 
-                    <div className="absolute top-2 right-2 z-20">
+                    {/* Button positioned at bottom right */}
+                    <div className="absolute bottom-0 right-0 p-2 z-20">
                       <Button
                         size="icon"
                         variant={isInCatalog ? "destructive" : "secondary"}
@@ -1046,7 +1047,7 @@ export default function StepRiserPage() {
                                 title: `Design ${item.code}`,
                                 image: item.image,
                                 sizesArray: ["300X1200", "200X1200MM"],
-                                isDesignCollection: true, // Add this flag for design collection
+                                isDesignCollection: true,
                               })
                         }
                       >
