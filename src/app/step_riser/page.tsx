@@ -1004,72 +1004,71 @@ export default function StepRiserPage() {
       </section>
 
       {/* TEXTURE GALLERY */}
-      <section className="py-16 px-4 md:px-8 bg-white border-t border-neutral-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-              Design Collection
-            </h2>
-            <p className="text-neutral-500 tracking-widest text-sm uppercase">
-              Premium Textures & Finishes
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {textureCollection.map((item) => {
-              const productId = `design-${item.code.toLowerCase()}`;
-              const isInCatalog = isItemInCatalog(productId);
+{/* TEXTURE GALLERY */}
+<section className="py-16 px-4 md:px-8 bg-white border-t border-neutral-100">
+  <div className="max-w-7xl mx-auto">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+        Design Collection
+      </h2>
+      <p className="text-neutral-500 tracking-widest text-sm uppercase">
+        Premium Textures & Finishes
+      </p>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+      {textureCollection.map((item) => {
+        const productId = `design-${item.code.toLowerCase()}`;
+        const isInCatalog = isItemInCatalog(productId);
 
-              return (
-                <motion.div key={item.code} className="group relative">
-                  <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden border border-neutral-200 group-hover:shadow-md transition-all">
-                    <Image
-                      src={item.image}
-                      alt={item.code}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                    />
-
-                    {/* Button positioned at bottom right */}
-                    <div className="absolute bottom-0 right-0 p-2 z-20">
-                      <Button
-                        size="icon"
-                        variant={isInCatalog ? "destructive" : "secondary"}
-                        className={`h-9 w-9 rounded-full shadow-lg border-none transition-colors ${
-                          !isInCatalog
-                            ? "bg-white text-neutral-900 hover:bg-gray-100"
-                            : "bg-red-500 text-white"
-                        }`}
-                        onClick={() =>
-                          isInCatalog
-                            ? removeItemFromCatalog(productId)
-                            : setActiveProduct({
-                                title: `Design ${item.code}`,
-                                image: item.image,
-                                sizesArray: ["300X1200", "200X1200MM"],
-                                isDesignCollection: true,
-                              })
-                        }
-                      >
-                        {isInCatalog ? (
-                          <ListMinus className="w-4.5 h-4.5" />
-                        ) : (
-                          <ListPlus className="w-4.5 h-4.5" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center mt-3">
-                    <p className="text-sm font-semibold text-neutral-700">
-                      {item.code}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+        return (
+          <motion.div key={item.code} className="group relative">
+            <div className="relative w-full aspect-[5/2] rounded-lg overflow-hidden border border-neutral-200 group-hover:shadow-md transition-all">
+              <Image
+                src={item.image}
+                alt={item.code}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+              />
+            </div>
+            
+            {/* Container for name and button aligned horizontally */}
+            <div className="flex justify-between items-center mt-3">
+              <p className="text-sm font-semibold text-neutral-700">
+                {item.code}
+              </p>
+              <Button
+                size="icon"
+                variant={isInCatalog ? "destructive" : "default"}
+                className={`h-7 w-7 rounded-full shadow-md transition-colors ${
+                  isInCatalog
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : "bg-neutral-900 text-white hover:bg-neutral-800"
+                }`}
+                onClick={() =>
+                  isInCatalog
+                    ? removeItemFromCatalog(productId)
+                    : setActiveProduct({
+                        title: `Design ${item.code}`,
+                        image: item.image,
+                        sizesArray: ["300X1200", "200X1200MM"],
+                        isDesignCollection: true,
+                      })
+                }
+              >
+                {isInCatalog ? (
+                  <ListMinus className="w-3.5 h-3.5" />
+                ) : (
+                  <ListPlus className="w-3.5 h-3.5" />
+                )}
+              </Button>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
       {/* DIALOG FOR QUANTITY */}
       {activeProduct && (

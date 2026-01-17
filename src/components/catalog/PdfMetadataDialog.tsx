@@ -21,7 +21,7 @@ interface PdfMetadataDialogProps {
 export function PdfMetadataDialog({ isOpen, onOpenChange, metadata, setMetadata, onConfirm }: PdfMetadataDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white opacity-100">
         <DialogHeader>
           <DialogTitle>Catalog Details</DialogTitle>
           <DialogDescription>Enter details for the PDF front page.</DialogDescription>
