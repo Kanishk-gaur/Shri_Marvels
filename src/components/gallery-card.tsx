@@ -285,7 +285,7 @@ const COLUMN_SPAN_MAP: Record<string, string> = {
   "6x3": "col-span-12 md:col-span-8 lg:col-span-3",
   "8x4": "col-span-12 md:col-span-8 lg:col-span-2",
   "3x2/24x18/2x2": "col-span-8 md:col-span-8 lg:col-span-6",
-  "3x2": "col-span-12 md:col-span-8 lg:col-span-6",
+  "3x2": "col-span-24 md:col-span-8 lg:col-span-6",
   "6x8": "col-span-12 md:col-span-6 lg:col-span-3",
   "24x3": "col-span-24 md:col-span-12 lg:col-span-6",
   "2 Soot": "col-span-24 md:col-span-12 lg:col-span-6",
