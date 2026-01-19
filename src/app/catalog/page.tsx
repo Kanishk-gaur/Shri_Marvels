@@ -67,12 +67,13 @@ export default function CatalogPage() {
       </div>
 
       <PdfMetadataDialog 
-        isOpen={showGenDialog} 
-        onOpenChange={setShowGenDialog} 
-        metadata={pdfMetadata} 
-        setMetadata={setPdfMetadata} 
-        onConfirm={handleGenerate} 
-      />
+  isOpen={showGenDialog} 
+  onOpenChange={setShowGenDialog} 
+  metadata={pdfMetadata} 
+  setMetadata={setPdfMetadata} 
+  onConfirm={handleGenerate}
+  isGenerating={isGenerating} // Pass the existing isGenerating state
+/>
 
       {editingItem && (
         <SizeSelectionDialog

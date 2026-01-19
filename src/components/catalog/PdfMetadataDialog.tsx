@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react"; //
 
 interface PdfMetadata {
   name: string;
@@ -16,36 +17,82 @@ interface PdfMetadataDialogProps {
   metadata: PdfMetadata;
   setMetadata: (data: PdfMetadata | ((prev: PdfMetadata) => PdfMetadata)) => void;
   onConfirm: () => void;
+  isGenerating?: boolean; // New prop for loading state
 }
 
-export function PdfMetadataDialog({ isOpen, onOpenChange, metadata, setMetadata, onConfirm }: PdfMetadataDialogProps) {
+export function PdfMetadataDialog({ 
+  isOpen, 
+  onOpenChange, 
+  metadata, 
+  setMetadata, 
+  onConfirm,
+  isGenerating = false 
+}: PdfMetadataDialogProps) {
+  
+  // Validation: Check word count for description
+  const wordCount = metadata.description.trim().split(/\s+/).filter(word => word.length > 0).length;
+  
+  // Compulsory field validation
+  const isInvalid = 
+    !metadata.name.trim() || 
+    !metadata.title.trim() || 
+    wordCount < 3;
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] bg-white opacity-100">
         <DialogHeader>
           <DialogTitle>Catalog Details</DialogTitle>
-          <DialogDescription>Enter details for the PDF front page.</DialogDescription>
+          <DialogDescription>
+            All fields are compulsory. Description requires at least 3 words.
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Input 
-            placeholder="Client Name" 
+            placeholder="Client Name (Compulsory)" 
             value={metadata.name} 
             onChange={(e) => setMetadata((prev) => ({ ...prev, name: e.target.value }))} 
+            disabled={isGenerating}
+            className={!metadata.name.trim() ? "border-orange-200" : ""}
           />
           <Input 
-            placeholder="Catalog Title" 
+            placeholder="Catalog Title (Compulsory)" 
             value={metadata.title} 
             onChange={(e) => setMetadata((prev) => ({ ...prev, title: e.target.value }))} 
+            disabled={isGenerating}
+            className={!metadata.title.trim() ? "border-orange-200" : ""}
           />
-          <Textarea 
-            placeholder="Notes / Description" 
-            value={metadata.description} 
-            onChange={(e) => setMetadata((prev) => ({ ...prev, description: e.target.value }))} 
-          />
+          <div className="space-y-1">
+            <Textarea 
+              placeholder="Notes / Description (Min. 3 words)" 
+              value={metadata.description} 
+              onChange={(e) => setMetadata((prev) => ({ ...prev, description: e.target.value }))} 
+              disabled={isGenerating}
+              className={wordCount < 3 ? "border-orange-200" : ""}
+            />
+            <p className={`text-[10px] ${wordCount < 3 ? "text-orange-500" : "text-zinc-400"}`}>
+              Word count: {wordCount} / 3
+            </p>
+          </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button onClick={onConfirm} className="bg-zinc-800 text-white">Confirm & Generate</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isGenerating}>
+            Cancel
+          </Button>
+          <Button 
+            onClick={onConfirm} 
+            disabled={isInvalid || isGenerating}
+            className="bg-zinc-800 text-white min-w-[140px]"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              "Confirm & Generate"
+            )}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
