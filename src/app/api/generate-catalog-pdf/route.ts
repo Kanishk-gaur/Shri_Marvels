@@ -43,8 +43,14 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, message: "Email sent successfully" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PDF/Email API Error:", error);
-    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+    
+    let errorMessage = "Internal Server Error";
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
