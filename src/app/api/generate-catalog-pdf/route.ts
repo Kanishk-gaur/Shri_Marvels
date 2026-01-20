@@ -1,39 +1,41 @@
 import { type NextRequest } from 'next/server';
-import { generatePdfFromItems } from './pdf-generator';
-
-export const maxDuration = 60; 
-export const dynamic = 'force-dynamic';
+import nodemailer from 'nodemailer';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { items, metadata } = body;
-    console.log("Received PDF generation request with items:", items);
-    
-    if (!items || items.length === 0) {
-      return new Response(JSON.stringify({ error: "No items provided" }), { status: 400 });
+    const { pdfBase64, metadata } = await request.json();
+
+    if (!pdfBase64) {
+      return new Response(JSON.stringify({ error: "No PDF data provided" }), { status: 400 });
     }
 
-    // This now receives an ArrayBuffer
-    const pdfArrayBuffer = await generatePdfFromItems(items, metadata);
-
-    // FIX: Use Buffer.from to create a Node-safe buffer from the ArrayBuffer
-    const responseBuffer = Buffer.from(pdfArrayBuffer);
-
-    return new Response(responseBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="catalog.pdf"`,
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: false, 
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
-  } catch (error) {
-    console.error("PDF API Error:", error);
-    
-    const errorMessage = error instanceof Error 
-      ? error.message 
-      : 'An unexpected error occurred';
-    
-    return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
+
+    await transporter.sendMail({
+      from: `"Shri Marvels" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: `Catalog: ${metadata.title}`,
+      text: `Client: ${metadata.name}\nNotes: ${metadata.description}`,
+      attachments: [
+        {
+          filename: `${metadata.title || 'Catalog'}.pdf`,
+          content: pdfBase64.split("base64,")[1], // Extract base64 data
+          encoding: 'base64'
+        }
+      ]
+    });
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (error: any) {
+    console.error("Mail Error:", error);
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }

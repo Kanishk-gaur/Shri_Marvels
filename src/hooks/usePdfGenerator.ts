@@ -169,11 +169,10 @@ export function usePdfGenerator() {
         currentX += colSpan * colUnit;
         usedCols += colSpan;
       }
-      // Apply the same 20mm gap logic here for consistency
       yPos += maxRowHeight + (g === groups.length - 1 ? 20 : 35);
     }
 
-    // ✅ 5) FOOTER (ORIGINAL RESTORED)
+    // ✅ 5) FOOTER
     yPos = footerStartY;
     const midPoint = pageWidth / 2;
 
@@ -233,12 +232,37 @@ export function usePdfGenerator() {
       doc.text("+91 70918 33184", rightSideStartX, footerTextY + 20);
     } catch (error) {
       console.error("QR Code Error:", error);
-      doc.setFont("helvetica", "bold").setFontSize(9).setTextColor(60, 60, 60);
-      doc.text("WhatsApp:", rightSideStartX, footerTextY);
-      doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(80, 80, 80);
-      doc.text("+91 70918 33184", rightSideStartX + 18, footerTextY);
     }
 
+    // ✅ EMAIL INTEGRATION PART
+    // Convert all grouped items into a flat array to send to the API
+    const itemsArray = Object.values(groupedCatalog).flat();
+
+ const pdfBase64 = doc.output('datauristring');
+
+    try {
+      const response = await fetch('/api/generate-catalog-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pdfBase64: pdfBase64,
+          metadata: metadata
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Server error");
+      }
+      
+      console.log("PDF sent to admin successfully");
+    } catch (error) {
+      console.error("Email Error:", error);
+      // We don't alert here so the user doesn't see an error if the email fails 
+      // but the download succeeds.
+    }
+
+    // Save for the user locally
     doc.save(`${metadata.title || "Agrawal_Ceramics"}_catalog.pdf`);
   };
 
