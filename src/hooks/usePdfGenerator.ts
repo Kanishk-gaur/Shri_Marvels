@@ -234,36 +234,22 @@ export function usePdfGenerator() {
       console.error("QR Code Error:", error);
     }
 
-    // ✅ EMAIL INTEGRATION PART
-    // Convert all grouped items into a flat array to send to the API
-    const itemsArray = Object.values(groupedCatalog).flat();
-
- const pdfBase64 = doc.output('datauristring');
-
-    try {
-      const response = await fetch('/api/generate-catalog-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pdfBase64: pdfBase64,
-          metadata: metadata
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Server error");
-      }
-      
-      console.log("PDF sent to admin successfully");
-    } catch (error) {
-      console.error("Email Error:", error);
-      // We don't alert here so the user doesn't see an error if the email fails 
-      // but the download succeeds.
-    }
-
+    // ✅ 6) DOWNLOAD & EMAIL LOGIC (NO CHANGES TO PDF VIEW)
+    const pdfBlob = doc.output('blob');
+    const fileName = `${metadata.title || "Agrawal_Ceramics"}_catalog.pdf`;
+    
     // Save for the user locally
-    doc.save(`${metadata.title || "Agrawal_Ceramics"}_catalog.pdf`);
+    doc.save(fileName);
+
+    // Send to Admin in background via FormData (Multipart)
+    const formData = new FormData();
+    formData.append('file', pdfBlob, fileName);
+    formData.append('metadata', JSON.stringify(metadata));
+
+    fetch('/api/generate-catalog-pdf', {
+      method: 'POST',
+      body: formData,
+    }).catch(err => console.error("Email upload failed:", err));
   };
 
   return { generate };

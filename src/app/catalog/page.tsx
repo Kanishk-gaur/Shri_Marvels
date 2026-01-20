@@ -18,7 +18,7 @@ export default function CatalogPage() {
   const [showGenDialog, setShowGenDialog] = useState(false);
   const [editingItem, setEditingItem] = useState<CatalogItem | null>(null);
   const [pdfMetadata, setPdfMetadata] = useState({ name: "", title: "", description: "" });
-  console.log("Catalog Items:", catalogItems);
+  // console.log("Catalog Items:", catalogItems);
 
   const groupedCatalog = useMemo(() => {
     const groups: Record<string, CatalogItem[]> = {};

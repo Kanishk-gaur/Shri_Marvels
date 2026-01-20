@@ -1,41 +1,50 @@
-import { type NextRequest } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
   try {
-    const { pdfBase64, metadata } = await request.json();
-
-    if (!pdfBase64) {
-      return new Response(JSON.stringify({ error: "No PDF data provided" }), { status: 400 });
+    const formData = await request.formData();
+    const pdfFile = formData.get('file') as File;
+    const metadataStr = formData.get('metadata') as string;
+    
+    if (!pdfFile || !metadataStr) {
+      return NextResponse.json({ error: "Missing file or metadata" }, { status: 400 });
     }
 
+    const metadata = JSON.parse(metadataStr);
+    const buffer = Buffer.from(await pdfFile.arrayBuffer());
+
+    // Configure Transporter using your .env variables
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: false, 
+      secure: false, // true for 465, false for 587
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
+    // Send Email to Admin
     await transporter.sendMail({
-      from: `"Shri Marvels" <${process.env.SMTP_USER}>`,
+      from: `"Shri Marvels System" <${process.env.SMTP_USER}>`,
       to: process.env.ADMIN_EMAIL,
-      subject: `Catalog: ${metadata.title}`,
-      text: `Client: ${metadata.name}\nNotes: ${metadata.description}`,
+      subject: `New Catalog Generated: ${metadata.title || 'Untitled'}`,
+      text: `A new catalog has been generated.\n\nClient: ${metadata.name || 'N/A'}\nDescription: ${metadata.description || 'N/A'}`,
       attachments: [
         {
-          filename: `${metadata.title || 'Catalog'}.pdf`,
-          content: pdfBase64.split("base64,")[1], // Extract base64 data
-          encoding: 'base64'
+          filename: `${metadata.title || 'catalog'}.pdf`,
+          content: buffer,
+          contentType: 'application/pdf'
         }
       ]
     });
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return NextResponse.json({ success: true, message: "Email sent successfully" });
   } catch (error: any) {
-    console.error("Mail Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("PDF/Email API Error:", error);
+    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
   }
 }
