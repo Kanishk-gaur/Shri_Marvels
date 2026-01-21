@@ -1,56 +1,44 @@
-import { type NextRequest, NextResponse } from 'next/server';
+// src/app/api/generate-catalog-pdf/route.ts
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export const maxDuration = 60;
-
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const formData = await request.formData();
-    const pdfFile = formData.get('file') as File;
+    const formData = await req.formData();
     const metadataStr = formData.get('metadata') as string;
-    
-    if (!pdfFile || !metadataStr) {
-      return NextResponse.json({ error: "Missing file or metadata" }, { status: 400 });
-    }
-
     const metadata = JSON.parse(metadataStr);
-    const buffer = Buffer.from(await pdfFile.arrayBuffer());
 
-    // Configure Transporter using your .env variables
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: false, // true for 465, false for 587
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
-    // Send Email to Admin
+    // Construct the email without attachments
     await transporter.sendMail({
-      from: `"Shri Marvels System" <${process.env.SMTP_USER}>`,
-      to: process.env.ADMIN_EMAIL,
-      subject: `New Catalog Generated: ${metadata.title || 'Untitled'}`,
-      text: `A new catalog has been generated.\n\nClient: ${metadata.name || 'N/A'}\nDescription: ${metadata.description || 'N/A'}`,
-      attachments: [
-        {
-          filename: `${metadata.title || 'catalog'}.pdf`,
-          content: buffer,
-          contentType: 'application/pdf'
-        }
-      ]
+      from: `"${metadata.name}" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAIL, // Your receiving email address
+      subject: `New Catalog Request: ${metadata.name}`,
+      text: `
+        New Request Received:
+        Client Name: ${metadata.name}
+        Mobile Number: ${metadata.mobile}
+        Notes: ${metadata.description}
+      `,
+      html: `
+        <h3>New Catalog Request</h3>
+        <p><strong>Client Name:</strong> ${metadata.name}</p>
+        <p><strong>Mobile Number:</strong> ${metadata.mobile}</p>
+        <p><strong>Notes:</strong> ${metadata.description}</p>
+      `,
     });
 
-    return NextResponse.json({ success: true, message: "Email sent successfully" });
-  } catch (error: unknown) {
-    console.error("PDF/Email API Error:", error);
-    
-    let errorMessage = "Internal Server Error";
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Email API Error:", error);
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }

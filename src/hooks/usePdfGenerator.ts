@@ -5,7 +5,7 @@ import { CatalogItem } from "@/context/CatalogContext";
 
 interface PdfMetadata {
   name: string;
-  title: string;
+  mobile: string; // Updated from title
   description: string;
 }
 
@@ -27,6 +27,7 @@ export function usePdfGenerator() {
     
     let headerHeight = 55; 
     if (metadata.name) headerHeight += 8;
+    if (metadata.mobile) headerHeight += 8; // Adjusting height for mobile line
 
     let splitDescription: string[] = [];
     if (metadata.description) {
@@ -60,7 +61,6 @@ export function usePdfGenerator() {
         maxRowHeight = Math.max(maxRowHeight, height);
         usedCols += colSpan;
       }
-      // Increased gap after the last group to shift footer down
       currentYCalculation += maxRowHeight + (g === groups.length - 1 ? 20 : 35);
     }
 
@@ -92,13 +92,13 @@ export function usePdfGenerator() {
     }
 
     doc.setFont("helvetica", "bold").setFontSize(24).setTextColor(30, 30, 30);
-    doc.text(metadata.title.toUpperCase() || "PRODUCT CATALOG", margin, yPos + 5);
+    doc.text("PRODUCT CATALOG", margin, yPos + 5);
     yPos += 15;
 
-    if (metadata.name || metadata.description) {
+    if (metadata.name || metadata.mobile || metadata.description) {
       doc.setFillColor(245, 235, 215); 
       const boxPadding = 8;
-      const boxHeight = (metadata.name ? 8 : 0) + (splitDescription.length * 5) + boxPadding;
+      const boxHeight = (metadata.name ? 8 : 0) + (metadata.mobile ? 8 : 0) + (splitDescription.length * 5) + boxPadding;
       doc.roundedRect(margin, yPos - 5, pageWidth - (margin * 2), boxHeight, 2, 2, "F");
 
       if (metadata.name) {
@@ -106,6 +106,14 @@ export function usePdfGenerator() {
         doc.text("CLIENT:", margin + 5, yPos + 2);
         doc.setFont("helvetica", "bold").setFontSize(11).setTextColor(60, 60, 60);
         doc.text(metadata.name, margin + 25, yPos + 2);
+        yPos += 8;
+      }
+
+      if (metadata.mobile) { // Added Mobile Number line after Client
+        doc.setFont("helvetica", "bold").setFontSize(11).setTextColor(brandGold[0], brandGold[1], brandGold[2]);
+        doc.text("MOBILE:", margin + 5, yPos + 2);
+        doc.setFont("helvetica", "bold").setFontSize(11).setTextColor(60, 60, 60);
+        doc.text(metadata.mobile, margin + 25, yPos + 2);
         yPos += 8;
       }
 
@@ -172,7 +180,7 @@ export function usePdfGenerator() {
       yPos += maxRowHeight + (g === groups.length - 1 ? 20 : 35);
     }
 
-    // ✅ 5) FOOTER
+    // ✅ 5) FOOTER (ORIGINAL LAYOUT PRESERVED)
     yPos = footerStartY;
     const midPoint = pageWidth / 2;
 
@@ -234,22 +242,20 @@ export function usePdfGenerator() {
       console.error("QR Code Error:", error);
     }
 
-    // ✅ 6) DOWNLOAD & EMAIL LOGIC (NO CHANGES TO PDF VIEW)
-    const pdfBlob = doc.output('blob');
-    const fileName = `${metadata.title || "Agrawal_Ceramics"}_catalog.pdf`;
+    // ✅ 6) DOWNLOAD & EMAIL LOGIC (NO PDF IN MAIL)
+    const fileName = `${metadata.name || "Catalog"}_${metadata.mobile || "Agrawal_Ceramics"}.pdf`;
     
-    // Save for the user locally
+    // Local download remains
     doc.save(fileName);
 
-    // Send to Admin in background via FormData (Multipart)
+    // Send only metadata to the API
     const formData = new FormData();
-    formData.append('file', pdfBlob, fileName);
     formData.append('metadata', JSON.stringify(metadata));
 
     fetch('/api/generate-catalog-pdf', {
       method: 'POST',
       body: formData,
-    }).catch(err => console.error("Email upload failed:", err));
+    }).catch(err => console.error("Email failed:", err));
   };
 
   return { generate };

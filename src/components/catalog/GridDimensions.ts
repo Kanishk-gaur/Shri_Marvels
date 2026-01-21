@@ -247,7 +247,6 @@ export function getGridDimensions(sizeString: string, subcategory?: string) {
   const colUnit = 7.5;
   const rowUnit = 2.0;
 
-  // --- 1. PRESERVE ORIGINAL LOGIC FOR SPECIFIC CATEGORIES ---
   if (subcategory === "Step & Riser") {
     const colSpan = 24;
     const rowSpan = 100;
