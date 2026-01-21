@@ -170,6 +170,8 @@ const ASPECT_RATIO_MAP: Record<string, string> = {
 
   "300X1200": "aspect-[5/5]",
 
+  "600X1200": "aspect-[5/5]",
+
   // Default fallback
   default: "aspect-[4/3]",
 };
@@ -178,6 +180,7 @@ const ASPECT_RATIO_MAP: Record<string, string> = {
 // Replicated Column Span Map from GalleryCard
 const COLUMN_SPAN_MAP: Record<string, string> = {
   // Large format tiles - 2 per row on laptop
+  "600X1200": "col-span-12 md:col-span-8 lg:col-span-6",
   "300X1200": "col-span-12 md:col-span-8 lg:col-span-6",
   "600x1200 mm (24x48 inch)": "col-span-12 md:col-span-8 lg:col-span-4",
   "1200x1800 mm (48x72 inch)": "col-span-12 md:col-span-12 lg:col-span-12",

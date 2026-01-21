@@ -19,7 +19,7 @@ export function CatalogHeader({ itemCount, isGenerating, onClear, onGenerateClic
         </Button>
       </Link>
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-zinc-800">My Custom Catalog</h1>
+        <h1 className="text-3xl font-bold text-zinc-800">My Catalog</h1>
         <p className="text-zinc-500 text-sm mt-1">{itemCount} Products Selected</p>
       </div>
       <div className="flex items-center gap-3">
