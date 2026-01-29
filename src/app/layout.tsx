@@ -1,5 +1,3 @@
-// src/app/layout.tsx
-
 import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -41,6 +39,12 @@ export const metadata: Metadata = {
   title: "Shri Marvels | Premium Tiles, Marble & Roofing Solutions",
   description:
     "Discover luxury flooring and roofing solutions at Shri Marvels (Agrawal Ceramics). Premium quality tiles, marble, and granite.",
+  
+  // Verification code added here
+  verification: {
+    google: "BYPXEPE7atFXW9IkzwwRwt6NeP03jln0iF4ghNr-eqs",
+  },
+
   keywords: [
     "Shri Marvels",
     "Agrawal Ceramics",
