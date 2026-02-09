@@ -173,6 +173,9 @@ const ASPECT_RATIO_MAP: Record<string, string> = {
   // 2x3 (2:3 ratio)
   "2x3": "aspect-[2/3]",
 
+  // 3x4 (1:2 ratio)
+  "300x450 mm (11.8x17.7 inch)": "aspect-[3/2]",
+
   // Default fallback
   default: "aspect-[4/3]",
 };
