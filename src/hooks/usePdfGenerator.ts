@@ -222,14 +222,14 @@ export function usePdfGenerator() {
 
     footerTextY += 10;
     doc.setFont("helvetica", "bold").text("Contact:", rightSideStartX, footerTextY);
-    doc.setFont("helvetica", "normal").text(" +91 7091833184", rightSideStartX + 15, footerTextY);
+    doc.setFont("helvetica", "normal").text(" +91 7070702506", rightSideStartX + 15, footerTextY);
     footerTextY += 5;
     doc.text("Email: contact@agrawalceramics.com", rightSideStartX, footerTextY);
 
     footerTextY += 12;
 
     try {
-      const whatsappUrl = "https://wa.me/917091833184";
+      const whatsappUrl = "https://wa.me/917070702506";
       const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(whatsappUrl)}`;
       doc.addImage(qrApiUrl, "PNG", rightSideStartX, footerTextY, 18, 18);
       doc.setFont("helvetica", "bold").setFontSize(9).setTextColor(60, 60, 60);

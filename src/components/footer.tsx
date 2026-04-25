@@ -15,7 +15,7 @@ const localBusinessSchema = {
   "image": "https://agrawalceramics.com/images/home/logo3.png", // Assuming a relevant image
   "description": "Premium decorative tiles, marbles, and ceramics for your home. High-quality materials with exquisite designs for modern interiors.",
   "priceRange": "$$",
-  "telephone": "+91 7091833184",
+  "telephone": "+91 7070702506",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "8-A, National Highway",
@@ -161,7 +161,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3 text-white/70 text-sm">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <span>+91 7091833184</span>
+                <span>+91 7070702506</span>
               </div>
               <div className="flex items-start space-x-3 text-white/70 text-sm">
                 <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />

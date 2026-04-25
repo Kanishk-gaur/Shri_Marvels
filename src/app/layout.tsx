@@ -21,13 +21,13 @@ const organizationSchema = {
     "Premier source for high-quality decorative tiles, luxurious marble slabs, and durable roofing solutions. Serving B2B and retail clients for over three decades.",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+91-7091833184",
+    "telephone": "+91-7070702506",
     "contactType": "sales",
     "areaServed": "IN",
     "availableLanguage": ["en", "hi"],
   },
   "sameAs": [
-    "https://wa.me/917091833184",
+    "https://wa.me/917070702506",
     "https://www.facebook.com/AgrawalCeramics",
     "https://www.instagram.com/AgrawalCeramics",
   ],
