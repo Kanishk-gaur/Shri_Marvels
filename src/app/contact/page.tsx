@@ -21,7 +21,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Call Us",
-    details: "+91 7091833184",
+    details: "+91 7070702506",
     description: "Mon-Sat, 10am to 7pm",
   },
   {
@@ -60,7 +60,7 @@ export default function ContactPage() {
 
   // Form field change handler
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData((prev) => ({
       ...prev,

@@ -237,7 +237,7 @@ export function usePdfGenerator() {
       doc.setFont("helvetica", "normal").setFontSize(8).setTextColor(80, 80, 80);
       doc.text("Scan to chat with us", rightSideStartX + 20, footerTextY + 9, { maxWidth: rightSideWidth - 20 });
       doc.setFont("helvetica", "bold").setFontSize(7).setTextColor(100);
-      doc.text("+91 70918 33184", rightSideStartX, footerTextY + 20);
+      doc.text("+91 7070702506", rightSideStartX, footerTextY + 20);
     } catch (error) {
       console.error("QR Code Error:", error);
     }
